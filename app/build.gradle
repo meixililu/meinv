@@ -6,12 +6,13 @@ android {
     buildToolsVersion "27.0.3"
     defaultConfig {
         applicationId "com.messi.languagehelper.meinv"
-        minSdkVersion 14
+        resConfigs "zh-rCN", "zh-rHK", "zh-rTW", "en"
+        minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         ndk {
-            abiFilters "armeabi"
+            abiFilters "armeabi","armeabi-v7a"
         }
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -26,22 +27,26 @@ android {
         daoPackage 'com.messi.languagehelper.meinv.dao'
         targetGenDir 'src/main/java'
     }
+    defaultConfig {
+        vectorDrawables.useSupportLibrary = true
+    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
-    implementation 'com.android.support:cardview-v7:27.1.1'
     implementation 'com.android.support:support-vector-drawable:27.1.1'
     implementation 'com.android.support:support-media-compat:27.1.1'
     implementation 'com.google.android:flexbox:0.3.0'
     implementation 'com.jakewharton:butterknife:8.8.1'
-    implementation 'com.google.code.gson:gson:2.8.5'
+//    implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.squareup.okio:okio:1.14.1'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.13'
     implementation 'cn.leancloud.android:avoscloud-sdk:v4.6.4'
     implementation 'com.facebook.fresco:fresco:1.10.0'
     implementation 'com.facebook.fresco:animated-gif:1.10.0'
@@ -50,12 +55,11 @@ dependencies {
     implementation 'com.yanzhenjie:permission:2.0.0-rc5'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.40'
     implementation 'com.karumi:headerrecyclerview:1.1.0'
+    implementation 'com.orhanobut:dialogplus:1.11@aar'
+    implementation 'com.yqritc:recyclerview-flexibledivider:1.4.0'
     implementation 'com.umeng.analytics:analytics:latest.integration'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation files('libs/Ad_Android_SDK.jar')
-    implementation files('libs/android-query-full.0.26.7.jar')
-    implementation files('libs/GDTUnionSDK.4.19.573.min.jar')
 }

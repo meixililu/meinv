@@ -1,12 +1,12 @@
 <resources>
 
-    <string name="app_name">中英互译</string>
-    <string name="app_des">告别说不出口的英语</string>
+    <string name="app_name">美秀图片</string>
+    <string name="app_des">高清美女图片壁纸</string>
     <string name="app_ad">随时随地 学英语</string>
     <string name="author">小白科技</string>
     <string name="title_about">关于我们</string>
     <string name="title_share_preview">分享预览</string>
-    <string name="title_TranslatePractice">练习</string>
+    <string name="title_meinv">美女</string>
     <string name="title_ai">Ai</string>
     <string name="title_ai_learn">跟Ai学英语</string>
     <string name="title_Practice">口语练习</string>
@@ -93,7 +93,7 @@
 
     <string name="menu_share">DIY分享</string>
     <string name="menu_settings">语速调节</string>
-    <string name="app_name_share">App:中英互译</string>
+    <string name="app_name_share">App:美秀图片</string>
     <string name="share_text_hint">请输入分享内容</string>
     <string name="input_et_hint_english">请输入需要查询的英文</string>
     <string name="input_et_hint_chinese">请输入需要查询的中文</string>
@@ -224,7 +224,7 @@
     <string name="speak_prompt">请根据您说的语言点击中文或者英文！</string>
     <string name="webview_reload">加载失败，轻触屏幕刷新!</string>
 
-    <string name="menu_translate">中英互译</string>
+    <string name="menu_translate">美秀图片</string>
     <string name="menu_speak">口语练习</string>
     <string name="menu_about">关于</string>
     <string name="recent_use_footer_prompt">温馨提示</string>
@@ -302,25 +302,6 @@
 
     <string name="leisuer_two">想学编程</string>
     <string name="leisuer_two_subtitle">学编程，高薪就业</string>
-    <string name="leisuer_two_content">
-        最近遇到一些朋友，对编程感兴趣\n
-        却又不知道从何入手\n
-        有些人说自己不知道适不适合学\n
-        有些人说自己数学不好\n
-        从何入手，我竟无言以对\n
-        计算机专业，工作编程8年\n
-        如今自己创业，中英互译英语翻译学习神器\n
-        虽然我很想帮助那些人\n
-        但仔细想想我能给出什么建议呢\n
-        。。。华丽的分割线。。。\n
-        想了好几天，习惯什么事都自己上的我\n
-        决定搞个直播编程教学\n
-        课程来自哪里呢？\n
-        唯有总结哈佛，剑桥，MIT等大学计算机公开课\n
-        我觉得才是最好的教材\n
-        如果你想跟软件作者学编程\n
-        加作者微信：xbkj6868
-    </string>
 
     <string name="invest_activity_title">使用场景和建议</string>
     <string name="feedback">反馈</string>

@@ -1,11 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="AppTheme" parent="AppTheme.Base" />
+
+    <style name="AppTheme.Base" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/load_blue</item>
+        <item name="colorPrimaryDark">@color/load_blue_alpha</item>
+        <!--<item name="colorPrimary">@color/green_500</item>-->
+        <!--<item name="colorPrimaryDark">@color/green_500_alpha</item>-->
+        <item name="colorAccent">@color/white</item>
+        <item name="android:itemBackground">@drawable/bg_lightblue_blue_selector</item>
+    </style>
+
+    <style name="AppTheme.Launcher" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/loading</item>
+    </style>
+
+    <style name="TextAppearance.ExpandedTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/none</item>
+    </style>
+
+    <style name="dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item><!--边框-->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/none</item><!--背景透明-->
+        <item name="android:windowEnterAnimation">@anim/zoomin</item>
+        <item name="android:windowExitAnimation">@anim/zoomout</item>
+    </style>
+
+    <style name="DialogAnimation" parent="@android:style/Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/zoomin</item>
+        <item name="android:windowExitAnimation">@anim/zoomout</item>
+    </style>
+
+    <style name="mydialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@color/none</item><!--背景透明-->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowEnterAnimation">@anim/zoomin</item>
+        <item name="android:windowExitAnimation">@anim/zoomout</item>
+    </style>
+
+    <style name="AppThemeForXF" parent="Theme.AppCompat.Light.DarkActionBar" />
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="CircularProgressWhite" parent="Widget.AppCompat.ProgressBar">
+        <item name="colorAccent">@color/white</item>
+    </style>
+
+    <style name="CircularProgressBlue" parent="Widget.AppCompat.ProgressBar">
+        <item name="colorAccent">@color/load_blue</item>
+    </style>
+
+    <style name="HorizontalProgressGreen" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="colorAccent">@color/green_500</item>
+    </style>
+
+    <style name="TabLayoutTextStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">@dimen/big</item>
+    </style>
+    <style name="MainTabTextStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">@dimen/big</item>
+    </style>
+
+    <style name="SeekbarStyle" >
+        <item name="android:progressDrawable">@drawable/seekbar_progress_bar</item>
+        <item name="android:thumb">@drawable/seekbar_thumb</item>
+        <item name="android:thumbOffset">0dp</item>
+    </style>
+
+    <style name="SeekbarBlackStyle" >
+        <item name="android:progressDrawable">@drawable/seekbar_progress_bar_black</item>
+        <item name="android:thumb">@drawable/seekbar_thumb</item>
+        <item name="android:thumbOffset">0dp</item>
     </style>
 
 </resources>

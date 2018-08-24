@@ -20,6 +20,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 
 import com.messi.languagehelper.meinv.util.KeyUtil;
+import com.messi.languagehelper.meinv.util.ScreenUtil;
+import com.messi.languagehelper.meinv.util.Settings;
 import com.umeng.analytics.MobclickAgent;
 
 
@@ -91,18 +93,18 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void getActionBarToolbar() {
-//        if (toolbar == null) {
-//            toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
-//            if (toolbar != null) {
-//                setSupportActionBar(toolbar);
-//                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//                if (VERSION.SDK_INT >= VERSION_CODES.KITKAT && VERSION.SDK_INT <= VERSION_CODES.LOLLIPOP) {
-//                    toolbar.setPadding(0, ScreenUtil.dip2px(this, 10), 0, 0);
-//                }
-//            }
-//            String title = getIntent().getStringExtra(KeyUtil.ActionbarTitle);
-//            setActionBarTitle(title);
-//        }
+        if (toolbar == null) {
+            toolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
+            if (toolbar != null) {
+                setSupportActionBar(toolbar);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                if (VERSION.SDK_INT >= VERSION_CODES.KITKAT && VERSION.SDK_INT <= VERSION_CODES.LOLLIPOP) {
+                    toolbar.setPadding(0, ScreenUtil.dip2px(this, 10), 0, 0);
+                }
+            }
+            String title = getIntent().getStringExtra(KeyUtil.ActionbarTitle);
+            setActionBarTitle(title);
+        }
     }
 
     protected void hideTitle(){
@@ -113,17 +115,6 @@ public class BaseActivity extends AppCompatActivity {
 
     public void updateUI(String music_action){}
 
-//	protected void startClipboardListener(){
-//		final ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-//		cm.addPrimaryClipChangedListener(new ClipboardManager.OnPrimaryClipChangedListener() {
-//			@Override
-//			public void onPrimaryClipChanged() {
-//				ClipData data = cm.getPrimaryClip();
-//				ClipData.Item item = data.getItemAt(0);
-//				LogUtil.DefalutLog("clipboard:"+item.getText().toString());
-//			}
-//		});
-//	}
 
     protected void setToolbarBackground(int color) {
         if (toolbar != null) {
@@ -150,28 +141,28 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void initProgressbar() {
-//        if (mProgressbar == null) {
-//            mProgressbar = (ProgressBar) findViewById(R.id.progressBarCircularIndetermininate);
-//        }
+        if (mProgressbar == null) {
+            mProgressbar = (ProgressBar) findViewById(R.id.progressBarCircularIndetermininate);
+        }
     }
 
     /**
      * need init beford use
      */
     protected void initSwipeRefresh() {
-//        if (mSwipeRefreshLayout == null) {
-//            mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.mswiperefreshlayout);
-//            mSwipeRefreshLayout.setColorSchemeResources(R.color.holo_blue_bright,
-//                    R.color.holo_green_light,
-//                    R.color.holo_orange_light,
-//                    R.color.holo_red_light);
-//            mSwipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
-//                @Override
-//                public void onRefresh() {
-//                    onSwipeRefreshLayoutRefresh();
-//                }
-//            });
-//        }
+        if (mSwipeRefreshLayout == null) {
+            mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.mswiperefreshlayout);
+            mSwipeRefreshLayout.setColorSchemeResources(R.color.holo_blue_bright,
+                    R.color.holo_green_light,
+                    R.color.holo_orange_light,
+                    R.color.holo_red_light);
+            mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    onSwipeRefreshLayoutRefresh();
+                }
+            });
+        }
     }
 
     public void onSwipeRefreshLayoutFinish() {
@@ -243,10 +234,10 @@ public class BaseActivity extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
-//                AudioTrackUtil.adjustStreamVolume(BaseActivity.this, keyCode);
+                Settings.adjustStreamVolume(BaseActivity.this, keyCode);
                 return true;
             case KeyEvent.KEYCODE_VOLUME_DOWN:
-//                AudioTrackUtil.adjustStreamVolume(BaseActivity.this, keyCode);
+                Settings.adjustStreamVolume(BaseActivity.this, keyCode);
                 return true;
         }
         return super.onKeyDown(keyCode, event);
