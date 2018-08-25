@@ -3,8 +3,7 @@
 
     <style name="AppTheme" parent="AppTheme.Base">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@color/load_blue</item>
-        <!--<item name="android:statusBarColor">@color/green_500</item>-->
+        <item name="android:statusBarColor">@color/colorPrimary</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowAllowEnterTransitionOverlap">true</item>
         <item name="android:windowAllowReturnTransitionOverlap">true</item>

@@ -9,36 +9,31 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/padding_15"
-        android:paddingLeft="@dimen/padding_7"
-        android:paddingRight="@dimen/padding_7"
-        android:paddingTop="@dimen/padding_15">
-        <TextView
-            android:id="@+id/des"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_5"
-            android:gravity="left"
-            android:lineSpacingExtra="6dp"
-            android:textColor="@color/text_black"
-            android:textIsSelectable="true"
-            android:textSize="@dimen/bigger" />
+        android:paddingBottom="@dimen/padding_10"
+        android:orientation="vertical">
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/list_item_img"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_10"
             fresco:actualImageScaleType="fitCenter"
             fresco:placeholderImage="@drawable/img_loading"
             fresco:placeholderImageScaleType="fitCenter"
             fresco:viewAspectRatio="0.8" />
+        <TextView
+            android:id="@+id/des"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_7"
+            android:layout_marginLeft="3dp"
+            android:gravity="left"
+            android:textColor="@color/text_grey"
+            android:textIsSelectable="true"
+            android:textSize="@dimen/middle" />
     </LinearLayout>
     <FrameLayout
         android:id="@+id/ad_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/padding_margin"
         android:visibility="gone"
         />
 

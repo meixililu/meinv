@@ -28,6 +28,7 @@ public class TXADUtil {
     public static String posId_XXL_SWXT = "9070133322784103";
     public static String posId_XXL_ZWYT = "1090838321167493";
     public static String posId_CDT = "7080330341367043";
+    public static String posId_CDTZX = "3040234889434979";
 
     public static void initTXADID(Context mContext){
         try {
@@ -36,13 +37,14 @@ public class TXADUtil {
             String ids = sp.getString(KeyUtil.Ad_Ids,"");
             if(!TextUtils.isEmpty(ids)){
                 String[] ides = ids.split("#");
-                if(ides.length >= 6){
+                if(ides.length >= 7){
                     appId = ides[0];
                     posId_Kaiping = ides[1];
                     posId_XXL_STXW = ides[2];
                     posId_XXL_SWXT = ides[3];
                     posId_XXL_ZWYT = ides[4];
                     posId_CDT = ides[5];
+                    posId_CDTZX = ides[6];
                     LogUtil.DefalutLog("initTXADID:"+ids);
                 }else {
                     initDefaultTXADID(mContext);
@@ -80,32 +82,15 @@ public class TXADUtil {
     }
 
     private static void initDefaultTXADID(Context mContext){
-        LogUtil.DefalutLog("initDefaultTXADID");
-        if(mContext.getPackageName().equals(Settings.application_id_meinv) ){
-            appId = "1106957016";
-            posId_Kaiping = "7080135419839958";
-            posId_XXL_STXW = "1030736419937999";
-            posId_XXL_SWXT = "2000636429344052";
-            posId_XXL_ZWYT = "9000337459847020";
-            posId_CDT = "7090539489345031";
-            LogUtil.DefalutLog("application_id_yyj");
-        }else if (mContext.getPackageName().equals(Settings.application_id_caricature)) {
-            appId = "1106957022";
-            posId_Kaiping = "3040833560655805";
-            posId_XXL_STXW = "5030230580451876";
-            posId_XXL_SWXT = "6080439550951887";
-            posId_XXL_ZWYT = "5010330570751838";
-            posId_CDT = "8030136520951889";
-        } else {
-            //zyhy id
-            appId = "1106863330";
-            posId_Kaiping = "8070635391202695";
-            posId_XXL_STXW = "8020132381266427";
-            posId_XXL_SWXT = "9070133322784103";
-            posId_XXL_ZWYT = "1090838321167493";
-            posId_CDT = "7080330341367043";
-            LogUtil.DefalutLog("application_id_zyhy");
-        }
+        LogUtil.DefalutLog("Exception initDefaultTXADID");
+        //zyhy id
+        appId = "1106863330";
+        posId_Kaiping = "8070635391202695";
+        posId_XXL_STXW = "8020132381266427";
+        posId_XXL_SWXT = "9070133322784103";
+        posId_XXL_ZWYT = "1090838321167493";
+        posId_CDT = "7080330341367043";
+        posId_CDTZX = "3040234889434979";
     }
 
     public static void showKaipingAD(Activity activity,
@@ -114,6 +99,17 @@ public class TXADUtil {
                                      SplashADListener listener){
         SplashAD splashAD = new SplashAD(activity, adContainer, skipContainer,
                 appId, posId_Kaiping, listener, 3000);
+    }
+
+    public static void showCDTZX(Activity activity,
+                               NativeExpressAD.NativeExpressADListener listener){
+        NativeExpressAD nativeExpressAD = new NativeExpressAD(activity,
+                new ADSize(ADSize.FULL_WIDTH, ADSize.AUTO_HEIGHT), appId, posId_CDTZX, listener);
+        nativeExpressAD.setVideoOption(new VideoOption.Builder()
+                .setAutoPlayPolicy(VideoOption.AutoPlayPolicy.WIFI) // WIFI环境下可以自动播放视频
+                .setAutoPlayMuted(true) // 自动播放时为静音
+                .build()); //
+        nativeExpressAD.loadAD(1);
     }
 
     public static void showCDT(Activity activity,

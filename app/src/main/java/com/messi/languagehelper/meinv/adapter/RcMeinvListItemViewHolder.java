@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -12,8 +11,8 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.iflytek.voiceads.NativeADDataRef;
+import com.messi.languagehelper.meinv.ImgViewActivity;
 import com.messi.languagehelper.meinv.R;
-import com.messi.languagehelper.meinv.WebViewActivity;
 import com.messi.languagehelper.meinv.bean.SougoItem;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
@@ -80,13 +79,10 @@ public class RcMeinvListItemViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void onItemClick(SougoItem mAVObject) {
-        Intent intent = new Intent(context, WebViewActivity.class);
-        intent.putExtra(KeyUtil.ActionbarTitle, " ");
-        if(!TextUtils.isEmpty(mAVObject.getPic_url())){
-            intent.putExtra(KeyUtil.URL, mAVObject.getPic_url());
-        }else {
-            intent.putExtra(KeyUtil.URL, mAVObject.getThumbUrl());
-        }
+        Intent intent = new Intent(context, ImgViewActivity.class);
+        intent.putExtra(KeyUtil.URL, mAVObject.getThumbUrl());
+        intent.putExtra(KeyUtil.Id, mAVObject.getId()+"");
+        intent.putExtra(KeyUtil.DownloadUrl, mAVObject.getPic_url());
         context.startActivity(intent);
     }
 

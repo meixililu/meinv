@@ -2,7 +2,7 @@ package com.messi.languagehelper.meinv.util;
 
 public class KeyUtil {
 
-	public static final String Study_Every = "study_every";
+	public static final String MaxRandom = "MaxRandom";
 	
 	public static final String Practice_FourInOne = "Practice_FourInOne";
 	
@@ -29,6 +29,10 @@ public class KeyUtil {
 	public static final String IsTranslateYueKey = "IsTranslateYueKey";
 
 	public static final String URL = "urlkey";
+
+	public static final String Id = "Id";
+
+	public static final String DownloadUrl = "DownloadUrl";
 
 	public static final String MesType = "MesType";
 

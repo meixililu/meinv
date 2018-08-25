@@ -34,8 +34,9 @@
             android:layout_height="@dimen/tabs_heigh"
             android:background="?attr/colorPrimary"
             app:tabSelectedTextColor="@color/white"
-            app:tabTextColor="@color/text_tint"
+            app:tabTextColor="@color/text_tint1"
             app:tabIndicatorColor="@color/none"
+            app:tabMode="scrollable"
             />
     </android.support.design.widget.AppBarLayout>
 

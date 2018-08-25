@@ -597,6 +597,18 @@ public class AVOUtil {
 
 	}
 
+	public static class Meinv {
+		public final static String Meinv = "MeinvTag";
+
+		public final static String tag = "tag";
+
+		public final static String code = "code";
+
+		public final static String order = "order";
+
+		public final static String isValid = "isValid";
+	}
+
 	public static class SubjectList{
 		public final static String SubjectList = "SubjectList";
 		public final static String category = "category";

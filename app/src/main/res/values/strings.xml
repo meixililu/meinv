@@ -2,13 +2,13 @@
 
     <string name="app_name">美秀图片</string>
     <string name="app_des">高清美女图片壁纸</string>
-    <string name="app_ad">随时随地 学英语</string>
-    <string name="author">小白科技</string>
+    <string name="app_ad">高清美女图片壁纸</string>
+    <string name="author">魁地奇信息科技</string>
     <string name="title_about">关于我们</string>
     <string name="title_share_preview">分享预览</string>
     <string name="title_meinv">美女</string>
-    <string name="title_ai">Ai</string>
-    <string name="title_ai_learn">跟Ai学英语</string>
+    <string name="title_mianzeshengming">本软件的所有数据均来自互联网，为了方便大家收集而来，版权归原创者所有，如果侵犯了你的权利，请提供证明并联系我们，我们会第一时间处理。</string>
+    <string name="menu_share">分享</string>
     <string name="title_Practice">口语练习</string>
     <string name="title_video_spoken">口语视频</string>
     <string name="title_listening">听力</string>
@@ -91,7 +91,7 @@
     <string name="advanced">高级</string>
     <string name="new_concept">新概念</string>
 
-    <string name="menu_share">DIY分享</string>
+    <string name="menu_mzsm">免责声明</string>
     <string name="menu_settings">语速调节</string>
     <string name="app_name_share">App:美秀图片</string>
     <string name="share_text_hint">请输入分享内容</string>
@@ -248,11 +248,10 @@
     <string name="cailing_ad_prompt">三块钱你买不了吃亏，买不了上当，只需三块钱，就能让电话另一头的TA拥有一次美好而有爱的等待，而不是平凡并且枯燥的嘟。。。嘟。。。嘟。。。还等什么呢，赶紧操作起来，为TA设置一段好玩又有新意的铃声吧! http://api.openspeech.cn/kyls/NTBhYTEyMTM=</string>
     <string name="yuedu_ad_prompt">专注随身阅读30年! http://api.openspeech.cn/cmread/NTBhYTEyMTM=</string>
     <string name="hotel_ad_prompt">专注开房30年! http://api.openspeech.cn/trip/NTBhYTEyMTM=</string>
-    <string name="invite_friends_zyhy">哎呦，这个软件不错哦，小伙伴快来！ http://a.app.qq.com/o/simple.jsp?pkgname=com.messi.languagehelper</string>
-    <string name="invite_friends_yyj">哎呦，这个软件不错哦，小伙伴快来！ http://a.app.qq.com/o/simple.jsp?pkgname=com.messi.learnenglish</string>
-    <string name="invite_friends_yys">哎呦，这个软件不错哦，小伙伴快来！ http://a.app.qq.com/o/simple.jsp?pkgname=com.messi.cantonese.study</string>
-    <string name="invite_friends_yycd">哎呦，这个软件不错哦，小伙伴快来！ http://a.app.qq.com/o/simple.jsp?pkgname=com.messi.languagehelper.chinese</string>
-    <string name="invite_friends_xbky">哎呦，这个软件不错哦，小伙伴快来！ http://a.app.qq.com/o/simple.jsp?pkgname=com.messi.languagehelper.spoken</string>
+    <string name="invite_friends_meixiu">哎呦，这个软件不错哦，小伙伴快来！ http://a.app.qq.com/o/simple.jsp?pkgname=com.messi.languagehelper.meixiu</string>
+    <string name="invite_friends_meinv">哎呦，这个软件不错哦，小伙伴快来！ http://a.app.qq.com/o/simple.jsp?pkgname=com.messi.languagehelper.meinv</string>
+    <string name="invite_friends_caricature">哎呦，这个软件不错哦，小伙伴快来！ http://a.app.qq.com/o/simple.jsp?pkgname=com.messi.languagehelper.caricature</string>
+    <string name="invite_friends_browser">哎呦，这个软件不错哦，小伙伴快来！ http://a.app.qq.com/o/simple.jsp?pkgname=com.messi.languagehelper.browser</string>
 
     <string name="dailysentence">每日一句</string>
     <string name="english_essay">励志语录</string>
@@ -335,8 +334,6 @@
 
     <string name="getcontent_1">开发中，敬请期待！</string>
     <string name="getcontent_2">帮助开发者，请猛戳！</string>
-
-    <string name="learn_english">学无止境</string>
 
     <string name="follow_teacher">外教跟读</string>
     <string name="server_error">服务器错误，请稍后重试！</string>

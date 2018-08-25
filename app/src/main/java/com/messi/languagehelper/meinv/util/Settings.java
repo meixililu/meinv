@@ -33,14 +33,16 @@ public class Settings {
 
 	private static final int RequestCode = 1;
 
-	public static String sougouApi = "http://pic.sogou.com/pics/channel/getAllRecomPicByTag.jsp?category=%E7%BE%8E%E5%A5%B3&len=10&tag=";
+	public static String sougouApi = "http://pic.sogou.com/pics/channel/getAllRecomPicByTag.jsp?category=美女&len=9&tag=";
+	// uc search
+	public static final String UCSearch = "https://yz.m.sm.cn/s?q=%E7%A5%9E%E9%A9%AC%E6%96%B0%E9%97%BB%E6%A6%9C%E5%8D%95&from=wm845578";
 
-
-	public static final String Email = "meixililulu@163.com";
+	public static final String Email = "mzxbkj@163.com";
 
 	public static final int page_size = 10;
 
-	public static final String application_id_meinv = "com.messi.languagehelper";
+	public static final String application_id_meixiu = "com.messi.languagehelper.meixiu";
+	public static final String application_id_meinv = "com.messi.languagehelper.meinv";
 	public static final String application_id_caricature = "com.messi.languagehelper.google";
 	public static final String application_id_browser = "com.messi.learnenglish";
 

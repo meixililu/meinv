@@ -47,7 +47,9 @@ public class AppUpdateUtil {
 
     public static void checkUpdate(final Activity mActivity) {
         AVQuery<AVObject> query = new AVQuery<AVObject>(AVOUtil.UpdateInfo.UpdateInfo);
-        if(mActivity.getPackageName().equals(Settings.application_id_meinv)){
+        if(mActivity.getPackageName().equals(Settings.application_id_meixiu)){
+            query.whereEqualTo(AVOUtil.UpdateInfo.AppCode, "meixiu");
+        }else if(mActivity.getPackageName().equals(Settings.application_id_meinv)){
             query.whereEqualTo(AVOUtil.UpdateInfo.AppCode, "meinv");
         }else if(mActivity.getPackageName().equals(Settings.application_id_caricature)){
             query.whereEqualTo(AVOUtil.UpdateInfo.AppCode, "caricature");

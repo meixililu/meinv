@@ -1,6 +1,7 @@
 package com.messi.languagehelper.meinv;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -41,22 +42,22 @@ public class JokeFragment extends BaseFragment implements OnClickListener {
     private RecyclerView listview;
     private RcMeinvListAdapter mAdapter;
     private List<SougoItem> avObjects;
-    private int skip = 0;
-    private String category;
+    private int skip;
     private IFLYNativeAd nativeAd;
     private int maxRandom;
     private boolean loading;
     private boolean hasMore = true;
     private SougoItem mADObject;
     private LinearLayoutManager mLinearLayoutManager;
+    private SharedPreferences sp;
     private List<NativeExpressADView> mTXADList;
     private String tag;
-    private int num;
+    private View view;
 
-    public static JokeFragment newInstance(String category){
+    public static JokeFragment newInstance(String tag){
         JokeFragment fragment = new JokeFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("category",category);
+        bundle.putString("tag",tag);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -65,7 +66,9 @@ public class JokeFragment extends BaseFragment implements OnClickListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle mBundle = getArguments();
-        this.category = mBundle.getString("category");
+        this.tag = mBundle.getString("tag");
+        sp = Settings.getSharedPreferences(getActivity());
+        maxRandom = sp.getInt(tag,0);
     }
 
     @Override
@@ -81,7 +84,14 @@ public class JokeFragment extends BaseFragment implements OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater,container,savedInstanceState);
-        View view = inflater.inflate(R.layout.joke_picture_fragment, container, false);
+        if(view != null){
+            ViewGroup parent = (ViewGroup)view.getParent();
+            if(parent != null){
+                parent.removeView(view);
+            }
+            return view;
+        }
+        view = inflater.inflate(R.layout.joke_picture_fragment, container, false);
         initViews(view);
         return view;
     }
@@ -89,6 +99,7 @@ public class JokeFragment extends BaseFragment implements OnClickListener {
     @Override
     public void loadDataOnStart() {
         super.loadDataOnStart();
+        random();
         loadAD();
         getData();
     }
@@ -108,7 +119,6 @@ public class JokeFragment extends BaseFragment implements OnClickListener {
                 new HorizontalDividerItemDecoration.Builder(getContext())
                         .colorResId(R.color.text_tint)
                         .sizeResId(R.dimen.list_divider_size)
-                        .marginResId(R.dimen.padding_margin, R.dimen.padding_margin)
                         .build());
         listview.setAdapter(mAdapter);
         setListOnScrollListener();
@@ -198,7 +208,6 @@ public class JokeFragment extends BaseFragment implements OnClickListener {
 
             @Override
             public void onResponsed(String responseString) {
-                LogUtil.DefalutLog(responseString);
                 if(!TextUtils.isEmpty(responseString)){
                     JsonRootBean mResult = JSON.parseObject(responseString,JsonRootBean.class);
                     setData(mResult);
@@ -275,7 +284,7 @@ public class JokeFragment extends BaseFragment implements OnClickListener {
     }
 
     private void loadTXAD(){
-        TXADUtil.showCDT(getActivity(), new NativeExpressAD.NativeExpressADListener() {
+        TXADUtil.showCDTZX(getActivity(), new NativeExpressAD.NativeExpressADListener() {
             @Override
             public void onNoAD(com.qq.e.comm.util.AdError adError) {
                 LogUtil.DefalutLog(adError.getErrorMsg());
@@ -366,9 +375,12 @@ public class JokeFragment extends BaseFragment implements OnClickListener {
         onSwipeRefreshLayoutRefresh();
     }
 
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Settings.saveSharedPreferences(sp,tag,maxRandom);
         if(mTXADList != null){
             for(NativeExpressADView adView : mTXADList){
                 adView.destroy();
