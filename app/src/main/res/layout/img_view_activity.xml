@@ -7,13 +7,15 @@
     android:orientation="vertical"
     android:background="@color/black">
 
-    <com.facebook.drawee.view.SimpleDraweeView
+    <com.messi.languagehelper.meinv.view.ZoomableDraweeView
         android:id="@+id/item_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/black"
         fresco:actualImageScaleType="fitCenter"
         fresco:placeholderImage="@drawable/img_loading"
+        fresco:failureImage="@drawable/img_lost"
+        fresco:failureImageScaleType="fitCenter"
         fresco:placeholderImageScaleType="fitCenter"/>
 
     <ImageView
@@ -27,8 +29,8 @@
 
     <ImageView
         android:id="@+id/download_img"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="27dp"
+        android:layout_height="27dp"
         android:src="@drawable/ic_download_white"
         android:layout_gravity="bottom|right"
         android:layout_margin="@dimen/padding_20"

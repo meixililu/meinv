@@ -4,7 +4,7 @@ public class KeyUtil {
 
 	public static final String MaxRandom = "MaxRandom";
 	
-	public static final String Practice_FourInOne = "Practice_FourInOne";
+	public static final String Tag = "Tag";
 	
 	public static final String Practice_ReadAfterMe = "Practice_ReadAfterMe";
 	
@@ -26,7 +26,7 @@ public class KeyUtil {
 
 	public static final String UpdateSymbolList = "UpdateSymbolList1";
 
-	public static final String IsTranslateYueKey = "IsTranslateYueKey";
+	public static final String Ratio = "Ratio";
 
 	public static final String URL = "urlkey";
 

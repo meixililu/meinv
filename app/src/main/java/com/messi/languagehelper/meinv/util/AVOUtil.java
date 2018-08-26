@@ -634,6 +634,14 @@ public class AVOUtil {
 		public final static String createdAt = "createdAt";
 	}
 
+	public static class SearchMeinvHot{
+		public final static String SearchMeinvHot = "SearchMeinvHot";
+		public final static String click_time = "click_time";
+		public final static String name = "name";
+		public final static String type = "type";
+		public final static String createdAt = "createdAt";
+	}
+
 	public static class XmlySearchHot{
 		public final static String XmlySearchHot = "XmlySearchHot";
 		public final static String click_time = "click_time";

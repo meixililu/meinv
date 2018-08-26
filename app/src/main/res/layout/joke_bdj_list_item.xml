@@ -18,6 +18,8 @@
             fresco:actualImageScaleType="fitCenter"
             fresco:placeholderImage="@drawable/img_loading"
             fresco:placeholderImageScaleType="fitCenter"
+            fresco:failureImage="@drawable/img_lost"
+            fresco:failureImageScaleType="fitCenter"
             fresco:viewAspectRatio="0.8" />
         <TextView
             android:id="@+id/des"

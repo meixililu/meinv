@@ -1,16 +1,12 @@
 package com.messi.languagehelper.meinv;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSON;
 import com.iflytek.voiceads.AdError;
@@ -23,8 +19,8 @@ import com.messi.languagehelper.meinv.bean.JsonRootBean;
 import com.messi.languagehelper.meinv.bean.SougoItem;
 import com.messi.languagehelper.meinv.http.LanguagehelperHttpClient;
 import com.messi.languagehelper.meinv.http.UICallback;
-import com.messi.languagehelper.meinv.impl.FragmentProgressbarListener;
 import com.messi.languagehelper.meinv.util.ADUtil;
+import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
 import com.messi.languagehelper.meinv.util.NumberUtil;
 import com.messi.languagehelper.meinv.util.Settings;
@@ -37,7 +33,7 @@ import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JokeFragment extends BaseFragment implements OnClickListener {
+public class MeinvActivity extends BaseActivity implements OnClickListener {
 
     private RecyclerView listview;
     private RcMeinvListAdapter mAdapter;
@@ -52,71 +48,33 @@ public class JokeFragment extends BaseFragment implements OnClickListener {
     private SharedPreferences sp;
     private List<NativeExpressADView> mTXADList;
     private String tag;
-    private View view;
-
-    public static JokeFragment newInstance(String tag){
-        JokeFragment fragment = new JokeFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("tag",tag);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle mBundle = getArguments();
-        this.tag = mBundle.getString("tag");
-        sp = Settings.getSharedPreferences(getActivity());
-        maxRandom = sp.getInt(tag,0);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mProgressbarListener = (FragmentProgressbarListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement FragmentProgressbarListener");
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater,container,savedInstanceState);
-        if(view != null){
-            ViewGroup parent = (ViewGroup)view.getParent();
-            if(parent != null){
-                parent.removeView(view);
-            }
-            return view;
-        }
-        view = inflater.inflate(R.layout.joke_picture_fragment, container, false);
-        initViews(view);
-        return view;
-    }
-
-    @Override
-    public void loadDataOnStart() {
-        super.loadDataOnStart();
-        random();
+        setContentView(R.layout.meinv_picture_activity);
+        initViews();
+        initSwipeRefresh();
         loadAD();
         getData();
     }
 
-    private void initViews(View view) {
+
+    private void initViews() {
+        this.tag = getIntent().getStringExtra(KeyUtil.Tag);
+        sp = Settings.getSharedPreferences(this);
+        maxRandom = sp.getInt(tag,0);
         avObjects = new ArrayList<SougoItem>();
         mTXADList = new ArrayList<NativeExpressADView>();
-        listview = (RecyclerView) view.findViewById(R.id.listview);
-        initSwipeRefresh(view);
+        listview = (RecyclerView) findViewById(R.id.listview);
         mAdapter = new RcMeinvListAdapter();
         mAdapter.setItems(avObjects);
         mAdapter.setFooter(new Object());
         hideFooterview();
-        mLinearLayoutManager = new LinearLayoutManager(getContext());
+        mLinearLayoutManager = new LinearLayoutManager(this);
         listview.setLayoutManager(mLinearLayoutManager);
         listview.addItemDecoration(
-                new HorizontalDividerItemDecoration.Builder(getContext())
+                new HorizontalDividerItemDecoration.Builder(this)
                         .colorResId(R.color.text_tint)
                         .sizeResId(R.dimen.list_divider_size)
                         .build());
@@ -149,7 +107,7 @@ public class JokeFragment extends BaseFragment implements OnClickListener {
                 if(i < avObjects.size() && i > 0){
                     SougoItem mAVObject = avObjects.get(i);
                     if(mAVObject != null && mAVObject.getIsAdShow() > 0){
-                        if(mAVObject.getIsAdShow() != 1 && misVisibleToUser){
+                        if(mAVObject.getIsAdShow() != 1){
                             NativeADDataRef mNativeADDataRef = mAVObject.getmNativeADDataRef();
                             if(mNativeADDataRef != null){
                                 boolean isExposure = mNativeADDataRef.onExposured(view.getChildAt(i%vCount));
@@ -194,7 +152,7 @@ public class JokeFragment extends BaseFragment implements OnClickListener {
         loading = true;
         showProgressbar();
         String url = Settings.sougouApi+tag+"&start="+skip;
-        LanguagehelperHttpClient.get(url,new UICallback(getActivity()){
+        LanguagehelperHttpClient.get(url,new UICallback(this){
             @Override
             public void onFailured() {
             }
@@ -220,7 +178,7 @@ public class JokeFragment extends BaseFragment implements OnClickListener {
         if(mResult != null && mResult.getAll_items() != null){
             maxRandom = mResult.getMaxEnd();
             if(mResult.getAll_items().size() == 0){
-                ToastUtil.diaplayMesShort(getContext(), "没有了！");
+                ToastUtil.diaplayMesShort(this, "没有了！");
                 hideFooterview();
                 hasMore = false;
             }else{
@@ -238,7 +196,7 @@ public class JokeFragment extends BaseFragment implements OnClickListener {
     }
 
     private void loadXFAD(){
-        nativeAd = new IFLYNativeAd(getContext(), ADUtil.XXLAD, new IFLYNativeListener() {
+        nativeAd = new IFLYNativeAd(this, ADUtil.XXLAD, new IFLYNativeListener() {
             @Override
             public void onConfirm() {
             }
@@ -284,7 +242,7 @@ public class JokeFragment extends BaseFragment implements OnClickListener {
     }
 
     private void loadTXAD(){
-        TXADUtil.showCDTZX(getActivity(), new NativeExpressAD.NativeExpressADListener() {
+        TXADUtil.showCDTZX(this, new NativeExpressAD.NativeExpressADListener() {
             @Override
             public void onNoAD(com.qq.e.comm.util.AdError adError) {
                 LogUtil.DefalutLog(adError.getErrorMsg());

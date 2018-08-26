@@ -44,7 +44,6 @@ public class RcJokeListItemViewHolder extends RecyclerView.ViewHolder {
         ad_layout = (FrameLayout) convertView.findViewById(R.id.ad_layout);
     }
 
-    //		type 1 img; 2 gif; 3 gif; 4 video; 5 text; 6 url；
     public void render(final AVObject mAVObject) {
         list_item_img.setVisibility(View.GONE);
         ad_layout.setVisibility(View.GONE);

@@ -1,16 +1,20 @@
 package com.messi.languagehelper.meinv;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
 import com.messi.languagehelper.meinv.impl.FragmentProgressbarListener;
 import com.messi.languagehelper.meinv.util.DownLoadUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.SDCardUtil;
 import com.messi.languagehelper.meinv.util.ToastUtil;
+import com.messi.languagehelper.meinv.view.DoubleTapGestureListener;
+import com.messi.languagehelper.meinv.view.ZoomableDraweeView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,7 +24,7 @@ import butterknife.OnClick;
 public class ImgViewActivity extends BaseActivity implements FragmentProgressbarListener {
 
     @BindView(R.id.item_img)
-    SimpleDraweeView itemImg;
+    ZoomableDraweeView itemImg;
     @BindView(R.id.close_img)
     ImageView closeImg;
     @BindView(R.id.download_img)
@@ -29,6 +33,7 @@ public class ImgViewActivity extends BaseActivity implements FragmentProgressbar
     private String img_id;
     private String DownloadUrl;
     private String saveUrl;
+    private float ratio;
 
 
     @Override
@@ -42,10 +47,24 @@ public class ImgViewActivity extends BaseActivity implements FragmentProgressbar
     private void init() {
         setStatusbarColor(R.color.black);
         url = getIntent().getStringExtra(KeyUtil.URL);
+        ratio = getIntent().getFloatExtra(KeyUtil.Ratio,0);
         DownloadUrl = getIntent().getStringExtra(KeyUtil.DownloadUrl);
         img_id = getIntent().getStringExtra(KeyUtil.Id);
         if (!TextUtils.isEmpty(url)) {
-            itemImg.setImageURI(url);
+            if(ratio > 0){
+                itemImg.setAspectRatio(ratio);
+            }
+            itemImg.setAllowTouchInterceptionWhileZoomed(true);
+            //长按
+            itemImg.setIsLongpressEnabled(false);
+            //双击击放大或缩小
+            itemImg.setTapListener(new DoubleTapGestureListener(itemImg));
+
+            DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                    .setUri(Uri.parse(url))
+                    .build();
+            //加载图片
+            itemImg.setController(draweeController);
         }
     }
 

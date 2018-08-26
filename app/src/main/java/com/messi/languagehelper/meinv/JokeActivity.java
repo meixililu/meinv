@@ -20,7 +20,6 @@ import com.messi.languagehelper.meinv.adapter.JokePageAdapter;
 import com.messi.languagehelper.meinv.impl.FragmentProgressbarListener;
 import com.messi.languagehelper.meinv.util.AVOUtil;
 import com.messi.languagehelper.meinv.util.AppUpdateUtil;
-import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
 import com.messi.languagehelper.meinv.util.Settings;
 
@@ -107,27 +106,15 @@ public class JokeActivity extends BaseActivity implements FragmentProgressbarLis
                 toMoreActivity();
                 break;
             case R.id.action_search:
-                toUCSearch();
+                toActivity(SearchActivity.class,null);
                 break;
         }
         return true;
     }
 
-    private void toUCSearch() {
-        Intent intent = new Intent(this, WebViewActivity.class);
-        intent.putExtra(KeyUtil.URL, getUCSearchUrl());
-        intent.putExtra(KeyUtil.IsHideToolbar, true);
-        intent.putExtra(KeyUtil.ActionbarTitle, getResources().getString(R.string.leisure_search));
-        startActivity(intent);
-    }
-
     private void toMoreActivity() {
         Intent intent = new Intent(this, MoreActivity.class);
         startActivity(intent);
-    }
-
-    private String getUCSearchUrl(){
-        return sp.getString(KeyUtil.Lei_UCSearch,Settings.UCSearch);
     }
 
     @Override

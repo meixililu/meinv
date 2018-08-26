@@ -82,6 +82,7 @@ public class RcMeinvListItemViewHolder extends RecyclerView.ViewHolder {
         Intent intent = new Intent(context, ImgViewActivity.class);
         intent.putExtra(KeyUtil.URL, mAVObject.getThumbUrl());
         intent.putExtra(KeyUtil.Id, mAVObject.getId()+"");
+        intent.putExtra(KeyUtil.Ratio, (float)mAVObject.getThumb_width() / mAVObject.getThumb_height());
         intent.putExtra(KeyUtil.DownloadUrl, mAVObject.getPic_url());
         context.startActivity(intent);
     }
