@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.messi.languagehelper.meinv.util.SDCardUtil;
-import com.messi.languagehelper.meinv.util.Settings;
+import com.messi.languagehelper.meinv.util.Setings;
 import com.messi.languagehelper.meinv.util.ViewUtil;
 
 import java.io.File;
@@ -49,13 +49,13 @@ public class QRCodeShareActivity extends BaseActivity implements OnClickListener
     }
 
     private void setImg(){
-        if(getPackageName().equals(Settings.application_id_meixiu)){
+        if(getPackageName().equals(Setings.application_id_meixiu)){
             qrcode_img.setImageResource(R.drawable.qrcode);
-        }else if (getPackageName().equals(Settings.application_id_meinv)) {
+        }else if (getPackageName().equals(Setings.application_id_meinv)) {
             qrcode_img.setImageResource(R.drawable.qrcode);
-        } else if (getPackageName().equals(Settings.application_id_caricature)) {
+        } else if (getPackageName().equals(Setings.application_id_caricature)) {
             qrcode_img.setImageResource(R.drawable.qrcode);
-        } else if (getPackageName().equals(Settings.application_id_browser)) {
+        } else if (getPackageName().equals(Setings.application_id_browser)) {
             qrcode_img.setImageResource(R.drawable.qrcode);
         } else {
             qrcode_img.setImageResource(R.drawable.qrcode);
@@ -73,7 +73,7 @@ public class QRCodeShareActivity extends BaseActivity implements OnClickListener
             if (file != null && file.exists() && file.isFile()) {
                 Uri uri = null;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    uri = FileProvider.getUriForFile(this, Settings.getProvider(this), file);
+                    uri = FileProvider.getUriForFile(this, Setings.getProvider(this), file);
                 } else {
                     uri = Uri.fromFile(file);
                 }

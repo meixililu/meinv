@@ -21,7 +21,7 @@ import com.google.android.flexbox.FlexboxLayout;
 import com.messi.languagehelper.meinv.util.AVOUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.ScreenUtil;
-import com.messi.languagehelper.meinv.util.Settings;
+import com.messi.languagehelper.meinv.util.Setings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +76,7 @@ public class SearchActivity extends BaseActivity {
 
     private void addHistory(){
         historyList.clear();
-        String history_str = Settings.getSharedPreferences(this).getString(KeyUtil.SearchHistory,"");
+        String history_str = Setings.getSharedPreferences(this).getString(KeyUtil.SearchHistory,"");
         if (!TextUtils.isEmpty(history_str)) {
             String[] hiss = history_str.split(",");
             if(hiss.length > 0){
@@ -190,7 +190,7 @@ public class SearchActivity extends BaseActivity {
     }
 
     private void clearHistory(){
-        Settings.saveSharedPreferences(Settings.getSharedPreferences(this),
+        Setings.saveSharedPreferences(Setings.getSharedPreferences(this),
                 KeyUtil.SearchHistory,
                 "");
         historyList.clear();
@@ -211,7 +211,7 @@ public class SearchActivity extends BaseActivity {
     private void saveHistory(String quest){
         StringBuilder sb = new StringBuilder();
         sb.append(quest);
-        String history_str = Settings.getSharedPreferences(this).getString(KeyUtil.SearchHistory,"");
+        String history_str = Setings.getSharedPreferences(this).getString(KeyUtil.SearchHistory,"");
         if (!TextUtils.isEmpty(history_str)) {
             String[] hiss = history_str.split(",");
             if(hiss.length > 0){
@@ -225,7 +225,7 @@ public class SearchActivity extends BaseActivity {
                 }
             }
         }
-        Settings.saveSharedPreferences(Settings.getSharedPreferences(this),
+        Setings.saveSharedPreferences(Setings.getSharedPreferences(this),
                 KeyUtil.SearchHistory,
                 sb.toString());
         saveHistoryToServer(quest);

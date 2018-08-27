@@ -26,7 +26,7 @@ import com.iflytek.voiceads.NativeADDataRef;
 import com.messi.languagehelper.meinv.util.ADUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
-import com.messi.languagehelper.meinv.util.Settings;
+import com.messi.languagehelper.meinv.util.Setings;
 import com.messi.languagehelper.meinv.util.TXADUtil;
 import com.qq.e.ads.splash.SplashADListener;
 import com.umeng.analytics.MobclickAgent;
@@ -267,7 +267,7 @@ public class LoadingActivity extends AppCompatActivity {
 
     private void toNextPage() {
         Class mclass = JokeActivity.class;
-        if(getPackageName().equals(Settings.application_id_meinv)){
+        if(getPackageName().equals(Setings.application_id_meinv)){
             mclass = JokeActivity.class;
         }
         Intent intent = new Intent(LoadingActivity.this, mclass);
@@ -330,9 +330,9 @@ public class LoadingActivity extends AppCompatActivity {
 //            lackedPermission.add(Manifest.permission.ACCESS_FINE_LOCATION);
 //        }
         if (lackedPermission.size() == 0) {
-            Settings.saveSharedPreferences(mSharedPreferences,KeyUtil.IsTXADPermissionReady,true);
+            Setings.saveSharedPreferences(mSharedPreferences,KeyUtil.IsTXADPermissionReady,true);
         } else {
-            Settings.saveSharedPreferences(mSharedPreferences,KeyUtil.IsTXADPermissionReady,false);
+            Setings.saveSharedPreferences(mSharedPreferences,KeyUtil.IsTXADPermissionReady,false);
         }
     }
 

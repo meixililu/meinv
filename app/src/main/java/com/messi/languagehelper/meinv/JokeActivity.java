@@ -3,9 +3,13 @@ package com.messi.languagehelper.meinv;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
@@ -21,7 +25,7 @@ import com.messi.languagehelper.meinv.impl.FragmentProgressbarListener;
 import com.messi.languagehelper.meinv.util.AVOUtil;
 import com.messi.languagehelper.meinv.util.AppUpdateUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
-import com.messi.languagehelper.meinv.util.Settings;
+import com.messi.languagehelper.meinv.util.Setings;
 
 import java.util.List;
 
@@ -50,7 +54,7 @@ public class JokeActivity extends BaseActivity implements FragmentProgressbarLis
             getSupportActionBar().setTitle("");
             getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
         }
-        sp = Settings.getSharedPreferences(this);
+        sp = Setings.getSharedPreferences(this);
         tablayout = (TabLayout) findViewById(R.id.tablayout);
         viewpager = (ViewPager) findViewById(R.id.viewpager);
     }
@@ -135,7 +139,7 @@ public class JokeActivity extends BaseActivity implements FragmentProgressbarLis
 
     @TargetApi(Build.VERSION_CODES.M)
     private void checkAndRequestPermission() {
-        Settings.verifyStoragePermissions(this, Settings.PERMISSIONS_STORAGE);
+        Setings.verifyStoragePermissions(this, Setings.PERMISSIONS_STORAGE);
     }
 
     private void initSDKAndPermission(){
@@ -147,5 +151,28 @@ public class JokeActivity extends BaseActivity implements FragmentProgressbarLis
         }, 1 * 1000);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 10010:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    AppUpdateUtil.checkUpdate(this);
+                } else {
+                    Uri packageURI = Uri.parse("package:"+this.getPackageName());
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,packageURI);
+                    startActivityForResult(intent, 10086);
+                }
+                break;
 
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == 10086) {
+            AppUpdateUtil.checkUpdate(this);
+        }
+    }
 }

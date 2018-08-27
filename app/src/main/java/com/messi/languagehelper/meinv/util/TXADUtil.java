@@ -33,7 +33,7 @@ public class TXADUtil {
     public static void initTXADID(Context mContext){
         try {
             ADUtil.IsShowAD = true;
-            SharedPreferences sp = Settings.getSharedPreferences(mContext);
+            SharedPreferences sp = Setings.getSharedPreferences(mContext);
             String ids = sp.getString(KeyUtil.Ad_Ids,"");
             if(!TextUtils.isEmpty(ids)){
                 String[] ides = ids.split("#");
@@ -56,8 +56,8 @@ public class TXADUtil {
             String ad = sp.getString(KeyUtil.APP_Advertiser,ADUtil.Advertiser_XF);
             if(!ad.equals(KeyUtil.No_Ad)){
                 String noAdChannel = sp.getString(KeyUtil.No_Ad_Channel,"");
-                String channel = Settings.getMetaData(mContext,"UMENG_CHANNEL");
-                int versionCode = Settings.getVersion(mContext);
+                String channel = Setings.getMetaData(mContext,"UMENG_CHANNEL");
+                int versionCode = Setings.getVersion(mContext);
                 int lastCode = sp.getInt(KeyUtil.VersionCode,-1);
                 LogUtil.DefalutLog("lastCode:"+lastCode+"--noAdChannel:"+noAdChannel+"--channel:"+channel);
                 if(lastCode < 0){

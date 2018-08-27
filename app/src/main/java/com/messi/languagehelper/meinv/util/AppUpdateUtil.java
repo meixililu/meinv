@@ -47,11 +47,11 @@ public class AppUpdateUtil {
 
     public static void checkUpdate(final Activity mActivity) {
         AVQuery<AVObject> query = new AVQuery<AVObject>(AVOUtil.UpdateInfo.UpdateInfo);
-        if(mActivity.getPackageName().equals(Settings.application_id_meixiu)){
+        if(mActivity.getPackageName().equals(Setings.application_id_meixiu)){
             query.whereEqualTo(AVOUtil.UpdateInfo.AppCode, "meixiu");
-        }else if(mActivity.getPackageName().equals(Settings.application_id_meinv)){
+        }else if(mActivity.getPackageName().equals(Setings.application_id_meinv)){
             query.whereEqualTo(AVOUtil.UpdateInfo.AppCode, "meinv");
-        }else if(mActivity.getPackageName().equals(Settings.application_id_caricature)){
+        }else if(mActivity.getPackageName().equals(Setings.application_id_caricature)){
             query.whereEqualTo(AVOUtil.UpdateInfo.AppCode, "caricature");
         }else{
             query.whereEqualTo(AVOUtil.UpdateInfo.AppCode, "noupdate");
@@ -68,7 +68,7 @@ public class AppUpdateUtil {
     }
 
     public static void saveSetting(Activity mActivity,AVObject mAVObject){
-        SharedPreferences mSharedPreferences = Settings.getSharedPreferences(mActivity);
+        SharedPreferences mSharedPreferences = Setings.getSharedPreferences(mActivity);
         LogUtil.DefalutLog(mAVObject.getString(AVOUtil.UpdateInfo.AppName));
         String app_advertiser = mAVObject.getString(AVOUtil.UpdateInfo.ad_type);
         String wyyx_url = mAVObject.getString(AVOUtil.UpdateInfo.wyyx_url);
@@ -76,22 +76,22 @@ public class AppUpdateUtil {
         String ucsearch_url = mAVObject.getString(AVOUtil.UpdateInfo.ucsearch_url);
         String ad_ids = mAVObject.getString(AVOUtil.UpdateInfo.ad_ids);
         String no_ad_channel = mAVObject.getString(AVOUtil.UpdateInfo.no_ad_channel);
-        Settings.saveSharedPreferences(mSharedPreferences,KeyUtil.Lei_WYYX_URL,wyyx_url);
-        Settings.saveSharedPreferences(mSharedPreferences,KeyUtil.APP_Advertiser,app_advertiser);
-        Settings.saveSharedPreferences(mSharedPreferences,KeyUtil.Lei_UCTT,uctt_url);
-        Settings.saveSharedPreferences(mSharedPreferences,KeyUtil.Lei_UCSearch,ucsearch_url);
-        Settings.saveSharedPreferences(mSharedPreferences,KeyUtil.Ad_Ids,ad_ids);
-        Settings.saveSharedPreferences(mSharedPreferences,KeyUtil.No_Ad_Channel,no_ad_channel);
-        Settings.saveSharedPreferences(mSharedPreferences,KeyUtil.VersionCode,
+        Setings.saveSharedPreferences(mSharedPreferences,KeyUtil.Lei_WYYX_URL,wyyx_url);
+        Setings.saveSharedPreferences(mSharedPreferences,KeyUtil.APP_Advertiser,app_advertiser);
+        Setings.saveSharedPreferences(mSharedPreferences,KeyUtil.Lei_UCTT,uctt_url);
+        Setings.saveSharedPreferences(mSharedPreferences,KeyUtil.Lei_UCSearch,ucsearch_url);
+        Setings.saveSharedPreferences(mSharedPreferences,KeyUtil.Ad_Ids,ad_ids);
+        Setings.saveSharedPreferences(mSharedPreferences,KeyUtil.No_Ad_Channel,no_ad_channel);
+        Setings.saveSharedPreferences(mSharedPreferences,KeyUtil.VersionCode,
                 mAVObject.getInt(AVOUtil.UpdateInfo.VersionCode));
 
     }
 
     public static void showUpdateDialog(final Activity mActivity,final AVObject mAVObject) {
         String isValid = mAVObject.getString(AVOUtil.UpdateInfo.IsValid);
-        if(!TextUtils.isEmpty(isValid) && isValid.equals("2")){
+        if(!TextUtils.isEmpty(isValid) && isValid.equals("3")){
             int newVersionCode = mAVObject.getInt(AVOUtil.UpdateInfo.VersionCode);
-            int oldVersionCode = Settings.getVersion(mActivity);
+            int oldVersionCode = Setings.getVersion(mActivity);
             if (newVersionCode > oldVersionCode) {
                 String updateInfo = mAVObject.getString(AVOUtil.UpdateInfo.AppUpdateInfo);
                 String downloadType = mAVObject.getString(AVOUtil.UpdateInfo.DownloadType);

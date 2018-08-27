@@ -25,7 +25,7 @@ import com.messi.languagehelper.meinv.util.AVOUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
 import com.messi.languagehelper.meinv.util.NumberUtil;
-import com.messi.languagehelper.meinv.util.Settings;
+import com.messi.languagehelper.meinv.util.Setings;
 import com.messi.languagehelper.meinv.util.TXADUtil;
 import com.messi.languagehelper.meinv.util.ToastUtil;
 import com.qq.e.ads.nativ.NativeExpressAD;
@@ -191,7 +191,7 @@ public class MeinvFragment extends BaseFragment implements OnClickListener {
             query.whereEqualTo(AVOUtil.Joke.category,"103");
             query.addDescendingOrder(AVOUtil.Joke.createdAt);
             query.skip(skip);
-            query.limit(Settings.page_size);
+            query.limit(Setings.page_size);
             try {
                 return query.find();
             } catch (Exception e) {
@@ -216,7 +216,7 @@ public class MeinvFragment extends BaseFragment implements OnClickListener {
                         if(addAD()){
                             mAdapter.notifyDataSetChanged();
                         }
-                        skip += Settings.page_size;
+                        skip += Setings.page_size;
                         showFooterview();
                     }
                 }
@@ -333,7 +333,7 @@ public class MeinvFragment extends BaseFragment implements OnClickListener {
 
     private boolean addAD(){
         if(mADObject != null && avObjects != null && avObjects.size() > 0){
-            int index = avObjects.size() - Settings.page_size + NumberUtil.randomNumberRange(1, 2);
+            int index = avObjects.size() - Setings.page_size + NumberUtil.randomNumberRange(1, 2);
             if(index < 1){
                 index = 1;
             }
@@ -366,7 +366,7 @@ public class MeinvFragment extends BaseFragment implements OnClickListener {
                 try {
                     AVQuery<AVObject> query = new AVQuery<AVObject>(AVOUtil.Joke.Joke);
                     query.whereEqualTo(AVOUtil.Joke.category,"103");
-                    maxRandom =  query.count() / Settings.page_size;
+                    maxRandom =  query.count() / Setings.page_size;
                     LogUtil.DefalutLog("category:"+category+"---maxRandom:"+maxRandom);
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -21,7 +21,7 @@ import android.widget.ProgressBar;
 
 import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.ScreenUtil;
-import com.messi.languagehelper.meinv.util.Settings;
+import com.messi.languagehelper.meinv.util.Setings;
 import com.umeng.analytics.MobclickAgent;
 
 
@@ -234,10 +234,10 @@ public class BaseActivity extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
-                Settings.adjustStreamVolume(BaseActivity.this, keyCode);
+                Setings.adjustStreamVolume(BaseActivity.this, keyCode);
                 return true;
             case KeyEvent.KEYCODE_VOLUME_DOWN:
-                Settings.adjustStreamVolume(BaseActivity.this, keyCode);
+                Setings.adjustStreamVolume(BaseActivity.this, keyCode);
                 return true;
         }
         return super.onKeyDown(keyCode, event);

@@ -1,11 +1,14 @@
 package com.messi.languagehelper.meinv.util;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat.Builder;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
@@ -23,7 +26,7 @@ import okhttp3.Response;
 
 public class AppDownloadUtil {
 
-	private Context mContext;
+	private Activity mContext;
 	private int record = -2;
 	private String url;
 	private String ContentTitle;
@@ -35,7 +38,7 @@ public class AppDownloadUtil {
 	private NotificationManager mNotifyManager;
 	private Builder mBuilder;
 	
-	public AppDownloadUtil(Context mContext, String url, String appName, String AVObjectId, String path){
+	public AppDownloadUtil(Activity mContext, String url, String appName, String AVObjectId, String path){
 		this.mContext = mContext;
 		this.url = url;
 		this.ContentTitle = appName + "下载通知";
@@ -63,7 +66,7 @@ public class AppDownloadUtil {
 					mNotifyManager.notify(0, mBuilder.build());
 					try {
 						Response response = LanguagehelperHttpClient.get(url,progressListener);
-						if(response.isSuccessful()){
+						if(response != null && response.isSuccessful()){
 							LogUtil.DefalutLog("---DownloadFile success");
 							DownLoadUtil.saveFile(mContext,path,appFileName,response.body().bytes());
 							PendingIntent pendUp = PendingIntent.getActivity(mContext, 0, getInstallApkIntent(mContext,appLocalFullName),
@@ -120,16 +123,25 @@ public class AppDownloadUtil {
 	} 
 	
 	/**安装apk**/
-	public void installApk(Context mContext,String filePath){
-		mContext.startActivity(getInstallApkIntent(mContext,filePath));
+	public void installApk(Activity mContext,String filePath){
+		if (Build.VERSION.SDK_INT >= 26) {
+			boolean installAllowed = mContext.getPackageManager().canRequestPackageInstalls();
+			if (installAllowed) {
+				mContext.startActivity(getInstallApkIntent(mContext,filePath));
+			} else {
+				ActivityCompat.requestPermissions(mContext, new String[]{Manifest.permission.REQUEST_INSTALL_PACKAGES}, 10010);
+			}
+		}else {
+			mContext.startActivity(getInstallApkIntent(mContext,filePath));
+		}
 	}
-	
+
 	public Intent getInstallApkIntent(Context mContext,String filePath){
 		LogUtil.DefalutLog("getInstallApkIntent---filePath:"+filePath);
 		Intent i = new Intent(Intent.ACTION_VIEW);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 			i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-			Uri imageUri = FileProvider.getUriForFile(mContext, Settings.getProvider(mContext), new File(filePath));
+			Uri imageUri = FileProvider.getUriForFile(mContext, Setings.getProvider(mContext), new File(filePath));
 			i.setDataAndType(imageUri, "application/vnd.android.package-archive");
 		}else {
 			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

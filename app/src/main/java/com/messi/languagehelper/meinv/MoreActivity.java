@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 
-import com.messi.languagehelper.meinv.util.Settings;
+import com.messi.languagehelper.meinv.util.Setings;
 import com.messi.languagehelper.meinv.util.ShareUtil;
 
 import butterknife.BindView;
@@ -38,7 +38,7 @@ public class MoreActivity extends BaseActivity implements OnClickListener {
 
     private void init() {
         getSupportActionBar().setTitle(getResources().getString(R.string.title_more));
-        mSharedPreferences = Settings.getSharedPreferences(this);
+        mSharedPreferences = Setings.getSharedPreferences(this);
         mzsm_layout.setOnClickListener(this);
         comments_layout.setOnClickListener(this);
         about_layout.setOnClickListener(this);
@@ -74,13 +74,13 @@ public class MoreActivity extends BaseActivity implements OnClickListener {
         try {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
-            if(getPackageName().equals(Settings.application_id_meixiu)){
+            if(getPackageName().equals(Setings.application_id_meixiu)){
                 intent.setData(Uri.parse("market://details?id=com.messi.languagehelper.meixiu"));
-            } else if (getPackageName().equals(Settings.application_id_meinv)) {
+            } else if (getPackageName().equals(Setings.application_id_meinv)) {
                 intent.setData(Uri.parse("market://details?id=com.messi.languagehelper.meinv"));
-            } else if (getPackageName().equals(Settings.application_id_caricature)) {
+            } else if (getPackageName().equals(Setings.application_id_caricature)) {
                 intent.setData(Uri.parse("market://details?id=com.messi.languagehelper.caricature"));
-            } else if (getPackageName().equals(Settings.application_id_browser)) {
+            } else if (getPackageName().equals(Setings.application_id_browser)) {
                 intent.setData(Uri.parse("market://details?id=com.messi.languagehelper.browser"));
             } else {
                 intent.setData(Uri.parse("market://details?id=com.messi.languagehelper"));
@@ -92,13 +92,13 @@ public class MoreActivity extends BaseActivity implements OnClickListener {
     }
 
     private void invite(){
-        if(getPackageName().equals(Settings.application_id_meixiu)){
+        if(getPackageName().equals(Setings.application_id_meixiu)){
             ShareUtil.shareText(MoreActivity.this, MoreActivity.this.getResources().getString(R.string.invite_friends_meixiu));
-        }else if (getPackageName().equals(Settings.application_id_meinv)) {
+        }else if (getPackageName().equals(Setings.application_id_meinv)) {
             ShareUtil.shareText(MoreActivity.this, MoreActivity.this.getResources().getString(R.string.invite_friends_meinv));
-        } else if (getPackageName().equals(Settings.application_id_caricature)) {
+        } else if (getPackageName().equals(Setings.application_id_caricature)) {
             ShareUtil.shareText(MoreActivity.this, MoreActivity.this.getResources().getString(R.string.invite_friends_caricature));
-        } else if (getPackageName().equals(Settings.application_id_browser)) {
+        } else if (getPackageName().equals(Setings.application_id_browser)) {
             ShareUtil.shareText(MoreActivity.this, MoreActivity.this.getResources().getString(R.string.invite_friends_browser));
         } else {
             ShareUtil.shareText(MoreActivity.this, MoreActivity.this.getResources().getString(R.string.invite_friends_meixiu));

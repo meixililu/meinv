@@ -27,7 +27,7 @@ import com.messi.languagehelper.meinv.impl.FragmentProgressbarListener;
 import com.messi.languagehelper.meinv.util.ADUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
 import com.messi.languagehelper.meinv.util.NumberUtil;
-import com.messi.languagehelper.meinv.util.Settings;
+import com.messi.languagehelper.meinv.util.Setings;
 import com.messi.languagehelper.meinv.util.TXADUtil;
 import com.messi.languagehelper.meinv.util.ToastUtil;
 import com.qq.e.ads.nativ.NativeExpressAD;
@@ -67,7 +67,7 @@ public class JokeFragment extends BaseFragment implements OnClickListener {
         super.onCreate(savedInstanceState);
         Bundle mBundle = getArguments();
         this.tag = mBundle.getString("tag");
-        sp = Settings.getSharedPreferences(getActivity());
+        sp = Setings.getSharedPreferences(getActivity());
         maxRandom = sp.getInt(tag,0);
     }
 
@@ -193,7 +193,7 @@ public class JokeFragment extends BaseFragment implements OnClickListener {
     private void getData(){
         loading = true;
         showProgressbar();
-        String url = Settings.sougouApi+tag+"&start="+skip;
+        String url = Setings.sougouApi+tag+"&start="+skip;
         LanguagehelperHttpClient.get(url,new UICallback(getActivity()){
             @Override
             public void onFailured() {
@@ -229,7 +229,7 @@ public class JokeFragment extends BaseFragment implements OnClickListener {
                     if(addAD()){
                         mAdapter.notifyDataSetChanged();
                     }
-                    skip += Settings.page_size;
+                    skip += Setings.page_size;
                     hasMore = true;
                     showFooterview();
                 }
@@ -344,7 +344,7 @@ public class JokeFragment extends BaseFragment implements OnClickListener {
 
     private boolean addAD(){
         if(mADObject != null && avObjects != null && avObjects.size() > 0){
-            int index = avObjects.size() - Settings.page_size + NumberUtil.randomNumberRange(1, 2);
+            int index = avObjects.size() - Setings.page_size + NumberUtil.randomNumberRange(1, 2);
             if(index < 1){
                 index = 1;
             }
@@ -380,7 +380,7 @@ public class JokeFragment extends BaseFragment implements OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Settings.saveSharedPreferences(sp,tag,maxRandom);
+        Setings.saveSharedPreferences(sp,tag,maxRandom);
         if(mTXADList != null){
             for(NativeExpressADView adView : mTXADList){
                 adView.destroy();
