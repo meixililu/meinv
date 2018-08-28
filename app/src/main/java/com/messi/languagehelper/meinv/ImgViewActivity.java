@@ -12,9 +12,9 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.messi.languagehelper.meinv.impl.FragmentProgressbarListener;
 import com.messi.languagehelper.meinv.util.DownLoadUtil;
+import com.messi.languagehelper.meinv.util.ImgUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.SDCardUtil;
-import com.messi.languagehelper.meinv.util.Setings;
 import com.messi.languagehelper.meinv.util.ToastUtil;
 import com.messi.languagehelper.meinv.view.DoubleTapGestureListener;
 import com.messi.languagehelper.meinv.view.ZoomableDraweeView;
@@ -49,7 +49,7 @@ public class ImgViewActivity extends BaseActivity implements FragmentProgressbar
             if(msg.what == 1){
                 try {
                     sharePath = SDCardUtil.getDownloadPath(SDCardUtil.ImgPath)+shareImgName;
-                    Setings.shareImg(ImgViewActivity.this,sharePath);
+                    ImgUtil.toBitmap(ImgViewActivity.this,sharePath);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

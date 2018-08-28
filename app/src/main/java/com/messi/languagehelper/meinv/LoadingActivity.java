@@ -266,9 +266,9 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     private void toNextPage() {
-        Class mclass = JokeActivity.class;
-        if(getPackageName().equals(Setings.application_id_meinv)){
-            mclass = JokeActivity.class;
+        Class mclass = MeixiuActivity.class;
+        if(getPackageName().equals(Setings.application_id_caricature)){
+            mclass = CaricatureMainActivity.class;
         }
         Intent intent = new Intent(LoadingActivity.this, mclass);
         startActivity(intent);

@@ -54,7 +54,7 @@ public class QRCodeShareActivity extends BaseActivity implements OnClickListener
         }else if (getPackageName().equals(Setings.application_id_meinv)) {
             qrcode_img.setImageResource(R.drawable.qrcode);
         } else if (getPackageName().equals(Setings.application_id_caricature)) {
-            qrcode_img.setImageResource(R.drawable.qrcode);
+            qrcode_img.setImageResource(R.drawable.qrcode_mh);
         } else if (getPackageName().equals(Setings.application_id_browser)) {
             qrcode_img.setImageResource(R.drawable.qrcode);
         } else {

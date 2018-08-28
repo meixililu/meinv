@@ -24,12 +24,7 @@ import java.util.List;
 public class AppUpdateUtil {
 
     public static void runCheckUpdateTask(final Activity mActivity) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                checkUpdate(mActivity);
-            }
-        }, 5 * 1000);
+        checkUpdate(mActivity);
         initXMLY(mActivity);
     }
 
@@ -59,9 +54,15 @@ public class AppUpdateUtil {
         query.findInBackground(new FindCallback<AVObject>() {
             public void done(List<AVObject> avObjects, AVException e) {
                 if (avObjects != null && avObjects.size() > 0) {
-                    AVObject mAVObject = avObjects.get(0);
+                    final AVObject mAVObject = avObjects.get(0);
                     saveSetting(mActivity,mAVObject);
-                    showUpdateDialog(mActivity,mAVObject);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            showUpdateDialog(mActivity,mAVObject);
+                        }
+                    }, 4500);
+
                 }
             }
         });

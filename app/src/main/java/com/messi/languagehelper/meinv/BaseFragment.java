@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.messi.languagehelper.meinv.impl.FragmentProgressbarListener;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
+import com.mindorks.nybus.NYBus;
 import com.umeng.analytics.MobclickAgent;
 
 
@@ -82,9 +83,9 @@ public class BaseFragment extends Fragment {
 	@Override
 	public void onStart() {
 		super.onStart();
-//		if(isRegisterBus){
-//			NYBus.get().register(this);
-//		}
+		if(isRegisterBus){
+			NYBus.get().register(this);
+		}
 	}
 
 	public void onResume() {
@@ -104,9 +105,9 @@ public class BaseFragment extends Fragment {
 	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
-//		if (isRegisterBus) {
-//			NYBus.get().unregister(this);
-//		}
+		if (isRegisterBus) {
+			NYBus.get().unregister(this);
+		}
 	}
 
 	/**

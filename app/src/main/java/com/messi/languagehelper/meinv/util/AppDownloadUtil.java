@@ -14,7 +14,7 @@ import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 
 import com.avos.avoscloud.AVObject;
-import com.messi.languagehelper.meinv.JokeActivity;
+import com.messi.languagehelper.meinv.MeixiuActivity;
 import com.messi.languagehelper.meinv.R;
 import com.messi.languagehelper.meinv.http.LanguagehelperHttpClient;
 import com.messi.languagehelper.meinv.impl.ProgressListener;
@@ -59,7 +59,7 @@ public class AppDownloadUtil {
 					mNotifyManager  = (NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 					mBuilder = new Builder(mContext);
 					mBuilder.setContentTitle(ContentTitle).setContentText("开始下载").setSmallIcon(R.drawable.ic_get_app_white_36dp).setTicker(Ticker).setAutoCancel(true);
-					Intent intent = new Intent (mContext, JokeActivity.class);
+					Intent intent = new Intent (mContext, MeixiuActivity.class);
 					intent.addFlags (Intent.FLAG_ACTIVITY_NEW_TASK);
 					PendingIntent pend = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 					mBuilder.setContentIntent (pend);

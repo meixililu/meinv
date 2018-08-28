@@ -1,8 +1,8 @@
 <resources>
 
-    <string name="app_name">美秀图片</string>
-    <string name="app_des">高清美女图片壁纸</string>
-    <string name="app_ad">高清美女图片壁纸</string>
+    <string name="app_name">极光漫画</string>
+    <string name="app_des">超火爆的漫画阅读器</string>
+    <string name="app_ad">超火爆的漫画阅读器</string>
     <string name="author">魁地奇信息科技</string>
     <string name="title_about">关于我们</string>
     <string name="title_share_preview">分享预览</string>
@@ -93,7 +93,7 @@
 
     <string name="menu_mzsm">免责声明</string>
     <string name="menu_settings">语速调节</string>
-    <string name="app_name_share">App:美秀图片</string>
+    <string name="app_name_share">App:极光漫画</string>
     <string name="share_text_hint">请输入分享内容</string>
     <string name="input_et_hint_english">请输入需要查询的英文</string>
     <string name="input_et_hint_chinese">请输入需要查询的中文</string>
@@ -224,7 +224,7 @@
     <string name="speak_prompt">请根据您说的语言点击中文或者英文！</string>
     <string name="webview_reload">加载失败，轻触屏幕刷新!</string>
 
-    <string name="menu_translate">美秀图片</string>
+    <string name="menu_translate">极光漫画</string>
     <string name="menu_speak">口语练习</string>
     <string name="menu_about">关于</string>
     <string name="recent_use_footer_prompt">温馨提示</string>

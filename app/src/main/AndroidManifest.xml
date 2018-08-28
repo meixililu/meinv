@@ -73,12 +73,37 @@
         <!--腾讯广告-->
 
         <activity
-            android:name=".JokeActivity"
+            android:name=".MeixiuActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"  />
+        <activity
+            android:name=".CaricatureMainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"  />
+        <activity
+            android:name=".WebViewNoAdActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".WebViewForCaricatureActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CaricatureSourceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CaricatureSearchResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CaricatureSearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CaricatureDetailActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MeinvActivity"
             android:screenOrientation="portrait" />

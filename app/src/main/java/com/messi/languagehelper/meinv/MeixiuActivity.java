@@ -30,7 +30,7 @@ import com.messi.languagehelper.meinv.util.Setings;
 import java.util.List;
 
 
-public class JokeActivity extends BaseActivity implements FragmentProgressbarListener {
+public class MeixiuActivity extends BaseActivity implements FragmentProgressbarListener {
 
     private TabLayout tablayout;
     private ViewPager viewpager;

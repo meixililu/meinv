@@ -12,24 +12,26 @@ import java.io.IOException;
 
 public class SDCardUtil {
 
+
 	/**sd卡保存文件夹名称**/
-	public static final String sdPath = "/meinv/audio/";
-	public static final String ImgPath = "/meinv/img/";
-	public static final String SymbolPath = "/meinv/audio/symbol/";
-	public static final String WordStudyPath = "/meinv/audio/wordstudy/";
-	public static final String CompositionPath = "/meinv/audio/composition/";
-	public static final String UserPracticePath = "/meinv/audio/practice/user/";
-	public static final String PracticePath = "/meinv/audio/practice/en/";
-	public static final String StudyDialogPath = "/meinv/audio/study/dialog/";
-	public static final String EvaluationPath = "/meinv/audio/study/evaluation/tts";
-	public static final String SpokenEnglishPath = "/meinv/audio/study/evaluation/";
-	public static final String EvaluationUserPath = "/meinv/audio/study/evaluation/user/";
-	public static final String DailySentencePath = "/meinv/audio/study/dailysentence/mp3/";
-	public static final String ReadingPath = "/meinv/audio/study/reading/mp3/";
-	public static final String apkPath = "/meinv/apps/download/";
-	public static final String apkUpdatePath = "/meinv/apps/update/";
-	public static final String lrcPath = "/meinv/lrc/voa/";
-	public static final String OfflineDicPath = "/meinv/offline/";
+	public static String rootPath = "/mzxbkj/";
+	public static final String sdPath = rootPath+"audio/";
+	public static final String ImgPath = rootPath+"img/";
+	public static final String SymbolPath = rootPath+"audio/symbol/";
+	public static final String WordStudyPath = rootPath+"audio/wordstudy/";
+	public static final String CompositionPath = rootPath+"audio/composition/";
+	public static final String UserPracticePath = rootPath+"audio/practice/user/";
+	public static final String PracticePath = rootPath+"audio/practice/en/";
+	public static final String StudyDialogPath = rootPath+"audio/study/dialog/";
+	public static final String EvaluationPath = rootPath+"audio/study/evaluation/tts";
+	public static final String SpokenEnglishPath = rootPath+"audio/study/evaluation/";
+	public static final String EvaluationUserPath = rootPath+"audio/study/evaluation/user/";
+	public static final String DailySentencePath = rootPath+"audio/study/dailysentence/mp3/";
+	public static final String ReadingPath = rootPath+"audio/study/reading/mp3/";
+	public static final String apkPath = rootPath+"apps/download/";
+	public static final String apkUpdatePath = rootPath+"apps/update/";
+	public static final String lrcPath = rootPath+"lrc/voa/";
+	public static final String OfflineDicPath = rootPath+"offline/";
 	public static final String Delimiter = "/";
 
 	/**sdcard路径
