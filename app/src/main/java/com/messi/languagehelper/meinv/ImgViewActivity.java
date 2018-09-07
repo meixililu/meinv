@@ -71,6 +71,7 @@ public class ImgViewActivity extends BaseActivity implements FragmentProgressbar
         ratio = getIntent().getFloatExtra(KeyUtil.Ratio, 0);
         DownloadUrl = getIntent().getStringExtra(KeyUtil.DownloadUrl);
         img_id = getIntent().getStringExtra(KeyUtil.Id);
+        shareImgName = img_id + ".jpg";
         if (!TextUtils.isEmpty(url)) {
             if (ratio > 0) {
                 itemImg.setAspectRatio(ratio);

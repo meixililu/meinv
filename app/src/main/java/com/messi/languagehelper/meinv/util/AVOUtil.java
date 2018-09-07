@@ -597,6 +597,24 @@ public class AVOUtil {
 
 	}
 
+	public static class MeinvDetail {
+		public final static String MeinvDetail = "MeinvDetail";
+
+		public final static String category = "category";
+
+		public final static String tags = "tags";
+
+		public final static String title = "title";
+
+		public final static String ratio = "ratio";
+
+		public final static String source = "source";
+
+		public final static String img_url = "img_url";
+
+		public final static String createdAt = "createdAt";
+	}
+
 	public static class Meinv {
 		public final static String Meinv = "MeinvTag";
 
@@ -605,6 +623,23 @@ public class AVOUtil {
 		public final static String code = "code";
 
 		public final static String order = "order";
+
+		public final static String isValid = "isValid";
+	}
+
+	public static class MeinvCategory {
+		public final static String MeinvCategory = "MeinvCategory";
+
+		//normal vivo huawei tencent baidu 360 oppo xiaomi meizu alixi other
+		public final static String channel = "channel";
+
+		public final static String version = "version";
+
+		public final static String verifyTags = "verifyTags";
+
+		public final static String normalTags = "normalTags";
+
+		public final static String app = "app";
 
 		public final static String isValid = "isValid";
 	}

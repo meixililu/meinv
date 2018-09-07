@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#ffc000</color>
-    <color name="colorPrimaryDark">#aaffc000</color>
-    <color name="colorAccent">#ffc000</color>
+    <color name="colorPrimary">#ff3366</color>
+    <color name="colorPrimaryDark">#aaff3366</color>
+    <color name="colorAccent">#ff3366</color>
+    <!--<color name="colorPrimary">#ffc000</color>-->
+    <!--<color name="colorPrimaryDark">#aaffc000</color>-->
+    <!--<color name="colorAccent">#ffc000</color>-->
     <color name="none">#00000000</color>
     <color name="none_thin">#aa000000</color>
     <color name="none_alpha8">#88000000</color>

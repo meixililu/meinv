@@ -1,42 +1,63 @@
 package com.messi.languagehelper.meinv.adapter;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.avos.avoscloud.AVObject;
-import com.messi.languagehelper.meinv.JokeFragment;
-import com.messi.languagehelper.meinv.util.AVOUtil;
+import com.messi.languagehelper.meinv.MeinvFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class JokePageAdapter extends FragmentPagerAdapter {
 
-    private List<AVObject> list;
+    private String category;
+    private List<MeinvFragment> fragments;
+    private String[] tags = {"推荐","明星","日韩","汽车","美女","可爱"};
 
-    public JokePageAdapter(FragmentManager fm, Context mContext,List<AVObject> list) {
+    public JokePageAdapter(FragmentManager fm,String[] tags,String category) {
         super(fm);
-        this.list = list;
+        this.category = category;
+        if(tags != null && tags.length > 0){
+            this.tags = tags;
+        }
+        fragments = new ArrayList<MeinvFragment>();
     }
 
     @Override
     public Fragment getItem(int position) {
-        return JokeFragment.newInstance(list.get(position).getString(AVOUtil.Meinv.tag));
+        if((fragments.size()-1) < position){
+            return getMeinvFragment(position);
+        }else {
+            if(fragments.get(position) == null){
+                return getMeinvFragment(position);
+            }else {
+                return fragments.get(position);
+            }
+
+        }
     }
 
-    public void onTabReselected(int index){
+    private MeinvFragment getMeinvFragment(int position){
+        MeinvFragment fragment = MeinvFragment.newInstance(category,tags[position]);
+        fragments.add(position,fragment);
+        return fragment;
+    }
 
+    public void onTabReselected(int position){
+        if(fragments.size() > position && fragments.get(position) != null){
+            fragments.get(position).onSwipeRefreshLayoutRefresh();
+        }
     }
 
     @Override
     public int getCount() {
-        return list.size();
+        return tags.length;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return list.get(position).getString(AVOUtil.Meinv.tag);
+        return tags[position];
     }
 }

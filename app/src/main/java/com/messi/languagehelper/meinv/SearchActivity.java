@@ -43,6 +43,7 @@ public class SearchActivity extends BaseActivity {
     private long lastTime;
     private ArrayList<AVObject> historyList;
     private ArrayList<AVObject> avObjects;
+    private String category;
 
 
     @Override
@@ -51,11 +52,11 @@ public class SearchActivity extends BaseActivity {
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
         init();
-        new QueryTask().execute();
     }
 
     private void init() {
         hideTitle();
+        category = getIntent().getStringExtra(KeyUtil.Category);
         searchEt.requestFocus();
         historyList = new ArrayList<AVObject>();
         avObjects = new ArrayList<AVObject>();
@@ -72,6 +73,9 @@ public class SearchActivity extends BaseActivity {
                 return false;
             }
         });
+        if(!category.equals("bizhi")){
+            new QueryTask().execute();
+        }
     }
 
     private void addHistory(){
@@ -195,17 +199,21 @@ public class SearchActivity extends BaseActivity {
                 "");
         historyList.clear();
         avObjects.clear();
-        new QueryTask().execute();
+        if(!category.equals("bizhi")){
+            new QueryTask().execute();
+        }
     }
 
     private void search(String quest) {
-        if (!TextUtils.isEmpty(quest)) {
-            Intent intent = new Intent(this, MeinvActivity.class);
-            intent.putExtra(KeyUtil.Tag, quest);
-            intent.putExtra(KeyUtil.ActionbarTitle, quest);
-            startActivity(intent);
-            saveHistory(quest);
+        if (TextUtils.isEmpty(quest)) {
+            quest = "美女";
         }
+        Intent intent = new Intent(this, MeinvTagActivity.class);
+        intent.putExtra(KeyUtil.Category, category);
+        intent.putExtra(KeyUtil.Tag, quest);
+        intent.putExtra(KeyUtil.ActionbarTitle, quest);
+        startActivity(intent);
+        saveHistory(quest);
     }
 
     private void saveHistory(String quest){

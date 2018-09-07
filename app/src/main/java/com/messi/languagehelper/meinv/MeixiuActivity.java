@@ -22,8 +22,10 @@ import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.FindCallback;
 import com.messi.languagehelper.meinv.adapter.JokePageAdapter;
 import com.messi.languagehelper.meinv.impl.FragmentProgressbarListener;
+import com.messi.languagehelper.meinv.util.ADUtil;
 import com.messi.languagehelper.meinv.util.AVOUtil;
 import com.messi.languagehelper.meinv.util.AppUpdateUtil;
+import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
 import com.messi.languagehelper.meinv.util.Setings;
 
@@ -37,6 +39,7 @@ public class MeixiuActivity extends BaseActivity implements FragmentProgressbarL
     private JokePageAdapter pageAdapter;
     private long exitTime = 0;
     private SharedPreferences sp;
+    private String category = "bizhi";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,10 +62,26 @@ public class MeixiuActivity extends BaseActivity implements FragmentProgressbarL
         viewpager = (ViewPager) findViewById(R.id.viewpager);
     }
 
-    private void setPageAdapter(List<AVObject> list){
-        pageAdapter = new JokePageAdapter(getSupportFragmentManager(),
-                this,
-                list);
+    private void setPageAdapter(AVObject object){
+        int ServerVersion = object.getInt(AVOUtil.MeinvCategory.version);
+        String ServerChannel = object.getString(AVOUtil.MeinvCategory.channel);
+        String verifyTags = object.getString(AVOUtil.MeinvCategory.verifyTags);
+        String normalTags = object.getString(AVOUtil.MeinvCategory.normalTags);
+        String[] tags = verifyTags.split("#");
+        if(Setings.appVersion >= ServerVersion){
+            if(ServerChannel.contains(Setings.appChannel)){
+                category = "bizhi";
+                ADUtil.IsShowAD = false;
+            }else {
+                category = "meinv";
+                tags = normalTags.split("#");
+            }
+        }else {
+            category = "meinv";
+            tags = normalTags.split("#");
+        }
+        LogUtil.DefalutLog("category:"+category);
+        pageAdapter = new JokePageAdapter(getSupportFragmentManager(), tags, category);
         viewpager.setAdapter(pageAdapter);
         tablayout.setupWithViewPager(viewpager);
         tablayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -74,24 +93,28 @@ public class MeixiuActivity extends BaseActivity implements FragmentProgressbarL
             }
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                if(pageAdapter != null){
-                    pageAdapter.onTabReselected(tab.getPosition());
-                }
+                refreshFragment();
             }
         });
     }
 
+    private void refreshFragment(){
+        if(pageAdapter != null){
+            pageAdapter.onTabReselected(tablayout.getSelectedTabPosition());
+        }
+    }
+
     private void getTagData(){
-        AVQuery<AVObject> query = new AVQuery<AVObject>(AVOUtil.Meinv.Meinv);
-        query.whereEqualTo(AVOUtil.Meinv.isValid,"1");
-        query.addAscendingOrder(AVOUtil.Meinv.order);
+        AVQuery<AVObject> query = new AVQuery<AVObject>(AVOUtil.MeinvCategory.MeinvCategory);
+        query.whereEqualTo(AVOUtil.MeinvCategory.isValid,"1");
+        query.whereEqualTo(AVOUtil.MeinvCategory.app,"meixiu");
         query.findInBackground(new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 LogUtil.DefalutLog("done"+list);
-                if(list != null){
+                if(list != null && list.size() > 0){
                     LogUtil.DefalutLog("list.size()"+list.size());
-                    setPageAdapter(list);
+                    setPageAdapter(list.get(0));
                 }
             }
         });
@@ -110,10 +133,16 @@ public class MeixiuActivity extends BaseActivity implements FragmentProgressbarL
                 toMoreActivity();
                 break;
             case R.id.action_search:
-                toActivity(SearchActivity.class,null);
+                toSearchActivity();
                 break;
         }
         return true;
+    }
+
+    private void toSearchActivity(){
+        Intent intent = new Intent(this, SearchActivity.class);
+        intent.putExtra(KeyUtil.Category,category);
+        startActivity(intent);
     }
 
     private void toMoreActivity() {
@@ -124,6 +153,7 @@ public class MeixiuActivity extends BaseActivity implements FragmentProgressbarL
     @Override
     public void onBackPressed() {
         if ((System.currentTimeMillis() - exitTime) > 2000) {
+            refreshFragment();
             Toast.makeText(getApplicationContext(), this.getResources().getString(R.string.exit_program), Toast.LENGTH_SHORT).show();
             exitTime = System.currentTimeMillis();
         } else {

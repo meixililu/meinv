@@ -4,20 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.avos.avoscloud.AVObject;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.iflytek.voiceads.NativeADDataRef;
+import com.messi.languagehelper.meinv.ImgViewActivity;
 import com.messi.languagehelper.meinv.R;
-import com.messi.languagehelper.meinv.WebViewActivity;
 import com.messi.languagehelper.meinv.util.AVOUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
@@ -32,7 +28,6 @@ public class RcJokeListItemViewHolder extends RecyclerView.ViewHolder {
 
     private TextView des;
     private SimpleDraweeView list_item_img;
-    private LinearLayout layout_cover;
     private FrameLayout ad_layout;
     private Context context;
 
@@ -47,6 +42,7 @@ public class RcJokeListItemViewHolder extends RecyclerView.ViewHolder {
     public void render(final AVObject mAVObject) {
         list_item_img.setVisibility(View.GONE);
         ad_layout.setVisibility(View.GONE);
+        des.setVisibility(View.GONE);
         final NativeADDataRef mNativeADDataRef = (NativeADDataRef) mAVObject.get(KeyUtil.ADKey);
         if(mNativeADDataRef == null){
             NativeExpressADView mADView = (NativeExpressADView) mAVObject.get(KeyUtil.TXADView);
@@ -59,16 +55,11 @@ public class RcJokeListItemViewHolder extends RecyclerView.ViewHolder {
                 ad_layout.addView(mADView);
                 mADView.render();
             }else {
-                des.setText(StringUtils.fromHtml(mAVObject.getString(AVOUtil.Joke.text)));
-                if(mAVObject.getString(AVOUtil.Joke.type).equals("3")){
-                    list_item_img.setAspectRatio((float)mAVObject.getDouble(AVOUtil.Joke.ratio));
-                    list_item_img.setVisibility(View.VISIBLE);
-                    DraweeController mDraweeController = Fresco.newDraweeControllerBuilder()
-                            .setAutoPlayAnimations(true)
-                            .setUri(Uri.parse(mAVObject.getString(AVOUtil.Joke.img)))
-                            .build();
-                    list_item_img.setController(mDraweeController);
-                }
+                des.setVisibility(View.VISIBLE);
+                list_item_img.setVisibility(View.VISIBLE);
+                des.setText(StringUtils.fromHtml(mAVObject.getString(AVOUtil.MeinvDetail.title)));
+                list_item_img.setAspectRatio((float)mAVObject.getDouble(AVOUtil.MeinvDetail.ratio));
+                list_item_img.setImageURI(mAVObject.getString(AVOUtil.MeinvDetail.img_url));
                 list_item_img.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -77,6 +68,8 @@ public class RcJokeListItemViewHolder extends RecyclerView.ViewHolder {
                 });
             }
         }else{
+            des.setVisibility(View.VISIBLE);
+            list_item_img.setVisibility(View.VISIBLE);
             des.setText(mNativeADDataRef.getTitle()+"  广告");
             list_item_img.setAspectRatio((float) 1.5);
             list_item_img.setVisibility(View.VISIBLE);
@@ -92,14 +85,13 @@ public class RcJokeListItemViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void onItemClick(AVObject mAVObject) {
-        Intent intent = new Intent(context, WebViewActivity.class);
-        intent.putExtra(KeyUtil.ActionbarTitle, " ");
-        if(!TextUtils.isEmpty(mAVObject.getString(AVOUtil.Joke.img))){
-            intent.putExtra(KeyUtil.URL, mAVObject.getString(AVOUtil.Joke.img));
-        }else {
-            intent.putExtra(KeyUtil.URL, mAVObject.getString(AVOUtil.Joke.source_url));
-        }
+        Intent intent = new Intent(context, ImgViewActivity.class);
+        intent.putExtra(KeyUtil.URL, mAVObject.getString(AVOUtil.MeinvDetail.img_url));
+        intent.putExtra(KeyUtil.Id, mAVObject.getObjectId());
+        intent.putExtra(KeyUtil.Ratio, mAVObject.getDouble(AVOUtil.MeinvDetail.ratio));
+        intent.putExtra(KeyUtil.DownloadUrl, mAVObject.getString(AVOUtil.MeinvDetail.img_url));
         context.startActivity(intent);
     }
+
 
 }

@@ -1,17 +1,13 @@
 package com.messi.languagehelper.meinv;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
@@ -21,7 +17,6 @@ import com.iflytek.voiceads.IFLYNativeAd;
 import com.iflytek.voiceads.IFLYNativeListener;
 import com.iflytek.voiceads.NativeADDataRef;
 import com.messi.languagehelper.meinv.adapter.RcJokeListAdapter;
-import com.messi.languagehelper.meinv.impl.FragmentProgressbarListener;
 import com.messi.languagehelper.meinv.util.ADUtil;
 import com.messi.languagehelper.meinv.util.AVOUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
@@ -37,7 +32,7 @@ import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MeinvFragment extends BaseFragment implements OnClickListener {
+public class MeinvTagActivity extends BaseActivity implements OnClickListener {
 
     private RecyclerView listview;
     private RcJokeListAdapter mAdapter;
@@ -52,76 +47,42 @@ public class MeinvFragment extends BaseFragment implements OnClickListener {
     private AVObject mADObject;
     private LinearLayoutManager mLinearLayoutManager;
     private List<NativeExpressADView> mTXADList;
-    private View view;
     private SharedPreferences sp;
 
-    public static MeinvFragment newInstance(String category,String tag){
-        MeinvFragment fragment = new MeinvFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("category",category);
-        bundle.putString("tag",tag);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle mBundle = getArguments();
-        this.category = mBundle.getString("category");
-        this.tag = mBundle.getString("tag");
-        sp = Setings.getSharedPreferences(getActivity());
-        maxRandom = sp.getInt(category+tag,500);
-        LogUtil.DefalutLog("category:"+category+"--tag:"+tag+"--maxRandom:"+maxRandom);
+        setContentView(R.layout.meinv_picture_activity);
+        initViews();
+        loadData();
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mProgressbarListener = (FragmentProgressbarListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement FragmentProgressbarListener");
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater,container,savedInstanceState);
-        if(view != null){
-            ViewGroup parent = (ViewGroup)view.getParent();
-            if(parent != null){
-                parent.removeView(view);
-            }
-            return view;
-        }
-        view = inflater.inflate(R.layout.joke_picture_fragment, container, false);
-        initViews(view);
-        return view;
-    }
-
-    @Override
-    public void loadDataOnStart() {
-        super.loadDataOnStart();
+    public void loadData() {
         random();
         loadAD();
         new QueryTask().execute();
         getMaxPageNumberBackground();
     }
 
-    private void initViews(View view) {
+    private void initViews() {
+        this.category = getIntent().getStringExtra(KeyUtil.Category);
+        this.tag = getIntent().getStringExtra(KeyUtil.Tag);
+        sp = Setings.getSharedPreferences(this);
+        maxRandom = sp.getInt(category+tag,0);
+        LogUtil.DefalutLog("category:"+category+"--tag:"+tag+"--maxRandom:"+maxRandom);
+
         avObjects = new ArrayList<AVObject>();
         mTXADList = new ArrayList<NativeExpressADView>();
-        listview = (RecyclerView) view.findViewById(R.id.listview);
-        initSwipeRefresh(view);
+        listview = (RecyclerView) findViewById(R.id.listview);
+        initSwipeRefresh();
         mAdapter = new RcJokeListAdapter();
         mAdapter.setItems(avObjects);
         mAdapter.setFooter(new Object());
         hideFooterview();
-        mLinearLayoutManager = new LinearLayoutManager(getContext());
+        mLinearLayoutManager = new LinearLayoutManager(this);
         listview.setLayoutManager(mLinearLayoutManager);
         listview.addItemDecoration(
-                new HorizontalDividerItemDecoration.Builder(getContext())
+                new HorizontalDividerItemDecoration.Builder(this)
                         .colorResId(R.color.text_tint)
                         .sizeResId(R.dimen.list_divider_size)
                         .marginResId(R.dimen.padding_margin, R.dimen.padding_margin)
@@ -155,7 +116,7 @@ public class MeinvFragment extends BaseFragment implements OnClickListener {
                 if(i < avObjects.size() && i > 0){
                     AVObject mAVObject = avObjects.get(i);
                     if(mAVObject != null && mAVObject.get(KeyUtil.ADKey) != null){
-                        if(!(Boolean) mAVObject.get(KeyUtil.ADIsShowKey) && misVisibleToUser){
+                        if(!(Boolean) mAVObject.get(KeyUtil.ADIsShowKey)){
                             NativeADDataRef mNativeADDataRef = (NativeADDataRef) mAVObject.get(KeyUtil.ADKey);
                             boolean isExposure = mNativeADDataRef.onExposured(view.getChildAt(i%vCount));
                             LogUtil.DefalutLog("isExposure:"+isExposure);
@@ -229,7 +190,7 @@ public class MeinvFragment extends BaseFragment implements OnClickListener {
             onSwipeRefreshLayoutFinish();
             if(avObject != null){
                 if(avObject.size() == 0){
-                    ToastUtil.diaplayMesShort(getContext(), "没有了！");
+                    ToastUtil.diaplayMesShort(MeinvTagActivity.this, "没有了！");
                     hideFooterview();
                 }else{
                     if(avObjects != null && mAdapter != null){
@@ -249,7 +210,7 @@ public class MeinvFragment extends BaseFragment implements OnClickListener {
     }
 
     private void loadXFAD(){
-        nativeAd = new IFLYNativeAd(getContext(), ADUtil.XXLAD, new IFLYNativeListener() {
+        nativeAd = new IFLYNativeAd(this, ADUtil.XXLAD, new IFLYNativeListener() {
             @Override
             public void onConfirm() {
             }
@@ -295,7 +256,7 @@ public class MeinvFragment extends BaseFragment implements OnClickListener {
     }
 
     private void loadTXAD(){
-        TXADUtil.showCDTZX(getActivity(), new NativeExpressAD.NativeExpressADListener() {
+        TXADUtil.showCDTZX(this, new NativeExpressAD.NativeExpressADListener() {
             @Override
             public void onNoAD(com.qq.e.comm.util.AdError adError) {
                 LogUtil.DefalutLog(adError.getErrorMsg());
@@ -397,11 +358,6 @@ public class MeinvFragment extends BaseFragment implements OnClickListener {
                 }
             }
         }).start();
-    }
-
-    public void onTabReselected(int index) {
-        listview.scrollToPosition(0);
-        onSwipeRefreshLayoutRefresh();
     }
 
     @Override

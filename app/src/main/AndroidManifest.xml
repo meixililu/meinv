@@ -47,7 +47,7 @@
             android:value="${applicationId}.provider" />
 
         <!--<meta-data android:value="5b7ed6a08f4a9d303c000060" android:name="UMENG_APPKEY"/>-->
-        <!--<meta-data android:value="normal" android:name="UMENG_CHANNEL"/>-->
+        <meta-data android:value="normal" android:name="UMENG_CHANNEL"/>
 
         <!-- 讯飞广告sdk -->
         <meta-data
@@ -86,6 +86,9 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"  />
+        <activity
+            android:name=".MeinvTagActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".WebViewNoAdActivity"
             android:screenOrientation="portrait" />
