@@ -23,26 +23,18 @@ public class JokePageAdapter extends FragmentPagerAdapter {
             this.tags = tags;
         }
         fragments = new ArrayList<MeinvFragment>();
-    }
-
-    @Override
-    public Fragment getItem(int position) {
-        if((fragments.size()-1) < position){
-            return getMeinvFragment(position);
-        }else {
-            if(fragments.get(position) == null){
-                return getMeinvFragment(position);
-            }else {
-                return fragments.get(position);
-            }
-
+        for(int i=0;i<tags.length;i++){
+            fragments.add(getMeinvFragment(i));
         }
     }
 
     private MeinvFragment getMeinvFragment(int position){
-        MeinvFragment fragment = MeinvFragment.newInstance(category,tags[position]);
-        fragments.add(position,fragment);
-        return fragment;
+        return MeinvFragment.newInstance(category,tags[position]);
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+        return fragments.get(position);
     }
 
     public void onTabReselected(int position){
