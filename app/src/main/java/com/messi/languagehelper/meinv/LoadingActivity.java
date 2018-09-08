@@ -196,16 +196,9 @@ public class LoadingActivity extends AppCompatActivity {
 
                     @Override
                     public void onADTick(long l) {
-                        LogUtil.DefalutLog("onADTick:"+l);
-                        if(l < 2500){
-                            if(!notJump){
-                                toNextPage();
-                            }
-                        }
                     }
                     @Override
                     public void onADExposure() {
-
                     }
                 });
     }
