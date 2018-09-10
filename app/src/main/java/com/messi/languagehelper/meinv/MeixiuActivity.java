@@ -2,7 +2,6 @@ package com.messi.languagehelper.meinv;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -38,7 +37,6 @@ public class MeixiuActivity extends BaseActivity implements FragmentProgressbarL
     private ViewPager viewpager;
     private JokePageAdapter pageAdapter;
     private long exitTime = 0;
-    private SharedPreferences sp;
     private String category = "bizhi";
 
     @Override
@@ -57,7 +55,6 @@ public class MeixiuActivity extends BaseActivity implements FragmentProgressbarL
             getSupportActionBar().setTitle("");
             getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
         }
-        sp = Setings.getSharedPreferences(this);
         tablayout = (TabLayout) findViewById(R.id.tablayout);
         viewpager = (ViewPager) findViewById(R.id.viewpager);
     }
@@ -111,9 +108,7 @@ public class MeixiuActivity extends BaseActivity implements FragmentProgressbarL
         query.findInBackground(new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
-                LogUtil.DefalutLog("done"+list);
                 if(list != null && list.size() > 0){
-                    LogUtil.DefalutLog("list.size()"+list.size());
                     setPageAdapter(list.get(0));
                 }
             }

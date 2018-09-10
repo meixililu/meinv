@@ -15,6 +15,7 @@ import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.FindCallback;
+import com.igexin.sdk.PushManager;
 import com.messi.languagehelper.meinv.R;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
@@ -26,6 +27,7 @@ public class AppUpdateUtil {
     public static void runCheckUpdateTask(final Activity mActivity) {
         checkUpdate(mActivity);
         initXMLY(mActivity);
+        PushManager.getInstance().initialize(mActivity.getApplicationContext(),null);
     }
 
     public static void initXMLY(Activity mActivity){

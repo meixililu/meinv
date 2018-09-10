@@ -10,8 +10,13 @@ android {
         resConfigs "zh-rCN", "zh-rHK", "zh-rTW", "en"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 2
-        versionName "1.1"
+        versionCode 3
+        versionName "1.2"
+        manifestPlaceholders = [
+                GETUI_APP_ID : "v0MlLKaIPs5yffnus03D52",
+                GETUI_APP_KEY : "SOehcY4PXL8qgrINBoa7L1",
+                GETUI_APP_SECRET : "FPU6TTJStS7TKCU0ZvyWX8"
+        ]
         ndk {
             abiFilters "armeabi","armeabi-v7a"
         }
@@ -62,6 +67,7 @@ dependencies {
     implementation 'com.mindorks.nybus:nybus-android:1.0.0'
     implementation 'com.yqritc:recyclerview-flexibledivider:1.4.0'
     implementation 'com.umeng.analytics:analytics:latest.integration'
+    implementation 'com.getui:sdk:2.12.5.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
