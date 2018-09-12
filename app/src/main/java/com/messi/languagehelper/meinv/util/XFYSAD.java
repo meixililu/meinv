@@ -227,7 +227,7 @@ public class XFYSAD {
 		}
 	}
 
-	public void hideHeader(final boolean isFaile){
+	public void hideHeader(boolean isFaile){
 		if(parentView != null){
 			parentView.setVisibility(View.GONE);
 		}

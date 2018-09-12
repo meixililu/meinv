@@ -26,6 +26,8 @@ public class MoreActivity extends BaseActivity implements OnClickListener {
     FrameLayout invite_layout;
     @BindView(R.id.qrcode_layout)
     FrameLayout qrcode_layout;
+    @BindView(R.id.qq_layout)
+    FrameLayout qq_layout;
     private SharedPreferences mSharedPreferences;
 
     @Override
@@ -44,6 +46,7 @@ public class MoreActivity extends BaseActivity implements OnClickListener {
         about_layout.setOnClickListener(this);
         invite_layout.setOnClickListener(this);
         qrcode_layout.setOnClickListener(this);
+        qq_layout.setOnClickListener(this);
     }
 
 
@@ -64,6 +67,9 @@ public class MoreActivity extends BaseActivity implements OnClickListener {
                 break;
             case R.id.qrcode_layout:
                 toActivity(QRCodeShareActivity.class, null);
+                break;
+            case R.id.qq_layout:
+                toQQ("36h6FS3z8vGUaFg-1UPd42IRtEjcsY0i");
                 break;
             default:
                 break;
@@ -88,6 +94,27 @@ public class MoreActivity extends BaseActivity implements OnClickListener {
             MoreActivity.this.startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    /****************
+     *
+     * 发起添加群流程。群号：极光漫画(763770901) 的 key 为： 36h6FS3z8vGUaFg-1UPd42IRtEjcsY0i
+     * 调用 joinQQGroup(36h6FS3z8vGUaFg-1UPd42IRtEjcsY0i) 即可发起手Q客户端申请加群 极光漫画(763770901)
+     *
+     * @param key 由官网生成的key
+     * @return 返回true表示呼起手Q成功，返回fals表示呼起失败
+     ******************/
+    public boolean toQQ(String key) {
+        Intent intent = new Intent();
+        intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D" + key));
+        // 此Flag可根据具体产品需要自定义，如设置，则在加群界面按返回，返回手Q主界面，不设置，按返回会返回到呼起产品界面    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        try {
+            startActivity(intent);
+            return true;
+        } catch (Exception e) {
+            // 未安装手Q或安装的版本不支持
+            return false;
         }
     }
 

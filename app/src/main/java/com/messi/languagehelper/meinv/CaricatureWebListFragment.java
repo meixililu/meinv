@@ -70,7 +70,9 @@ public class CaricatureWebListFragment extends BaseFragment implements View.OnCl
         layoutManager.setSpanSizeLookup(headerSpanSizeLookup);
         category_lv.setLayoutManager(layoutManager);
         category_lv.addItemDecoration(new DividerGridItemDecoration(1));
-        mAdapter.setHeader(new Object());
+        if(ADUtil.IsShowAD){
+            mAdapter.setHeader(new Object());
+        }
         mAdapter.setItems(mList);
         mXFYSAD.setAdapter(mAdapter);
         category_lv.setAdapter(mAdapter);

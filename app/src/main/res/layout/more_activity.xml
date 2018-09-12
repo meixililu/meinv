@@ -153,6 +153,45 @@
                 />
 
             <FrameLayout
+                android:id="@+id/qq_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:foreground="@drawable/framelayout_selector" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="20dp"
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:background="@color/none"
+                        android:gravity="center_vertical"
+                        android:text="@string/qq_qun"
+                        android:textColor="@color/text_black"
+                        android:textSize="@dimen/big" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/expend_right"
+                        />
+                </LinearLayout>
+            </FrameLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/contentbg"
+                />
+
+            <FrameLayout
                 android:id="@+id/qrcode_layout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

@@ -67,7 +67,9 @@ public class CaricatureSourceActivity extends BaseActivity implements View.OnCli
         HeaderSpanSizeLookup headerSpanSizeLookup = new HeaderSpanSizeLookup(mAdapter, layoutManager);
         layoutManager.setSpanSizeLookup(headerSpanSizeLookup);
         category_lv.setLayoutManager(layoutManager);
-        mAdapter.setHeader(new Object());
+        if(ADUtil.IsShowAD){
+            mAdapter.setHeader(new Object());
+        }
         mAdapter.setItems(mList);
         mXFYSAD.setAdapter(mAdapter);
         category_lv.setAdapter(mAdapter);
