@@ -56,6 +56,10 @@
 			</FrameLayout>
 		</LinearLayout>
     </android.support.v7.widget.Toolbar>
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
 
 	<LinearLayout
 		android:layout_width="match_parent"
@@ -114,5 +118,5 @@
 			app:flexWrap="wrap">
 		</com.google.android.flexbox.FlexboxLayout>
 	</LinearLayout>
-
+	</ScrollView>
 </LinearLayout>

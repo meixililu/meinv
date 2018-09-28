@@ -36,7 +36,6 @@ public class CaricatureWebListFragment extends BaseFragment implements View.OnCl
     private List<AVObject> mList;
     private XFYSAD mXFYSAD;
     private int skip = 0;
-    private int page_size = 21;
     private boolean loading;
     private boolean hasMore = true;
 
@@ -122,7 +121,7 @@ public class CaricatureWebListFragment extends BaseFragment implements View.OnCl
         query.whereEqualTo(AVOUtil.EnglishWebsite.category, "caricature");
         query.orderByDescending(AVOUtil.EnglishWebsite.Order);
         query.skip(skip);
-        query.limit(page_size);
+        query.limit(30);
         query.findInBackground(new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
@@ -139,11 +138,11 @@ public class CaricatureWebListFragment extends BaseFragment implements View.OnCl
                         }
                         mList.addAll(list);
                         mAdapter.notifyDataSetChanged();
-                        if(list.size() < page_size){
+                        if(list.size() < 30){
                             hasMore = false;
                             hideFooterview();
                         }else {
-                            skip += page_size;
+                            skip += 30;
                             hasMore = true;
                             showFooterview();
                         }

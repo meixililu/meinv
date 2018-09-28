@@ -7,14 +7,37 @@ import android.view.ViewGroup;
 
 import com.avos.avoscloud.AVObject;
 import com.messi.languagehelper.meinv.R;
+import com.messi.languagehelper.meinv.impl.AdapterStringListener;
+
+import java.util.List;
 
 /**
  * Created by luli on 10/23/16.
  */
 
-public class RcCaricatureHomeListAdapter extends HeaderFooterRecyclerViewAdapter<RecyclerView.ViewHolder, Object, AVObject, Object> {
+public class RcCaricatureCategoryAdapter extends HeaderFooterRecyclerViewAdapter<RecyclerView.ViewHolder, Object, AVObject, Object> {
 
+    private List<AVObject> list;
+    private AdapterStringListener listener;
 
+    public RcCaricatureCategoryAdapter(List<AVObject> list,AdapterStringListener listener){
+        this.list = list;
+        this.listener = listener;
+    }
+
+    @Override
+    protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater inflater = getLayoutInflater(parent);
+        View headerView = inflater.inflate(R.layout.xmly_tags_list_header, parent, false);
+        return new RcXmlyTagsHeaderViewHolder(headerView,listener);
+    }
+
+    @Override
+    protected void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+        super.onBindHeaderViewHolder(holder, position);
+        RcXmlyTagsHeaderViewHolder headerViewHolder = (RcXmlyTagsHeaderViewHolder)holder;
+        headerViewHolder.setData(list);
+    }
     @Override
     protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = getLayoutInflater(parent);

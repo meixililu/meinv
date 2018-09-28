@@ -18,6 +18,7 @@ import com.messi.languagehelper.meinv.event.CaricatureEventHistory;
 import com.messi.languagehelper.meinv.util.AVOUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
+import com.messi.languagehelper.meinv.util.Setings;
 import com.messi.languagehelper.meinv.util.ToastUtil;
 import com.mindorks.nybus.annotation.Subscribe;
 
@@ -43,7 +44,6 @@ public class CaricatureHistoryFragment extends BaseFragment implements View.OnCl
     private GridLayoutManager layoutManager;
     private List<AVObject> mList;
     private int skip = 0;
-    private int page_size = 21;
     private boolean loading;
     private boolean hasMore = true;
     private boolean isDeleteModel;
@@ -79,6 +79,7 @@ public class CaricatureHistoryFragment extends BaseFragment implements View.OnCl
         HeaderSpanSizeLookup headerSpanSizeLookup = new HeaderSpanSizeLookup(mAdapter, layoutManager);
         layoutManager.setSpanSizeLookup(headerSpanSizeLookup);
         category_lv.setLayoutManager(layoutManager);
+        mAdapter.setFooter(new Object());
         mAdapter.setItems(mList);
         category_lv.setAdapter(mAdapter);
         setListOnScrollListener();
@@ -150,7 +151,7 @@ public class CaricatureHistoryFragment extends BaseFragment implements View.OnCl
     private List<AVObject> getData(){
         LogUtil.DefalutLog("CaricatureEventHistory---getData");
         List<AVObject> list = DataBaseUtil.getInstance().getCaricaturesList(AVOUtil.Caricature.Caricature,
-                skip,page_size,true,false);
+                skip, Setings.ca_psize,true,false);
         return list;
     }
 
@@ -170,11 +171,11 @@ public class CaricatureHistoryFragment extends BaseFragment implements View.OnCl
                 initDeleteModel(list);
                 mList.addAll(list);
                 mAdapter.notifyDataSetChanged();
-                if(list.size() < page_size){
+                if(list.size() < Setings.ca_psize){
                     hasMore = false;
                     hideFooterview();
                 }else {
-                    skip += page_size;
+                    skip += Setings.ca_psize;
                     hasMore = true;
                     showFooterview();
                 }

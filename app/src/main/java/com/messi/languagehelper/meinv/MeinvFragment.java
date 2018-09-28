@@ -155,7 +155,7 @@ public class MeinvFragment extends BaseFragment implements OnClickListener {
                 if(i < avObjects.size() && i > 0){
                     AVObject mAVObject = avObjects.get(i);
                     if(mAVObject != null && mAVObject.get(KeyUtil.ADKey) != null){
-                        if(!(Boolean) mAVObject.get(KeyUtil.ADIsShowKey) && misVisibleToUser){
+                        if(!(Boolean) mAVObject.get(KeyUtil.ADIsShowKey)){
                             NativeADDataRef mNativeADDataRef = (NativeADDataRef) mAVObject.get(KeyUtil.ADKey);
                             boolean isExposure = mNativeADDataRef.onExposured(view.getChildAt(i%vCount));
                             LogUtil.DefalutLog("isExposure:"+isExposure);

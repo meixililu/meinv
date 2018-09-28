@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.messi.languagehelper.meinv.util.Setings;
 import com.messi.languagehelper.meinv.util.ShareUtil;
@@ -28,6 +29,8 @@ public class MoreActivity extends BaseActivity implements OnClickListener {
     FrameLayout qrcode_layout;
     @BindView(R.id.qq_layout)
     FrameLayout qq_layout;
+    @BindView(R.id.qq_layout_line)
+    ImageView qq_layout_line;
     private SharedPreferences mSharedPreferences;
 
     @Override
@@ -46,7 +49,11 @@ public class MoreActivity extends BaseActivity implements OnClickListener {
         about_layout.setOnClickListener(this);
         invite_layout.setOnClickListener(this);
         qrcode_layout.setOnClickListener(this);
-        qq_layout.setOnClickListener(this);
+        if (getPackageName().equals(Setings.application_id_caricature)) {
+            qq_layout.setVisibility(View.VISIBLE);
+            qq_layout_line.setVisibility(View.VISIBLE);
+            qq_layout.setOnClickListener(this);
+        }
     }
 
 

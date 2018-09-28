@@ -26,6 +26,8 @@ import com.messi.languagehelper.meinv.util.ToastUtil;
 import com.messi.languagehelper.meinv.util.XFYSAD;
 import com.mindorks.nybus.NYBus;
 
+import java.text.DecimalFormat;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -114,7 +116,7 @@ public class CaricatureDetailActivity extends BaseActivity {
                 tags.setText(mAVObject.getString(AVOUtil.Caricature.tag));
                 author.setText(mAVObject.getString(AVOUtil.Caricature.author));
                 des.setText(mAVObject.getString(AVOUtil.Caricature.des));
-                views.setText("人气：" + mAVObject.getNumber(AVOUtil.Caricature.views));
+                views.setText("人气：" + getNumberStr(mAVObject.getNumber(AVOUtil.Caricature.views).doubleValue()));
                 source.setText("来源：" + mAVObject.getString(AVOUtil.Caricature.source_name));
             } else {
                 finish();
@@ -122,6 +124,20 @@ public class CaricatureDetailActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private String getNumberStr(double num){
+        String numStr = "" + num;
+        if(num > 100000000){
+            num = num / 100000000.0;
+            DecimalFormat df = new DecimalFormat("#.00");
+            numStr = df.format(num)+ "亿";
+        }else if(num > 10000){
+            num = num / 10000.0;
+            DecimalFormat df = new DecimalFormat("#.00");
+            numStr = df.format(num)+ "万";
+        }
+        return numStr;
     }
 
     private void loadAD() {

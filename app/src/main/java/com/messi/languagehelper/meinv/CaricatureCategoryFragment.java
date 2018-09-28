@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,8 @@ import com.iflytek.voiceads.IFLYNativeAd;
 import com.iflytek.voiceads.IFLYNativeListener;
 import com.iflytek.voiceads.NativeADDataRef;
 import com.karumi.headerrecyclerview.HeaderSpanSizeLookup;
-import com.messi.languagehelper.meinv.adapter.RcCaricatureHomeListAdapter;
+import com.messi.languagehelper.meinv.adapter.RcCaricatureCategoryAdapter;
+import com.messi.languagehelper.meinv.impl.AdapterStringListener;
 import com.messi.languagehelper.meinv.util.ADUtil;
 import com.messi.languagehelper.meinv.util.AVOUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
@@ -32,28 +34,31 @@ import com.qq.e.ads.nativ.NativeExpressAD;
 import com.qq.e.ads.nativ.NativeExpressADView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class CaricatureHomeFragment extends BaseFragment implements View.OnClickListener{
+public class CaricatureCategoryFragment extends BaseFragment implements View.OnClickListener,AdapterStringListener {
 
     private static final int NUMBER_OF_COLUMNS = 3;
     private RecyclerView category_lv;
     private FrameLayout search_btn;
     private Toolbar my_awesome_toolbar;
-    private RcCaricatureHomeListAdapter mAdapter;
+    private RcCaricatureCategoryAdapter mAdapter;
     private GridLayoutManager layoutManager;
     private List<AVObject> mList;
+    private List<AVObject> calist;
     private int skip = 0;
-    private int max_count = 8000;
+    private int max_count = 300;
     private boolean loading;
     private boolean hasMore = true;
     private boolean isNeedClear = true;
+    private String search_text = "全部";
     private IFLYNativeAd nativeAd;
     private AVObject mADObject;
     private List<NativeExpressADView> mTXADList;
 
-    public static CaricatureHomeFragment newInstance(){
-        CaricatureHomeFragment fragment = new CaricatureHomeFragment();
+    public static CaricatureCategoryFragment newInstance(){
+        CaricatureCategoryFragment fragment = new CaricatureCategoryFragment();
         return fragment;
     }
 
@@ -64,26 +69,36 @@ public class CaricatureHomeFragment extends BaseFragment implements View.OnClick
         initViews(view);
         initSwipeRefresh(view);
         randomPage();
-        loadAD();
-        RequestAsyncTask();
+        Request();
         return view;
+    }
+
+    private void Request(){
+        if(calist.size() == 0){
+            RequestCategoryTask();
+        }else {
+            loadAD();
+            RequestAsyncTask();
+        }
     }
 
     private void initViews(View view) {
         mList = new ArrayList<AVObject>();
+        calist = new ArrayList<AVObject>();
         mTXADList = new ArrayList<NativeExpressADView>();
         my_awesome_toolbar = (Toolbar) view.findViewById(R.id.my_awesome_toolbar);
         search_btn = (FrameLayout) view.findViewById(R.id.search_btn);
         category_lv = (RecyclerView) view.findViewById(R.id.listview);
-        my_awesome_toolbar.setTitle(R.string.recommend);
+        my_awesome_toolbar.setTitle(R.string.title_category);
         search_btn.setOnClickListener(this);
         category_lv.setHasFixedSize(true);
-        mAdapter = new RcCaricatureHomeListAdapter();
+        mAdapter = new RcCaricatureCategoryAdapter(calist,this);
         layoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
         HeaderSpanSizeLookup headerSpanSizeLookup = new HeaderSpanSizeLookup(mAdapter, layoutManager);
         layoutManager.setSpanSizeLookup(headerSpanSizeLookup);
         category_lv.setLayoutManager(layoutManager);
         mAdapter.setFooter(new Object());
+        mAdapter.setHeader(new Object());
         mAdapter.setItems(mList);
         category_lv.setAdapter(mAdapter);
         setListOnScrollListener();
@@ -130,20 +145,9 @@ public class CaricatureHomeFragment extends BaseFragment implements View.OnClick
 
     @Override
     public void onSwipeRefreshLayoutRefresh() {
-        loadAD();
         randomPage();
         hasMore = true;
-        RequestAsyncTask();
-    }
-
-    private void loadAD(){
-        if(ADUtil.IsShowAD){
-            if(ADUtil.Advertiser.equals(ADUtil.Advertiser_XF)){
-                loadXFAD();
-            }else {
-                loadTXAD();
-            }
-        }
+        Request();
     }
 
     private void randomPage(){
@@ -156,10 +160,51 @@ public class CaricatureHomeFragment extends BaseFragment implements View.OnClick
         }
     }
 
+    private void RequestCategoryTask() {
+        showProgressbar();
+        AVQuery<AVObject> query = new AVQuery<AVObject>(AVOUtil.CaricatureSearchHot.CaricatureSearchHot);
+        query.whereEqualTo(AVOUtil.CaricatureSearchHot.type,"tag");
+        query.orderByDescending(AVOUtil.CaricatureSearchHot.click_time);
+        query.findInBackground(new FindCallback<AVObject>() {
+            @Override
+            public void done(List<AVObject> list, AVException e) {
+                hideProgressbar();
+                onSwipeRefreshLayoutFinish();
+                if(list != null && list.size() > 0){
+                    for(AVObject item : list){
+                        item.put("selected","0");
+                    }
+                    calist.clear();
+                    calist.addAll(list);
+                    addTag();
+                    mAdapter.notifyDataSetChanged();
+                    RequestAsyncTask();
+                    loadAD();
+                }
+            }
+        });
+    }
+
+    private void addTag(){
+        AVObject object = new AVObject();
+        object.put(AVOUtil.CaricatureSearchHot.name,"全部");
+        object.put("selected","1");
+        calist.add(0,object);
+    }
+
     private void RequestAsyncTask() {
         showProgressbar();
         loading = true;
-        AVQuery<AVObject> query = new AVQuery<AVObject>(AVOUtil.Caricature.Caricature);
+        AVQuery<AVObject> query = null;
+        if(!TextUtils.isEmpty(search_text) && !"全部".equals(search_text)){
+            AVQuery<AVObject> priorityQuery = new AVQuery<>(AVOUtil.Caricature.Caricature);
+            priorityQuery.whereContains(AVOUtil.Caricature.name, search_text);
+            AVQuery<AVObject> statusQuery = new AVQuery<>(AVOUtil.Caricature.Caricature);
+            statusQuery.whereContains(AVOUtil.Caricature.tag, search_text);
+            query = AVQuery.or(Arrays.asList(priorityQuery,statusQuery));
+        }else {
+            query = new AVQuery<AVObject>(AVOUtil.Caricature.Caricature);
+        }
         query.orderByDescending(AVOUtil.Caricature.views);
         query.skip(skip);
         query.limit(Setings.ca_psize);
@@ -196,6 +241,16 @@ public class CaricatureHomeFragment extends BaseFragment implements View.OnClick
                 }
             }
         });
+    }
+
+    private void loadAD(){
+        if(ADUtil.IsShowAD){
+            if(ADUtil.Advertiser.equals(ADUtil.Advertiser_XF)){
+                loadXFAD();
+            }else {
+                loadTXAD();
+            }
+        }
     }
 
     private void loadXFAD(){
@@ -334,5 +389,14 @@ public class CaricatureHomeFragment extends BaseFragment implements View.OnClick
 
     private void toSearchActivity(){
         toActivity(CaricatureSearchActivity.class,null);
+    }
+
+    @Override
+    public void OnItemClick(String item) {
+        search_text = item;
+        skip = 0;
+        mList.clear();
+        mAdapter.notifyDataSetChanged();
+        RequestAsyncTask();
     }
 }

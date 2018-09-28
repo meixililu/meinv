@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.messi.languagehelper.meinv.util.AppUpdateUtil;
 import com.messi.languagehelper.meinv.util.Setings;
+import com.messi.languagehelper.meinv.view.BottomNavigationViewHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,6 +30,7 @@ public class CaricatureMainActivity extends AppCompatActivity {
     @BindView(R.id.navigation)
     BottomNavigationView navigation;
     private Fragment engFragment;
+    private Fragment categoryFragment;
     private Fragment dashboardFragment;
     private Fragment radioHomeFragment;
     private long exitTime = 0;
@@ -42,7 +44,10 @@ public class CaricatureMainActivity extends AppCompatActivity {
                 case R.id.navigation_home:
                     hideAllFragment();
                     getSupportFragmentManager().beginTransaction().show(engFragment).commit();
-                    engFragment.setUserVisibleHint(true);
+                    return true;
+                case R.id.navigation_category:
+                    hideAllFragment();
+                    getSupportFragmentManager().beginTransaction().show(categoryFragment).commit();
                     return true;
                 case R.id.navigation_dashboard:
                     hideAllFragment();
@@ -70,13 +75,16 @@ public class CaricatureMainActivity extends AppCompatActivity {
     }
 
     private void initFragment(){
+        BottomNavigationViewHelper.disableShiftMode(navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         engFragment = CaricatureHomeFragment.newInstance();
+        categoryFragment = CaricatureCategoryFragment.newInstance();
         dashboardFragment = CaricatureWebListFragment.newInstance();
         radioHomeFragment = CaricatureBHFragment.getInstance();
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.content, engFragment)
+                .add(R.id.content, categoryFragment)
                 .add(R.id.content, dashboardFragment)
                 .add(R.id.content, radioHomeFragment)
                 .commit();
@@ -91,6 +99,7 @@ public class CaricatureMainActivity extends AppCompatActivity {
                 .hide(dashboardFragment)
                 .hide(radioHomeFragment)
                 .hide(engFragment)
+                .hide(categoryFragment)
                 .commit();
     }
 

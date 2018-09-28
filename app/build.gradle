@@ -18,8 +18,8 @@ android {
 //                GETUI_APP_SECRET : "FPU6TTJStS7TKCU0ZvyWX8"
 //        ]
         //manhua
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
         manifestPlaceholders = [
                 GETUI_APP_ID : "5dTeDKjX1C6xuI4eNccsv1",
                 GETUI_APP_KEY : "fkXv9lrOy06unUVmdqUHH7",

@@ -15,6 +15,14 @@
         android:gravity="center"
         android:orientation="vertical" >
 
+        <LinearLayout
+            android:id="@+id/ad_layout"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            ></LinearLayout>
+
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/img"
             android:layout_width="match_parent"

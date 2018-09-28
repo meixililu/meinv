@@ -149,7 +149,7 @@ public class JokeFragment extends BaseFragment implements OnClickListener {
                 if(i < avObjects.size() && i > 0){
                     SougoItem mAVObject = avObjects.get(i);
                     if(mAVObject != null && mAVObject.getIsAdShow() > 0){
-                        if(mAVObject.getIsAdShow() != 1 && misVisibleToUser){
+                        if(mAVObject.getIsAdShow() != 1){
                             NativeADDataRef mNativeADDataRef = mAVObject.getmNativeADDataRef();
                             if(mNativeADDataRef != null){
                                 boolean isExposure = mNativeADDataRef.onExposured(view.getChildAt(i%vCount));

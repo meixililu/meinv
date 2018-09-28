@@ -7,17 +7,18 @@
         android:title="@string/title_home_tab" />
 
     <item
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_category"
         android:icon="@drawable/ic_subject_black_24dp"
+        android:title="@string/title_category" />
+
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:icon="@drawable/ic_web_source_black_24dp"
         android:title="@string/title_source" />
 
     <item
         android:id="@+id/navigation_history"
         android:icon="@drawable/ic_library_books_black_24dp"
         android:title="@string/title_bookshelf" />
-    <!--<item-->
-        <!--android:id="@+id/navigation_history"-->
-        <!--android:icon="@drawable/ic_history_black_24dp"-->
-        <!--android:title="@string/title_history" />-->
 
 </menu>
