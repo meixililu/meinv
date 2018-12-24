@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.avos.avoscloud.AVObject;
+import cn.leancloud.AVObject;
 import com.messi.languagehelper.meinv.R;
 import com.messi.languagehelper.meinv.impl.AdapterStringListener;
 
@@ -29,13 +29,13 @@ public class RcCaricatureCategoryAdapter extends HeaderFooterRecyclerViewAdapter
     protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = getLayoutInflater(parent);
         View headerView = inflater.inflate(R.layout.xmly_tags_list_header, parent, false);
-        return new RcXmlyTagsHeaderViewHolder(headerView,listener);
+        return new RcCaricatureTagHeaderViewHolder(headerView,listener);
     }
 
     @Override
     protected void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
         super.onBindHeaderViewHolder(holder, position);
-        RcXmlyTagsHeaderViewHolder headerViewHolder = (RcXmlyTagsHeaderViewHolder)holder;
+        RcCaricatureTagHeaderViewHolder headerViewHolder = (RcCaricatureTagHeaderViewHolder)holder;
         headerViewHolder.setData(list);
     }
     @Override

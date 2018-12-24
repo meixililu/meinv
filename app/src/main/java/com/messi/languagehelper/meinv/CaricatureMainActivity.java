@@ -1,29 +1,34 @@
 package com.messi.languagehelper.meinv;
 
-import android.annotation.TargetApi;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
+import android.Manifest;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.design.bottomnavigation.LabelVisibilityMode;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechUtility;
 import com.messi.languagehelper.meinv.util.AppUpdateUtil;
-import com.messi.languagehelper.meinv.util.Setings;
-import com.messi.languagehelper.meinv.view.BottomNavigationViewHelper;
+import com.messi.languagehelper.meinv.util.LogUtil;
+import com.messi.languagehelper.meinv.util.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnPermissionDenied;
+import permissions.dispatcher.OnShowRationale;
+import permissions.dispatcher.PermissionRequest;
+import permissions.dispatcher.RuntimePermissions;
 
-public class CaricatureMainActivity extends AppCompatActivity {
+@RuntimePermissions
+public class CaricatureMainActivity extends BaseActivity {
 
     @BindView(R.id.content)
     FrameLayout content;
@@ -65,7 +70,7 @@ public class CaricatureMainActivity extends AppCompatActivity {
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_caricature_main);
         ButterKnife.bind(this);
@@ -75,7 +80,8 @@ public class CaricatureMainActivity extends AppCompatActivity {
     }
 
     private void initFragment(){
-        BottomNavigationViewHelper.disableShiftMode(navigation);
+        SpeechUtility.createUtility(this, SpeechConstant.APPID + "=" + getString(R.string.app_id));
+        navigation.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         engFragment = CaricatureHomeFragment.newInstance();
         categoryFragment = CaricatureCategoryFragment.newInstance();
@@ -113,49 +119,45 @@ public class CaricatureMainActivity extends AppCompatActivity {
         }
     }
 
-    private void initPermissions(){
-        if (Build.VERSION.SDK_INT >= 23) {
-            checkAndRequestPermission();
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    private void checkAndRequestPermission() {
-        Setings.verifyStoragePermissions(this, Setings.PERMISSIONS_STORAGE);
-    }
-
     private void initSDKAndPermission(){
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                initPermissions();
+                CaricatureMainActivityPermissionsDispatcher.showPermissionWithPermissionCheck(CaricatureMainActivity.this);
             }
         }, 1 * 1000);
+    }
+
+    @NeedsPermission({Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.ACCESS_FINE_LOCATION})
+    void showPermission() {
+        LogUtil.DefalutLog("showPermission");
+    }
+
+    @OnShowRationale({Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.ACCESS_FINE_LOCATION})
+    void onShowRationale(final PermissionRequest request) {
+        new AlertDialog.Builder(this,R.style.Theme_AppCompat_Light_Dialog_Alert)
+                .setTitle("温馨提示")
+                .setMessage("需要授权才能使用。")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        request.proceed();
+                    }
+                }).show();
+    }
+
+    @OnPermissionDenied({Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.ACCESS_FINE_LOCATION})
+    void onPerDenied() {
+        ToastUtil.diaplayMesShort(this,"没有授权，部分功能将无法使用！");
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case 10010:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    AppUpdateUtil.checkUpdate(this);
-                } else {
-                    Uri packageURI = Uri.parse("package:"+this.getPackageName());
-                    Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,packageURI);
-                    startActivityForResult(intent, 10086);
-                }
-                break;
-
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == 10086) {
-            AppUpdateUtil.checkUpdate(this);
-        }
+        CaricatureMainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
 }

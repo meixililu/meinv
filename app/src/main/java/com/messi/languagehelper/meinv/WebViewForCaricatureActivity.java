@@ -22,7 +22,6 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.avos.avoscloud.AVObject;
 import com.messi.languagehelper.meinv.db.DataBaseUtil;
 import com.messi.languagehelper.meinv.dialog.AdDialog;
 import com.messi.languagehelper.meinv.event.CaricatureEventHistory;
@@ -30,7 +29,11 @@ import com.messi.languagehelper.meinv.util.ADUtil;
 import com.messi.languagehelper.meinv.util.AVOUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
-import com.mindorks.nybus.NYBus;
+import com.messi.languagehelper.meinv.util.StringUtils;
+
+import org.greenrobot.eventbus.EventBus;
+
+import cn.leancloud.AVObject;
 
 
 public class WebViewForCaricatureActivity extends BaseActivity{
@@ -67,7 +70,7 @@ public class WebViewForCaricatureActivity extends BaseActivity{
 		isReedPullDownRefresh = getIntent().getBooleanExtra(KeyUtil.IsReedPullDownRefresh, false);
 		isHideToolbar = getIntent().getBooleanExtra(KeyUtil.IsHideToolbar, false);
 		if(!TextUtils.isEmpty(serializedStr)){
-		    mItem = AVObject.parseAVObject(serializedStr);
+		    mItem = AVObject.createWithoutData(serializedStr,StringUtils.getRandomString(16));
             AVObject temp = DataBaseUtil.getInstance().findByItemId(AVOUtil.Caricature.Caricature,mItem.getObjectId());
             if (temp != null && mItem != null) {
                 LogUtil.DefalutLog("lasturl:"+temp.getString(AVOUtil.Caricature.lastUrl));
@@ -276,7 +279,7 @@ public class WebViewForCaricatureActivity extends BaseActivity{
 				AVOUtil.Caricature.Caricature,
 				mItem,
 				mItem.getString(AVOUtil.Caricature.name));
-		NYBus.get().post(new CaricatureEventHistory());
+		EventBus.getDefault().post(new CaricatureEventHistory());
 		mWebView.destroy();
 	}
 

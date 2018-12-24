@@ -1,33 +1,33 @@
 package com.messi.languagehelper.meinv.util;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVFile;
-import com.avos.avoscloud.AVObject;
-import com.avos.avoscloud.AVQuery;
-import com.avos.avoscloud.FindCallback;
-import com.igexin.sdk.PushManager;
 import com.messi.languagehelper.meinv.R;
-import com.orhanobut.dialogplus.DialogPlus;
-import com.orhanobut.dialogplus.ViewHolder;
 
 import java.util.List;
+
+import cn.leancloud.AVException;
+import cn.leancloud.AVFile;
+import cn.leancloud.AVObject;
+import cn.leancloud.AVQuery;
+import cn.leancloud.callback.FindCallback;
+import cn.leancloud.convertor.ObserverBuilder;
 
 public class AppUpdateUtil {
 
     public static void runCheckUpdateTask(final Activity mActivity) {
         checkUpdate(mActivity);
         initXMLY(mActivity);
-        PushManager.getInstance().initialize(mActivity.getApplicationContext(),null);
+//        PushManager.getInstance().initialize(mActivity.getApplicationContext(),null);
     }
 
     public static void initXMLY(Activity mActivity){
@@ -53,7 +53,7 @@ public class AppUpdateUtil {
         }else{
             query.whereEqualTo(AVOUtil.UpdateInfo.AppCode, "noupdate");
         }
-        query.findInBackground(new FindCallback<AVObject>() {
+        query.findInBackground().subscribe(ObserverBuilder.buildSingleObserver(new FindCallback<AVObject>() {
             public void done(List<AVObject> avObjects, AVException e) {
                 if (avObjects != null && avObjects.size() > 0) {
                     final AVObject mAVObject = avObjects.get(0);
@@ -67,7 +67,7 @@ public class AppUpdateUtil {
 
                 }
             }
-        });
+        }));
     }
 
     public static void saveSetting(Activity mActivity,AVObject mAVObject){
@@ -108,18 +108,13 @@ public class AppUpdateUtil {
                 final String downloadUrl = apkUrl;
                 LogUtil.DefalutLog("apkUrl:" + apkUrl);
 
-                final DialogPlus dialog = DialogPlus.newDialog(mActivity)
-                        .setContentHolder(new ViewHolder(R.layout.dialog_update_info))
-                        .setCancelable(false)
-                        .setGravity(Gravity.BOTTOM)
-                        .setContentHeight(ViewGroup.LayoutParams.WRAP_CONTENT)
-                        .setOverlayBackgroundResource(R.color.none_alpha)
-                        .create();
-                View view = dialog.getHolderView();
+                View view = LayoutInflater.from(mActivity).inflate(R.layout.dialog_update_info,null);
                 TextView updage_info = (TextView) view.findViewById(R.id.updage_info);
-                TextView cancel_btn = (TextView) view.findViewById(R.id.cancel_btn);
+                ImageView cancel_btn = (ImageView) view.findViewById(R.id.cancel_btn);
                 TextView update_btn = (TextView) view.findViewById(R.id.update_btn);
-
+                final AlertDialog dialog = new AlertDialog.Builder(mActivity).create();
+                dialog.setView(view);
+                dialog.setCancelable(false);
                 updage_info.setText(updateInfo);
                 cancel_btn.setOnClickListener(new View.OnClickListener() {
                     @Override

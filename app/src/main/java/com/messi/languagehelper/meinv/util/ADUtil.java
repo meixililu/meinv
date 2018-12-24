@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.avos.avoscloud.AVObject;
-import com.avos.avoscloud.AVQuery;
+import cn.leancloud.AVObject;
+import cn.leancloud.AVQuery;
 import com.iflytek.voiceads.NativeADDataRef;
 import com.messi.languagehelper.meinv.WebViewActivity;
 import com.messi.languagehelper.meinv.bean.NativeADDataRefForZYHY;
@@ -143,9 +143,9 @@ public class ADUtil {
 		try {
 			AVQuery<AVObject> query = new AVQuery<AVObject>(AVOUtil.AdList.AdList);
 			query.whereEqualTo(AVOUtil.AdList.isValid, "1");
-			query.whereContains(AVOUtil.AdList.app, "zyhy");
+			query.whereContains(AVOUtil.AdList.app, "manhua");
 			query.addDescendingOrder(AVOUtil.AdList.createdAt);
-			query.limit(10);
+			query.limit(20);
 			List<AVObject> list = query.find();
 			localAd.clear();
 			if(list != null && list.size() > 0){

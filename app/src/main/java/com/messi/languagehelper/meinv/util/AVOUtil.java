@@ -1,6 +1,6 @@
 package com.messi.languagehelper.meinv.util;
 
-import com.avos.avoscloud.AVObject;
+import cn.leancloud.AVObject;
 
 public class AVOUtil {
 

@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.avos.avoscloud.AVObject;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.messi.languagehelper.meinv.db.DataBaseUtil;
 import com.messi.languagehelper.meinv.event.CaricatureEventAddBookshelf;
@@ -22,15 +21,18 @@ import com.messi.languagehelper.meinv.util.ImgUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
 import com.messi.languagehelper.meinv.util.SDCardUtil;
+import com.messi.languagehelper.meinv.util.StringUtils;
 import com.messi.languagehelper.meinv.util.ToastUtil;
 import com.messi.languagehelper.meinv.util.XFYSAD;
-import com.mindorks.nybus.NYBus;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.DecimalFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.leancloud.AVObject;
 
 public class CaricatureDetailActivity extends BaseActivity {
 
@@ -107,7 +109,7 @@ public class CaricatureDetailActivity extends BaseActivity {
     private void init() {
         try {
             String serializedStr = getIntent().getStringExtra(KeyUtil.AVObjectKey);
-            mAVObject = AVObject.parseAVObject(serializedStr);
+            mAVObject = AVObject.createWithoutData(serializedStr,StringUtils.getRandomString(16));
             if (mAVObject != null) {
                 imgUrl = mAVObject.getString(AVOUtil.Caricature.book_img_url);
                 itemImg.setImageURI(imgUrl);
@@ -177,7 +179,7 @@ public class CaricatureDetailActivity extends BaseActivity {
                 mAVObject,
                 mAVObject.getString(AVOUtil.Caricature.name),
                 System.currentTimeMillis());
-        NYBus.get().post(new CaricatureEventAddBookshelf());
+        EventBus.getDefault().post(new CaricatureEventAddBookshelf());
         ToastUtil.diaplayMesShort(this, getString(R.string.add_bookshelf_success));
     }
 

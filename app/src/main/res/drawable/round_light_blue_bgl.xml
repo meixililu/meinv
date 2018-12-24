@@ -3,9 +3,9 @@
     android:shape="oval"
 >
 
-    <solid android:color="?attr/colorPrimary"/>
+    <solid android:color="@color/theme_color"/>
     
-    <stroke android:width="7dp" android:color="?attr/colorPrimary" />
+    <stroke android:width="7dp" android:color="@color/theme_color" />
     
     <corners android:radius="20dp" /> 
     

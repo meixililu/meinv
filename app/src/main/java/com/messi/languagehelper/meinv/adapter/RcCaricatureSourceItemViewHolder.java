@@ -6,12 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import com.avos.avoscloud.AVObject;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.messi.languagehelper.meinv.CaricatureSourceActivity;
 import com.messi.languagehelper.meinv.R;
 import com.messi.languagehelper.meinv.util.AVOUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
+
+import cn.leancloud.AVObject;
 
 /**
  * Created by luli on 10/23/16.

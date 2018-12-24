@@ -38,6 +38,9 @@ public class KeyUtil {
 
 	public static final String Type = "Type";
 
+	public static final String ApkPath = "ApkPath";
+
+
 	public static final String DeleteModel = "DeleteModel";
 
 	public static final String isNeedDelete = "isNeedDelete";

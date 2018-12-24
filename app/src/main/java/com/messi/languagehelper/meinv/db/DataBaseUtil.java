@@ -2,17 +2,19 @@ package com.messi.languagehelper.meinv.db;
 
 import android.content.Context;
 
-import com.avos.avoscloud.AVObject;
 import com.messi.languagehelper.meinv.BaseApplication;
 import com.messi.languagehelper.meinv.dao.Avobject;
 import com.messi.languagehelper.meinv.dao.AvobjectDao;
 import com.messi.languagehelper.meinv.dao.DaoSession;
+import com.messi.languagehelper.meinv.util.StringUtils;
 
 import org.greenrobot.greendao.query.DeleteQuery;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.leancloud.AVObject;
 
 public class DataBaseUtil {
 
@@ -127,7 +129,7 @@ public class DataBaseUtil {
         try {
             Avobject mAvobject = findById(tableName,objectId);
             if (mAvobject != null) {
-                return AVObject.parseAVObject(mAvobject.getSerializedString());
+                return AVObject.createWithoutData(mAvobject.getSerializedString(),objectId);
             } else {
                 return null;
             }
@@ -141,7 +143,7 @@ public class DataBaseUtil {
         try {
             Avobject mAvobject = findByKey(tableName,key);
             if (mAvobject != null) {
-                return AVObject.parseAVObject(mAvobject.getSerializedString());
+                return AVObject.createWithoutData(mAvobject.getSerializedString(),StringUtils.getRandomString(16));
             } else {
                 return null;
             }
@@ -174,7 +176,7 @@ public class DataBaseUtil {
             List<Avobject> list = getCaricatureList(tableName,page,page_size,isHistory,isCollected);
             if(list != null && list.size() > 0){
                 for(Avobject item : list){
-                    AVObject object = AVObject.parseAVObject(item.getSerializedString());
+                    AVObject object = AVObject.createWithoutData(item.getSerializedString(),StringUtils.getRandomString(16));
                     if(object != null){
                         dataList.add(object);
                     }

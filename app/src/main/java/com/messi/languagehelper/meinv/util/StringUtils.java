@@ -3,6 +3,8 @@ package com.messi.languagehelper.meinv.util;
 import android.text.Html;
 import android.text.Spanned;
 
+import java.util.Random;
+
 public class StringUtils {
 
 	@SuppressWarnings("deprecation")
@@ -80,6 +82,18 @@ public class StringUtils {
 		}else {
 			return " " + new java.text.DecimalFormat("#.0").format( (double)times / 100000000 ) + "亿";
 		}
+	}
+
+	//length表示生成字符串的长度
+	public static String getRandomString(int length) {
+		String base = "abcdefghijklmnopqrstuvwxyz0123456789";
+		Random random = new Random();
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < length; i++) {
+			int number = random.nextInt(base.length());
+			sb.append(base.charAt(number));
+		}
+		return sb.toString();
 	}
 
 }

@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.avos.avoscloud.AVObject;
+import cn.leancloud.AVObject;
 import com.google.android.flexbox.FlexboxLayout;
 import com.messi.languagehelper.meinv.R;
 import com.messi.languagehelper.meinv.impl.AdapterStringListener;
@@ -22,7 +22,7 @@ import java.util.List;
  * Created by luli on 10/23/16.
  */
 
-public class RcXmlyTagsHeaderViewHolder extends RecyclerView.ViewHolder {
+public class RcCaricatureTagHeaderViewHolder extends RecyclerView.ViewHolder {
 
     public View headerView;
     private Context context;
@@ -30,7 +30,7 @@ public class RcXmlyTagsHeaderViewHolder extends RecyclerView.ViewHolder {
     private List<AVObject> list;
     private AdapterStringListener listener;
 
-    public RcXmlyTagsHeaderViewHolder(View itemView, AdapterStringListener listener) {
+    public RcCaricatureTagHeaderViewHolder(View itemView, AdapterStringListener listener) {
         super(itemView);
         context = itemView.getContext();
         this.listener = listener;

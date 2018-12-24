@@ -1,15 +1,16 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
+apply plugin: 'io.objectbox'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
     defaultConfig {
 //        applicationId "com.messi.languagehelper.meixiu"
         applicationId "com.messi.languagehelper.caricature"
         resConfigs "zh-rCN", "zh-rHK", "zh-rTW", "en"
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 28
 //        versionCode 3
 //        versionName "1.2"
 //        manifestPlaceholders = [
@@ -20,13 +21,24 @@ android {
         //manhua
         versionCode 2
         versionName "1.1"
-        manifestPlaceholders = [
-                GETUI_APP_ID : "5dTeDKjX1C6xuI4eNccsv1",
-                GETUI_APP_KEY : "fkXv9lrOy06unUVmdqUHH7",
-                GETUI_APP_SECRET : "4I4S00yfCx6pNF9hn99k51"
-        ]
-        ndk {
-            abiFilters "armeabi","armeabi-v7a"
+//        manifestPlaceholders = [
+//                GETUI_APP_ID : "5dTeDKjX1C6xuI4eNccsv1",
+//                GETUI_APP_KEY : "fkXv9lrOy06unUVmdqUHH7",
+//                GETUI_APP_SECRET : "4I4S00yfCx6pNF9hn99k51"
+//        ]
+//        multiDexEnabled true
+        splits {
+            abi {
+                enable true
+                reset()
+                include 'armeabi-v7a'
+                universalApk false
+            }
+        }
+        vectorDrawables.useSupportLibrary = true
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
         }
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -41,44 +53,46 @@ android {
         daoPackage 'com.messi.languagehelper.meinv.dao'
         targetGenDir 'src/main/java'
     }
-    defaultConfig {
-        vectorDrawables.useSupportLibrary = true
-    }
+
+
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:support-v4:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support:cardview-v7:27.1.1'
-    implementation 'com.android.support:recyclerview-v7:27.1.1'
-    implementation 'com.android.support:support-vector-drawable:27.1.1'
-    implementation 'com.android.support:support-media-compat:27.1.1'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    configurations.all {
+        exclude group: 'com.android.support', module: 'support-v13'
+    }
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.android.support:cardview-v7:28.0.0'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'com.android.support:support-vector-drawable:28.0.0'
+    implementation 'com.android.support:support-media-compat:28.0.0'
     implementation 'com.google.android:flexbox:0.3.0'
-    implementation 'com.jakewharton:butterknife:8.8.1'
+    implementation 'com.jakewharton:butterknife:9.0.0-rc2'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc2'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
     //    implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.squareup.okio:okio:1.14.1'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.13'
-    implementation 'cn.leancloud.android:avoscloud-sdk:v4.6.4'
-    implementation 'com.facebook.fresco:fresco:1.10.0'
-    implementation 'com.facebook.fresco:animated-gif:1.10.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.4'
+    implementation 'cn.leancloud:storage-android:5.0.1'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    implementation 'com.alibaba:fastjson:1.1.70.android'
+    implementation 'com.facebook.fresco:fresco:1.11.0'
+    implementation 'com.facebook.fresco:animated-gif:1.11.0'
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.0.3'
-    implementation 'com.yanzhenjie:permission:2.0.0-rc5'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.40'
     implementation 'com.karumi:headerrecyclerview:1.1.0'
-    implementation 'com.orhanobut:dialogplus:1.11@aar'
-    implementation 'com.mindorks.nybus:nybus-android:1.0.0'
+    implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'com.yqritc:recyclerview-flexibledivider:1.4.0'
-    implementation 'com.umeng.analytics:analytics:latest.integration'
-    implementation 'com.getui:sdk:2.12.5.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.umeng.umsdk:analytics:7.5.4'
+    implementation 'com.umeng.umsdk:common:1.5.4'
+    implementation 'com.github.hotchemi:permissionsdispatcher:3.3.2'
+    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:3.3.2"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation files('libs/nineoldandroids-2.4.0.jar')
 }

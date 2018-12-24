@@ -15,13 +15,13 @@ public class ImgUtil {
     public static void toBitmap(Activity mContext, String path){
         try {
             Bitmap srcBitmap= BitmapFactory.decodeFile(path);
-            int resourseId = R.drawable.qrcode_mh;
+            int resourseId = R.drawable.qr_jgmh;
             if(mContext.getPackageName().equals(Setings.application_id_meixiu)){
-                resourseId = R.drawable.qrcode;
+                resourseId = R.drawable.qr_mxtp;
             }else if (mContext.getPackageName().equals(Setings.application_id_meinv)) {
-                resourseId = R.drawable.qrcode;
+                resourseId = R.drawable.qr_mxtp;
             } else if (mContext.getPackageName().equals(Setings.application_id_caricature)) {
-                resourseId = R.drawable.qrcode_mh;
+                resourseId = R.drawable.qr_jgmh;
             } else if (mContext.getPackageName().equals(Setings.application_id_browser)) {
             }
             Bitmap waterBitmap = BitmapFactory.decodeResource(mContext.getResources(),resourseId);
@@ -50,7 +50,8 @@ public class ImgUtil {
         //在画布上绘制水印图片
         canvas.drawBitmap(watermark, paddingLeft, paddingTop, null);
         // 保存
-        canvas.save(Canvas.ALL_SAVE_FLAG);
+//        canvas.save(Canvas.ALL_SAVE_FLAG);
+        canvas.save();
         // 存储
         canvas.restore();
         return newb;
@@ -104,7 +105,8 @@ public class ImgUtil {
         cv.drawBitmap(src, 0, 0, null);
         //水印图绘制在画布的右下角，距离右边和底部都为20
         cv.drawBitmap(watermark, src.getWidth() - w2-20, src.getHeight() - h2-20, null);
-        cv.save(Canvas.ALL_SAVE_FLAG);
+//        cv.save(Canvas.ALL_SAVE_FLAG);
+        cv.save();
         cv.restore();
 
         return result;

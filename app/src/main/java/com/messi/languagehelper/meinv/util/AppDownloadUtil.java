@@ -2,6 +2,7 @@ package com.messi.languagehelper.meinv.util;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -9,12 +10,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Builder;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 
-import com.avos.avoscloud.AVObject;
-import com.messi.languagehelper.meinv.MeixiuActivity;
+import cn.leancloud.AVObject;
+import com.messi.languagehelper.meinv.InstallActivity;
 import com.messi.languagehelper.meinv.R;
 import com.messi.languagehelper.meinv.http.LanguagehelperHttpClient;
 import com.messi.languagehelper.meinv.impl.ProgressListener;
@@ -25,6 +27,8 @@ import java.io.IOException;
 import okhttp3.Response;
 
 public class AppDownloadUtil {
+
+	private static final int NO_1 =0x1;
 
 	private Activity mContext;
 	private int record = -2;
@@ -37,6 +41,7 @@ public class AppDownloadUtil {
 	private String path;
 	private NotificationManager mNotifyManager;
 	private Builder mBuilder;
+	private int lastPercent = 0;
 	
 	public AppDownloadUtil(Activity mContext, String url, String appName, String AVObjectId, String path){
 		this.mContext = mContext;
@@ -57,13 +62,20 @@ public class AppDownloadUtil {
 				@Override
 				public void run() {
 					mNotifyManager  = (NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-					mBuilder = new Builder(mContext);
-					mBuilder.setContentTitle(ContentTitle).setContentText("开始下载").setSmallIcon(R.drawable.ic_get_app_white_36dp).setTicker(Ticker).setAutoCancel(true);
-					Intent intent = new Intent (mContext, MeixiuActivity.class);
+					createNotificationChannel();
+					mBuilder = new Builder(mContext,AVObjectId);
+					mBuilder.setContentTitle(ContentTitle)
+							.setContentText("开始下载")
+							.setSmallIcon(R.drawable.ic_get_app_white_36dp)
+							.setTicker(Ticker)
+							.setPriority(NotificationCompat.PRIORITY_DEFAULT)
+							.setAutoCancel(true);
+					Intent intent = new Intent (mContext, InstallActivity.class);
 					intent.addFlags (Intent.FLAG_ACTIVITY_NEW_TASK);
+					intent.putExtra(KeyUtil.Type,InstallActivity.Action_Install);
 					PendingIntent pend = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 					mBuilder.setContentIntent (pend);
-					mNotifyManager.notify(0, mBuilder.build());
+					mNotifyManager.notify(NO_1, mBuilder.build());
 					try {
 						Response response = LanguagehelperHttpClient.get(url,progressListener);
 						if(response != null && response.isSuccessful()){
@@ -72,13 +84,14 @@ public class AppDownloadUtil {
 							PendingIntent pendUp = PendingIntent.getActivity(mContext, 0, getInstallApkIntent(mContext,appLocalFullName),
 									PendingIntent.FLAG_UPDATE_CURRENT);
 							mBuilder.setContentIntent (pendUp);
-				            mNotifyManager.notify(0, mBuilder.build());
+							mBuilder.setContentText("下载完成").setProgress(0,0,false);
+				            mNotifyManager.notify(NO_1, mBuilder.build());
 				            installApk(mContext,appLocalFullName);
 				            updateDownloadTime();
 						}else{
 							LogUtil.DefalutLog("---DownloadFile onFailure");
 							mBuilder.setContentText("下载失败,请稍后重试").setProgress(0,0,false);
-							mNotifyManager.notify(0, mBuilder.build());
+							mNotifyManager.notify(NO_1, mBuilder.build());
 						}
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -87,22 +100,37 @@ public class AppDownloadUtil {
 			}).start();
 		}
 	}
+
+	private void createNotificationChannel() {
+		// Create the NotificationChannel, but only on API 26+ because
+		// the NotificationChannel class is new and not in the support library
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			String description = "update";
+			int importance = NotificationManager.IMPORTANCE_DEFAULT;
+			NotificationChannel channel = new NotificationChannel(AVObjectId, appFileName, importance);
+			channel.setDescription(description);
+			// Register the channel with the system; you can't change the importance
+			// or other notification behaviors after this
+			mNotifyManager.createNotificationChannel(channel);
+		}
+	}
 	
 	final ProgressListener progressListener = new ProgressListener() {
 		@Override
 		public void update(long bytesRead, long contentLength, boolean done) {
 			try {
-				int percent = (int) ((100 * bytesRead) / contentLength);
-				if(percent != 100 && record != percent){
-					record = percent;
-					mBuilder.setProgress(100, percent, false);
-					mBuilder.setContentText("更新进度"+percent+"%");
-					mNotifyManager.notify(0, mBuilder.build());
-				}else if(percent == 100){
-					if(done){
-						mBuilder.setContentText("下载完成").setProgress(0,0,false);
-						mNotifyManager.notify(0, mBuilder.build());
+				if(!done){
+					int percent = (int) ((100 * bytesRead) / contentLength);
+					if(percent - lastPercent > 8){
+						lastPercent = percent;
+						mBuilder.setProgress(100, percent, false);
+						mBuilder.setContentText("更新进度"+percent+"%");
+						mNotifyManager.notify(NO_1, mBuilder.build());
 					}
+				}else{
+					mBuilder.setProgress(0,0,false);
+					mBuilder.setContentText("下载完成");
+					mNotifyManager.notify(NO_1, mBuilder.build());
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

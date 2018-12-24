@@ -1,6 +1,5 @@
 package com.messi.languagehelper.meinv.view;
 
-import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
@@ -18,12 +17,6 @@ public class BottomNavigationViewHelper {
             shiftingMode.setAccessible(true);
             shiftingMode.setBoolean(menuView, false);
             shiftingMode.setAccessible(false);
-            for (int i = 0; i < menuView.getChildCount(); i++) {
-                BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
-                //去除shift效果
-                item.setShiftingMode(false);
-                item.setChecked(item.getItemData().isChecked());
-            }
         } catch (NoSuchFieldException e) {
             Log.e("BNVHelper", "没有mShiftingMode这个成员变量", e);
         } catch (IllegalAccessException e) {

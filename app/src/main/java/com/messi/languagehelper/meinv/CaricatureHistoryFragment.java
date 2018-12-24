@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.avos.avoscloud.AVObject;
+import cn.leancloud.AVObject;
 import com.karumi.headerrecyclerview.HeaderSpanSizeLookup;
 import com.messi.languagehelper.meinv.adapter.RcCaricatureBookShelfAdapter;
 import com.messi.languagehelper.meinv.db.DataBaseUtil;
@@ -20,7 +20,9 @@ import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
 import com.messi.languagehelper.meinv.util.Setings;
 import com.messi.languagehelper.meinv.util.ToastUtil;
-import com.mindorks.nybus.annotation.Subscribe;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,7 +104,7 @@ public class CaricatureHistoryFragment extends BaseFragment implements View.OnCl
         });
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(CaricatureEventHistory scode){
         LogUtil.DefalutLog("CaricatureEventHistory---onEvent");
         onSwipeRefreshLayoutRefresh();

@@ -11,14 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="?attr/colorPrimary"
+        android:background="@color/theme_color"
         >
         <android.support.design.widget.TabLayout
             android:id="@+id/tablayout"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:layout_height="@dimen/actionBar"
+            android:background="@color/theme_color"
             app:tabTextAppearance="@style/TabLayoutTextStyle"
             app:tabIndicatorColor="@color/white" />
         <FrameLayout

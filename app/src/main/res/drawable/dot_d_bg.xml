@@ -5,12 +5,12 @@
 
     <stroke
         android:width="0dip"
-        android:color="?attr/colorPrimary" />
+        android:color="@color/theme_color" />
     <!-- 描边 ：边框宽度与颜色 -->
 
     <corners android:radius="3dip" />
 
-    <solid android:color="?attr/colorPrimary" />
+    <solid android:color="@color/theme_color" />
  <!-- 没有描边的中间部分 -->
 
 </shape>

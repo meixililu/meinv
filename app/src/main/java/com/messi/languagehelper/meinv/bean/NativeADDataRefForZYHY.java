@@ -4,7 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.avos.avoscloud.AVObject;
+import cn.leancloud.AVObject;
 import com.iflytek.voiceads.NativeADDataRef;
 import com.messi.languagehelper.meinv.util.ADUtil;
 import com.messi.languagehelper.meinv.util.AVOUtil;

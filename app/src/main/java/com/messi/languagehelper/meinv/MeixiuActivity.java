@@ -1,24 +1,20 @@
 package com.messi.languagehelper.meinv;
 
-import android.annotation.TargetApi;
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVObject;
-import com.avos.avoscloud.AVQuery;
-import com.avos.avoscloud.FindCallback;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechUtility;
 import com.messi.languagehelper.meinv.adapter.JokePageAdapter;
 import com.messi.languagehelper.meinv.impl.FragmentProgressbarListener;
 import com.messi.languagehelper.meinv.util.ADUtil;
@@ -27,10 +23,22 @@ import com.messi.languagehelper.meinv.util.AppUpdateUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
 import com.messi.languagehelper.meinv.util.Setings;
+import com.messi.languagehelper.meinv.util.ToastUtil;
 
 import java.util.List;
 
+import cn.leancloud.AVException;
+import cn.leancloud.AVObject;
+import cn.leancloud.AVQuery;
+import cn.leancloud.callback.FindCallback;
+import cn.leancloud.convertor.ObserverBuilder;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnPermissionDenied;
+import permissions.dispatcher.OnShowRationale;
+import permissions.dispatcher.PermissionRequest;
+import permissions.dispatcher.RuntimePermissions;
 
+@RuntimePermissions
 public class MeixiuActivity extends BaseActivity implements FragmentProgressbarListener {
 
     private TabLayout tablayout;
@@ -50,6 +58,7 @@ public class MeixiuActivity extends BaseActivity implements FragmentProgressbarL
     }
 
     private void initViews() {
+        SpeechUtility.createUtility(this, SpeechConstant.APPID + "=" + getString(R.string.app_id));
         if (toolbar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             getSupportActionBar().setTitle("");
@@ -105,14 +114,14 @@ public class MeixiuActivity extends BaseActivity implements FragmentProgressbarL
         AVQuery<AVObject> query = new AVQuery<AVObject>(AVOUtil.MeinvCategory.MeinvCategory);
         query.whereEqualTo(AVOUtil.MeinvCategory.isValid,"1");
         query.whereEqualTo(AVOUtil.MeinvCategory.app,"meixiu");
-        query.findInBackground(new FindCallback<AVObject>() {
+        query.findInBackground().subscribe(ObserverBuilder.buildSingleObserver(new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if(list != null && list.size() > 0){
                     setPageAdapter(list.get(0));
                 }
             }
-        });
+        }));
     }
 
     @Override
@@ -156,48 +165,46 @@ public class MeixiuActivity extends BaseActivity implements FragmentProgressbarL
         }
     }
 
-    private void initPermissions(){
-        if (Build.VERSION.SDK_INT >= 23) {
-            checkAndRequestPermission();
-        }
-    }
 
-    @TargetApi(Build.VERSION_CODES.M)
-    private void checkAndRequestPermission() {
-        Setings.verifyStoragePermissions(this, Setings.PERMISSIONS_STORAGE);
-    }
 
     private void initSDKAndPermission(){
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                initPermissions();
+                MeixiuActivityPermissionsDispatcher.showPermissionWithPermissionCheck(MeixiuActivity.this);
             }
         }, 1 * 1000);
+    }
+
+    @NeedsPermission({android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.ACCESS_FINE_LOCATION})
+    void showPermission() {
+        LogUtil.DefalutLog("showPermission");
+    }
+
+    @OnShowRationale({android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.ACCESS_FINE_LOCATION})
+    void onShowRationale(final PermissionRequest request) {
+        new AlertDialog.Builder(this,R.style.Theme_AppCompat_Light_Dialog_Alert)
+                .setTitle("温馨提示")
+                .setMessage("需要授权才能使用。")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        request.proceed();
+                    }
+                }).show();
+    }
+
+    @OnPermissionDenied({android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.ACCESS_FINE_LOCATION})
+    void onPerDenied() {
+        ToastUtil.diaplayMesShort(this,"没有授权，部分功能将无法使用！");
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case 10010:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    AppUpdateUtil.checkUpdate(this);
-                } else {
-                    Uri packageURI = Uri.parse("package:"+this.getPackageName());
-                    Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,packageURI);
-                    startActivityForResult(intent, 10086);
-                }
-                break;
-
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == 10086) {
-            AppUpdateUtil.checkUpdate(this);
-        }
+        MeixiuActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 }
