@@ -15,7 +15,6 @@ import android.support.v4.app.NotificationCompat.Builder;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 
-import cn.leancloud.AVObject;
 import com.messi.languagehelper.meinv.InstallActivity;
 import com.messi.languagehelper.meinv.R;
 import com.messi.languagehelper.meinv.http.LanguagehelperHttpClient;
@@ -24,6 +23,7 @@ import com.messi.languagehelper.meinv.impl.ProgressListener;
 import java.io.File;
 import java.io.IOException;
 
+import cn.leancloud.AVObject;
 import okhttp3.Response;
 
 public class AppDownloadUtil {

@@ -5,14 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import cn.leancloud.AVObject;
 import com.messi.languagehelper.meinv.R;
+import com.messi.languagehelper.meinv.box.CNWBean;
 
 /**
  * Created by luli on 10/23/16.
  */
 
-public class RcCaricatureHomeListAdapter extends HeaderFooterRecyclerViewAdapter<RecyclerView.ViewHolder, Object, AVObject, Object> {
+public class RcCaricatureHomeListAdapter extends HeaderFooterRecyclerViewAdapter<RecyclerView.ViewHolder, Object, CNWBean, Object> {
 
 
     @Override
@@ -24,7 +24,7 @@ public class RcCaricatureHomeListAdapter extends HeaderFooterRecyclerViewAdapter
 
     @Override
     protected void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
-        AVObject mAVObject = getItem(position);
+        CNWBean mAVObject = getItem(position);
         RcCaricatureHomeListItemViewHolder itemViewHolder = (RcCaricatureHomeListItemViewHolder)holder;
         itemViewHolder.render(mAVObject);
     }

@@ -759,7 +759,9 @@ public class AVOUtil {
 	public static class AdFilter{
 		public final static String AdFilter = "AdFilter";
 		public final static String name = "name";
+		public final static String category = "category";
 		public final static String filter = "filter";
+		public final static String ad_url = "ad_url";
 		public final static String isShowAd = "isShowAd";
 	}
 

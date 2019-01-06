@@ -5,17 +5,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import cn.leancloud.AVObject;
 import com.messi.languagehelper.meinv.R;
+import com.messi.languagehelper.meinv.box.CNWBean;
 import com.messi.languagehelper.meinv.impl.AdapterStringListener;
 
 import java.util.List;
+
+import cn.leancloud.AVObject;
 
 /**
  * Created by luli on 10/23/16.
  */
 
-public class RcCaricatureCategoryAdapter extends HeaderFooterRecyclerViewAdapter<RecyclerView.ViewHolder, Object, AVObject, Object> {
+public class RcCaricatureCategoryAdapter extends HeaderFooterRecyclerViewAdapter<RecyclerView.ViewHolder, Object, CNWBean, Object> {
 
     private List<AVObject> list;
     private AdapterStringListener listener;
@@ -47,7 +49,7 @@ public class RcCaricatureCategoryAdapter extends HeaderFooterRecyclerViewAdapter
 
     @Override
     protected void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
-        AVObject mAVObject = getItem(position);
+        CNWBean mAVObject = getItem(position);
         RcCaricatureHomeListItemViewHolder itemViewHolder = (RcCaricatureHomeListItemViewHolder)holder;
         itemViewHolder.render(mAVObject);
     }

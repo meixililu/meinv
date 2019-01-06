@@ -9,11 +9,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import cn.leancloud.AVObject;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.messi.languagehelper.meinv.CaricatureDetailActivity;
 import com.messi.languagehelper.meinv.R;
-import com.messi.languagehelper.meinv.util.AVOUtil;
+import com.messi.languagehelper.meinv.box.CNWBean;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 
 /**
@@ -39,34 +38,34 @@ public class RcCaricatureBookshelfItemViewHolder extends RecyclerView.ViewHolder
         delete_img = (ImageView) convertView.findViewById(R.id.delete_img);
     }
 
-    public void render(final AVObject mAVObject) {
+    public void render(final CNWBean mAVObject) {
         delete_layout.setVisibility(View.GONE);
         delete_img.setImageResource(R.drawable.ic_check_white);
-        img.setImageURI(mAVObject.getString(AVOUtil.Caricature.book_img_url));
-        name.setText( mAVObject.getString(AVOUtil.Caricature.name));
-        if(!TextUtils.isEmpty(mAVObject.getString(KeyUtil.DeleteModel))){
-            if (mAVObject.getString(KeyUtil.DeleteModel).equals("1")) {
+        img.setImageURI(mAVObject.getImg_url());
+        name.setText( mAVObject.getTitle());
+        if(!TextUtils.isEmpty(mAVObject.getDelete_model())){
+            if (mAVObject.getDelete_model().equals("1")) {
                 delete_layout.setVisibility(View.VISIBLE);
             }
         }
-        if(!TextUtils.isEmpty(mAVObject.getString(KeyUtil.isNeedDelete))){
-            if (mAVObject.getString(KeyUtil.isNeedDelete).equals("1")) {
+        if(!TextUtils.isEmpty(mAVObject.getIs_need_delete())){
+            if (mAVObject.getIs_need_delete().equals("1")) {
                 delete_img.setImageResource(R.drawable.ic_done);
             }
         }
         delete_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!TextUtils.isEmpty(mAVObject.getString(KeyUtil.isNeedDelete))){
-                    if(!"1".equals(mAVObject.getString(KeyUtil.isNeedDelete))){
-                        mAVObject.put(KeyUtil.isNeedDelete,"1");
+                if(!TextUtils.isEmpty(mAVObject.getIs_need_delete())){
+                    if(!"1".equals(mAVObject.getIs_need_delete())){
+                        mAVObject.setIs_need_delete("1");
                         delete_img.setImageResource(R.drawable.ic_done);
                     }else {
-                        mAVObject.put(KeyUtil.isNeedDelete,"0");
+                        mAVObject.setIs_need_delete("0");
                         delete_img.setImageResource(R.drawable.ic_check_white);
                     }
                 }else {
-                    mAVObject.put(KeyUtil.isNeedDelete,"1");
+                    mAVObject.setIs_need_delete("1");
                     delete_img.setImageResource(R.drawable.ic_done);
                 }
             }
@@ -79,10 +78,10 @@ public class RcCaricatureBookshelfItemViewHolder extends RecyclerView.ViewHolder
         });
     }
 
-    private void onItemClick(AVObject mAVObject){
+    private void onItemClick(CNWBean mAVObject){
         Intent intent = new Intent(context, CaricatureDetailActivity.class);
-        intent.putExtra(KeyUtil.AVObjectKey, mAVObject.toString());
-        intent.putExtra(KeyUtil.ActionbarTitle, mAVObject.getString(AVOUtil.Caricature.name));
+        intent.putExtra(KeyUtil.AVObjectKey, mAVObject);
+        intent.putExtra(KeyUtil.ActionbarTitle, mAVObject.getTitle());
         context.startActivity(intent);
     }
 

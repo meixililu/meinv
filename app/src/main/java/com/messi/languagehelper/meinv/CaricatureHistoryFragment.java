@@ -10,15 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import cn.leancloud.AVObject;
 import com.karumi.headerrecyclerview.HeaderSpanSizeLookup;
 import com.messi.languagehelper.meinv.adapter.RcCaricatureBookShelfAdapter;
-import com.messi.languagehelper.meinv.db.DataBaseUtil;
+import com.messi.languagehelper.meinv.box.BoxHelper;
+import com.messi.languagehelper.meinv.box.CNWBean;
 import com.messi.languagehelper.meinv.event.CaricatureEventHistory;
 import com.messi.languagehelper.meinv.util.AVOUtil;
-import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
-import com.messi.languagehelper.meinv.util.Setings;
 import com.messi.languagehelper.meinv.util.ToastUtil;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -44,10 +42,10 @@ public class CaricatureHistoryFragment extends BaseFragment implements View.OnCl
     private TextView empty_tv;
     private RcCaricatureBookShelfAdapter mAdapter;
     private GridLayoutManager layoutManager;
-    private List<AVObject> mList;
+    private List<CNWBean> mList;
     private int skip = 0;
     private boolean loading;
-    private boolean hasMore = true;
+    private boolean hasMore = false;
     private boolean isDeleteModel;
 
     public static CaricatureHistoryFragment newInstance(){
@@ -67,7 +65,7 @@ public class CaricatureHistoryFragment extends BaseFragment implements View.OnCl
 
     private void initViews(View view) {
         isRegisterBus = true;
-        mList = new ArrayList<AVObject>();
+        mList = new ArrayList<CNWBean>();
         category_lv = (RecyclerView) view.findViewById(R.id.listview);
         action_delete_btn = (CardView) view.findViewById(R.id.action_delete_btn);
         action_delete_all = (CardView) view.findViewById(R.id.action_delete_all);
@@ -121,21 +119,21 @@ public class CaricatureHistoryFragment extends BaseFragment implements View.OnCl
         LogUtil.DefalutLog("CaricatureEventHistory---RequestAsyncTask");
         showProgressbar();
         loading = true;
-        Observable.create(new ObservableOnSubscribe<List<AVObject>>() {
+        Observable.create(new ObservableOnSubscribe<List<CNWBean>>() {
             @Override
-            public void subscribe(ObservableEmitter<List<AVObject>> e) throws Exception {
+            public void subscribe(ObservableEmitter<List<CNWBean>> e) throws Exception {
                 e.onNext(getData());
             }
         })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<AVObject>>() {
+                .subscribe(new Observer<List<CNWBean>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                     }
 
                     @Override
-                    public void onNext(List<AVObject> s) {
+                    public void onNext(List<CNWBean> s) {
                         onFinishLoadData(s);
                     }
 
@@ -150,38 +148,24 @@ public class CaricatureHistoryFragment extends BaseFragment implements View.OnCl
                 });
     }
 
-    private List<AVObject> getData(){
+    private List<CNWBean> getData(){
         LogUtil.DefalutLog("CaricatureEventHistory---getData");
-        List<AVObject> list = DataBaseUtil.getInstance().getCaricaturesList(AVOUtil.Caricature.Caricature,
-                skip, Setings.ca_psize,true,false);
+        List<CNWBean> list = BoxHelper.getCaricatureList(AVOUtil.Caricature.Caricature,
+                0, 0,true,false);
         return list;
     }
 
-    private void onFinishLoadData(List<AVObject> list) {
+    private void onFinishLoadData(List<CNWBean> list) {
         LogUtil.DefalutLog("CaricatureEventHistory---onFinishLoadData");
         onSwipeRefreshLayoutFinish();
         hideProgressbar();
         loading = false;
         if(list != null){
-            if(list.size() == 0){
-                hasMore = false;
-                hideFooterview();
-            }else {
-                if(skip == 0){
-                    mList.clear();
-                }
-                initDeleteModel(list);
-                mList.addAll(list);
-                mAdapter.notifyDataSetChanged();
-                if(list.size() < Setings.ca_psize){
-                    hasMore = false;
-                    hideFooterview();
-                }else {
-                    skip += Setings.ca_psize;
-                    hasMore = true;
-                    showFooterview();
-                }
-            }
+            mList.clear();
+            initDeleteModel(list);
+            mList.addAll(list);
+            hideFooterview();
+            mAdapter.notifyDataSetChanged();
         }else{
             ToastUtil.diaplayMesShort(getContext(), "加载失败，下拉可刷新");
         }
@@ -194,7 +178,7 @@ public class CaricatureHistoryFragment extends BaseFragment implements View.OnCl
         }
     }
 
-    private void initDeleteModel(List<AVObject> list){
+    private void initDeleteModel(List<CNWBean> list){
         if(isDeleteModel){
             setDeleteModel(list,"1");
         }else {
@@ -210,10 +194,10 @@ public class CaricatureHistoryFragment extends BaseFragment implements View.OnCl
         mAdapter.showFooter();
     }
 
-    private void setDeleteModel(List<AVObject> list,String status){
-        for(AVObject mAVObject : list){
-            mAVObject.put(KeyUtil.DeleteModel,status);
-            mAVObject.put(KeyUtil.isNeedDelete,"0");
+    private void setDeleteModel(List<CNWBean> list,String status){
+        for(CNWBean mAVObject : list){
+            mAVObject.setDelete_model(status);
+            mAVObject.setIs_need_delete("0");
         }
         mAdapter.notifyDataSetChanged();
     }
@@ -236,7 +220,7 @@ public class CaricatureHistoryFragment extends BaseFragment implements View.OnCl
     }
 
     private void deleteAll(){
-        DataBaseUtil.getInstance().clearAvobjectHistory(AVOUtil.Caricature.Caricature);
+        BoxHelper.deleteAllData(AVOUtil.Caricature.Caricature,true,false);
         mList.clear();
         mAdapter.notifyDataSetChanged();
         isDeleteModel = false;
@@ -244,12 +228,12 @@ public class CaricatureHistoryFragment extends BaseFragment implements View.OnCl
     }
 
     private void deleteBooks(){
-        List<AVObject> newList = new ArrayList<AVObject>();
-        for(AVObject mAVObject : mList){
-            if(!TextUtils.isEmpty(mAVObject.getString(KeyUtil.isNeedDelete))){
-               if("1".equals(mAVObject.getString(KeyUtil.isNeedDelete))){
-                   DataBaseUtil.getInstance().updateAVObjectHistory(AVOUtil.Caricature.Caricature,
-                           mAVObject,0);
+        List<CNWBean> newList = new ArrayList<CNWBean>();
+        for(CNWBean mAVObject : mList){
+            if(!TextUtils.isEmpty(mAVObject.getIs_need_delete())){
+               if("1".equals(mAVObject.getIs_need_delete())){
+                   mAVObject.setHistory(0);
+                   BoxHelper.updateCNWBean(mAVObject);
                }else {
                    newList.add(mAVObject);
                }

@@ -22,18 +22,16 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.messi.languagehelper.meinv.db.DataBaseUtil;
+import com.messi.languagehelper.meinv.box.BoxHelper;
+import com.messi.languagehelper.meinv.box.CNWBean;
+import com.messi.languagehelper.meinv.box.WebFilter;
 import com.messi.languagehelper.meinv.dialog.AdDialog;
 import com.messi.languagehelper.meinv.event.CaricatureEventHistory;
 import com.messi.languagehelper.meinv.util.ADUtil;
-import com.messi.languagehelper.meinv.util.AVOUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
-import com.messi.languagehelper.meinv.util.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
-
-import cn.leancloud.AVObject;
 
 
 public class WebViewForCaricatureActivity extends BaseActivity{
@@ -50,7 +48,7 @@ public class WebViewForCaricatureActivity extends BaseActivity{
     private String filter_source_name;
     private String is_need_load_ad;
     private String adFilte;
-    private AVObject mItem;
+    private CNWBean mItem;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -65,25 +63,16 @@ public class WebViewForCaricatureActivity extends BaseActivity{
 	}
 	
 	private void initData() throws Exception{
-		String serializedStr = getIntent().getStringExtra(KeyUtil.AVObjectKey);
 		ToolbarBackgroundColor = getIntent().getIntExtra(KeyUtil.ToolbarBackgroundColorKey,0);
 		isReedPullDownRefresh = getIntent().getBooleanExtra(KeyUtil.IsReedPullDownRefresh, false);
 		isHideToolbar = getIntent().getBooleanExtra(KeyUtil.IsHideToolbar, false);
-		if(!TextUtils.isEmpty(serializedStr)){
-		    mItem = AVObject.createWithoutData(serializedStr,StringUtils.getRandomString(16));
-            AVObject temp = DataBaseUtil.getInstance().findByItemId(AVOUtil.Caricature.Caricature,mItem.getObjectId());
-            if (temp != null && mItem != null) {
-                LogUtil.DefalutLog("lasturl:"+temp.getString(AVOUtil.Caricature.lastUrl));
-                if(!TextUtils.isEmpty(temp.getString(AVOUtil.Caricature.lastUrl))){
-                    mItem.put(AVOUtil.Caricature.lastUrl,temp.getString(AVOUtil.Caricature.lastUrl));
-                }
-            }
-		}
-		if(mItem != null){
-			if(!TextUtils.isEmpty(mItem.getString(AVOUtil.Caricature.lastUrl))){
-				Url = mItem.getString(AVOUtil.Caricature.lastUrl);
+		mItem = getIntent().getParcelableExtra(KeyUtil.AVObjectKey);
+		if (mItem != null) {
+			LogUtil.DefalutLog("lasturl:"+mItem.getLast_read_url());
+			if(!TextUtils.isEmpty(mItem.getLast_read_url())){
+				Url = mItem.getLast_read_url();
 			}else {
-				Url = mItem.getString(AVOUtil.Caricature.read_url);
+				Url = mItem.getRead_url();
 			}
 		}
 		if(ToolbarBackgroundColor != 0){
@@ -239,11 +228,9 @@ public class WebViewForCaricatureActivity extends BaseActivity{
 	}
 
 	private void getFilter(){
-		AVObject object = DataBaseUtil.getInstance().findByItemKey(
-				AVOUtil.EnglishWebsite.EnglishWebsite,
-				mItem.getString(AVOUtil.Caricature.source_name));
-		if(object != null){
-			adFilte = object.getString(AVOUtil.EnglishWebsite.ad_filte);
+		WebFilter filter = BoxHelper.findWebFilterByName(mItem.getSource_name());
+		if(filter != null){
+			adFilte = filter.getAd_filter();
 			LogUtil.DefalutLog("adFilte:"+adFilte);
 		}
 	}
@@ -274,11 +261,10 @@ public class WebViewForCaricatureActivity extends BaseActivity{
 	protected void onDestroy() {
 		super.onDestroy();
 		LogUtil.DefalutLog("Url:"+mWebView.getUrl());
-		mItem.put(AVOUtil.Caricature.lastUrl,mWebView.getUrl());
-		DataBaseUtil.getInstance().updateOrInsertAVObject(
-				AVOUtil.Caricature.Caricature,
-				mItem,
-				mItem.getString(AVOUtil.Caricature.name));
+		mItem.setHistory(System.currentTimeMillis());
+		mItem.setUpdateTime(System.currentTimeMillis());
+		mItem.setLast_read_url(mWebView.getUrl());
+		BoxHelper.updateCNWBean(mItem);
 		EventBus.getDefault().post(new CaricatureEventHistory());
 		mWebView.destroy();
 	}

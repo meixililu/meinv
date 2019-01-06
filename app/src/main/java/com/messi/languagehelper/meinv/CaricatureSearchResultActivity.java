@@ -11,8 +11,10 @@ import com.iflytek.voiceads.IFLYNativeListener;
 import com.iflytek.voiceads.NativeADDataRef;
 import com.karumi.headerrecyclerview.HeaderSpanSizeLookup;
 import com.messi.languagehelper.meinv.adapter.RcCaricatureHomeListAdapter;
+import com.messi.languagehelper.meinv.box.CNWBean;
 import com.messi.languagehelper.meinv.util.ADUtil;
 import com.messi.languagehelper.meinv.util.AVOUtil;
+import com.messi.languagehelper.meinv.util.DataUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
 import com.messi.languagehelper.meinv.util.NumberUtil;
@@ -38,13 +40,13 @@ public class CaricatureSearchResultActivity extends BaseActivity{
     private RecyclerView category_lv;
     private RcCaricatureHomeListAdapter mAdapter;
     private GridLayoutManager layoutManager;
-    private List<AVObject> mList;
+    private List<CNWBean> mList;
     private int skip = 0;
     private boolean loading;
     private boolean hasMore = true;
     private String search_text;
     private IFLYNativeAd nativeAd;
-    private AVObject mADObject;
+    private CNWBean mADObject;
     private List<NativeExpressADView> mTXADList;
     
     @Override
@@ -60,7 +62,7 @@ public class CaricatureSearchResultActivity extends BaseActivity{
     private void initViews() {
         search_text = getIntent().getStringExtra(KeyUtil.SearchKey);
         mTXADList = new ArrayList<NativeExpressADView>();
-        mList = new ArrayList<AVObject>();
+        mList = new ArrayList<CNWBean>();
         category_lv = (RecyclerView) findViewById(R.id.listview);
         category_lv.setHasFixedSize(true);
         mAdapter = new RcCaricatureHomeListAdapter();
@@ -97,15 +99,13 @@ public class CaricatureSearchResultActivity extends BaseActivity{
         if(mList.size() > 3){
             for(int i=first;i< (first+vCount);i++){
                 if(i < mList.size() && i > 0){
-                    AVObject mAVObject = mList.get(i);
-                    if(mAVObject != null && mAVObject.get(KeyUtil.ADKey) != null){
-                        if(!(Boolean) mAVObject.get(KeyUtil.ADIsShowKey)){
-                            NativeADDataRef mNativeADDataRef = (NativeADDataRef) mAVObject.get(KeyUtil.ADKey);
+                    CNWBean mAVObject = mList.get(i);
+                    if(mAVObject != null && mAVObject.getmNativeADDataRef() != null){
+                        if(!mAVObject.isAdShow()){
+                            NativeADDataRef mNativeADDataRef = mAVObject.getmNativeADDataRef();
                             boolean isExposure = mNativeADDataRef.onExposured(view.getChildAt(i%vCount));
+                            mAVObject.setAdShow(isExposure);
                             LogUtil.DefalutLog("isExposure:"+isExposure);
-                            if(isExposure){
-                                mAVObject.put(KeyUtil.ADIsShowKey, isExposure);
-                            }
                         }
                     }
                 }
@@ -158,7 +158,7 @@ public class CaricatureSearchResultActivity extends BaseActivity{
                         if(skip == 0){
                             mList.clear();
                         }
-                        mList.addAll(list);
+                        mList.addAll(DataUtil.toCNWBeanList(list));
                         if(addAD()){
                             mAdapter.notifyDataSetChanged();
                         }
@@ -209,9 +209,9 @@ public class CaricatureSearchResultActivity extends BaseActivity{
     }
 
     private void addXFAD(NativeADDataRef nad){
-        mADObject = new AVObject();
-        mADObject.put(KeyUtil.ADKey, nad);
-        mADObject.put(KeyUtil.ADIsShowKey, false);
+        mADObject = new CNWBean();
+        mADObject.setmNativeADDataRef(nad);
+        mADObject.setAdShow(false);
         if(!loading){
             addAD();
         }
@@ -240,8 +240,8 @@ public class CaricatureSearchResultActivity extends BaseActivity{
                 LogUtil.DefalutLog("onADLoaded");
                 if(list != null && list.size() > 0){
                     mTXADList.add(list.get(0));
-                    mADObject = new AVObject();
-                    mADObject.put(KeyUtil.TXADView, list.get(0));
+                    mADObject = new CNWBean();
+                    mADObject.setmTXADView(list.get(0));
                     if (!loading) {
                         addAD();
                     }

@@ -1,5 +1,6 @@
 package com.messi.languagehelper.meinv.util;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -186,6 +187,20 @@ public class NumberUtil {
 	
 	public static int randomNumberRange(int min,int max){
 		return new Random().nextInt(max)%(max-min+1) + min;
+	}
+
+	public static String getNumberStr(double num){
+		String numStr = "" + num;
+		if(num > 100000000){
+			num = num / 100000000.0;
+			DecimalFormat df = new DecimalFormat("#.00");
+			numStr = df.format(num)+ "亿";
+		}else if(num > 10000){
+			num = num / 10000.0;
+			DecimalFormat df = new DecimalFormat("#.00");
+			numStr = df.format(num)+ "万";
+		}
+		return numStr;
 	}
 	
 	/**

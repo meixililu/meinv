@@ -14,8 +14,10 @@ import com.iflytek.voiceads.IFLYNativeListener;
 import com.iflytek.voiceads.NativeADDataRef;
 import com.karumi.headerrecyclerview.HeaderSpanSizeLookup;
 import com.messi.languagehelper.meinv.adapter.RcCaricatureHomeListAdapter;
+import com.messi.languagehelper.meinv.box.CNWBean;
 import com.messi.languagehelper.meinv.util.ADUtil;
 import com.messi.languagehelper.meinv.util.AVOUtil;
+import com.messi.languagehelper.meinv.util.DataUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
 import com.messi.languagehelper.meinv.util.NumberUtil;
@@ -41,7 +43,7 @@ public class CaricatureSourceActivity extends BaseActivity implements View.OnCli
     private FrameLayout source_web_btn;
     private RcCaricatureHomeListAdapter mAdapter;
     private GridLayoutManager layoutManager;
-    private List<AVObject> mList;
+    private List<CNWBean> mList;
     private int skip = 0;
     private int max_count = 2000;
     private boolean loading;
@@ -51,7 +53,7 @@ public class CaricatureSourceActivity extends BaseActivity implements View.OnCli
     private String source_url;
     private String ad_filte;
     private IFLYNativeAd nativeAd;
-    private AVObject mADObject;
+    private CNWBean mADObject;
     private List<NativeExpressADView> mTXADList;
 
     @Override
@@ -68,7 +70,7 @@ public class CaricatureSourceActivity extends BaseActivity implements View.OnCli
         source_url = getIntent().getStringExtra(KeyUtil.URL);
         ad_filte = getIntent().getStringExtra(KeyUtil.AdFilter);
         mTXADList = new ArrayList<NativeExpressADView>();
-        mList = new ArrayList<AVObject>();
+        mList = new ArrayList<CNWBean>();
         category_lv = (RecyclerView) findViewById(R.id.listview);
         source_web_btn = (FrameLayout) findViewById(R.id.source_web_btn);
         source_web_btn.setOnClickListener(this);
@@ -106,15 +108,13 @@ public class CaricatureSourceActivity extends BaseActivity implements View.OnCli
         if(mList.size() > 3){
             for(int i=first;i< (first+vCount);i++){
                 if(i < mList.size() && i > 0){
-                    AVObject mAVObject = mList.get(i);
-                    if(mAVObject != null && mAVObject.get(KeyUtil.ADKey) != null){
-                        if(!(Boolean) mAVObject.get(KeyUtil.ADIsShowKey)){
-                            NativeADDataRef mNativeADDataRef = (NativeADDataRef) mAVObject.get(KeyUtil.ADKey);
+                    CNWBean mAVObject = mList.get(i);
+                    if(mAVObject != null && mAVObject.getmNativeADDataRef() != null){
+                        if(!mAVObject.isAdShow()){
+                            NativeADDataRef mNativeADDataRef = mAVObject.getmNativeADDataRef();
                             boolean isExposure = mNativeADDataRef.onExposured(view.getChildAt(i%vCount));
+                            mAVObject.setAdShow(isExposure);
                             LogUtil.DefalutLog("isExposure:"+isExposure);
-                            if(isExposure){
-                                mAVObject.put(KeyUtil.ADIsShowKey, isExposure);
-                            }
                         }
                     }
                 }
@@ -166,7 +166,7 @@ public class CaricatureSourceActivity extends BaseActivity implements View.OnCli
                             isNeedClear = false;
                             mList.clear();
                         }
-                        mList.addAll(list);
+                        mList.addAll(DataUtil.toCNWBeanList(list));
                         if(addAD()){
                             mAdapter.notifyDataSetChanged();
                         }
@@ -227,9 +227,9 @@ public class CaricatureSourceActivity extends BaseActivity implements View.OnCli
     }
 
     private void addXFAD(NativeADDataRef nad){
-        mADObject = new AVObject();
-        mADObject.put(KeyUtil.ADKey, nad);
-        mADObject.put(KeyUtil.ADIsShowKey, false);
+        mADObject = new CNWBean();
+        mADObject.setmNativeADDataRef(nad);
+        mADObject.setAdShow(false);
         if(!loading){
             addAD();
         }
@@ -258,8 +258,8 @@ public class CaricatureSourceActivity extends BaseActivity implements View.OnCli
                 LogUtil.DefalutLog("onADLoaded");
                 if(list != null && list.size() > 0){
                     mTXADList.add(list.get(0));
-                    mADObject = new AVObject();
-                    mADObject.put(KeyUtil.TXADView, list.get(0));
+                    mADObject = new CNWBean();
+                    mADObject.setmTXADView(list.get(0));
                     if (!loading) {
                         addAD();
                     }
@@ -329,6 +329,7 @@ public class CaricatureSourceActivity extends BaseActivity implements View.OnCli
         intent.putExtra(KeyUtil.AdFilter, ad_filte);
         intent.putExtra(KeyUtil.IsHideToolbar, true);
         startActivity(intent);
+        finish();
     }
 
     @Override

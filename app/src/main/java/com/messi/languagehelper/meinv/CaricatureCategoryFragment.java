@@ -17,10 +17,11 @@ import com.iflytek.voiceads.IFLYNativeListener;
 import com.iflytek.voiceads.NativeADDataRef;
 import com.karumi.headerrecyclerview.HeaderSpanSizeLookup;
 import com.messi.languagehelper.meinv.adapter.RcCaricatureCategoryAdapter;
+import com.messi.languagehelper.meinv.box.CNWBean;
 import com.messi.languagehelper.meinv.impl.AdapterStringListener;
 import com.messi.languagehelper.meinv.util.ADUtil;
 import com.messi.languagehelper.meinv.util.AVOUtil;
-import com.messi.languagehelper.meinv.util.KeyUtil;
+import com.messi.languagehelper.meinv.util.DataUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
 import com.messi.languagehelper.meinv.util.NumberUtil;
 import com.messi.languagehelper.meinv.util.Setings;
@@ -47,7 +48,7 @@ public class CaricatureCategoryFragment extends BaseFragment implements View.OnC
     private Toolbar my_awesome_toolbar;
     private RcCaricatureCategoryAdapter mAdapter;
     private GridLayoutManager layoutManager;
-    private List<AVObject> mList;
+    private List<CNWBean> mList;
     private List<AVObject> calist;
     private int skip = 0;
     private int max_count = 300;
@@ -56,7 +57,7 @@ public class CaricatureCategoryFragment extends BaseFragment implements View.OnC
     private boolean isNeedClear = true;
     private String search_text = "全部";
     private IFLYNativeAd nativeAd;
-    private AVObject mADObject;
+    private CNWBean mADObject;
     private List<NativeExpressADView> mTXADList;
 
     public static CaricatureCategoryFragment newInstance(){
@@ -85,7 +86,7 @@ public class CaricatureCategoryFragment extends BaseFragment implements View.OnC
     }
 
     private void initViews(View view) {
-        mList = new ArrayList<AVObject>();
+        mList = new ArrayList<CNWBean>();
         calist = new ArrayList<AVObject>();
         mTXADList = new ArrayList<NativeExpressADView>();
         my_awesome_toolbar = (Toolbar) view.findViewById(R.id.my_awesome_toolbar);
@@ -129,15 +130,13 @@ public class CaricatureCategoryFragment extends BaseFragment implements View.OnC
         if(mList.size() > 3){
             for(int i=first;i< (first+vCount);i++){
                 if(i < mList.size() && i > 0){
-                    AVObject mAVObject = mList.get(i);
-                    if(mAVObject != null && mAVObject.get(KeyUtil.ADKey) != null){
-                        if(!(Boolean) mAVObject.get(KeyUtil.ADIsShowKey)){
-                            NativeADDataRef mNativeADDataRef = (NativeADDataRef) mAVObject.get(KeyUtil.ADKey);
+                    CNWBean mAVObject = mList.get(i);
+                    if(mAVObject != null && mAVObject.getmNativeADDataRef() != null){
+                        if(!mAVObject.isAdShow()){
+                            NativeADDataRef mNativeADDataRef = mAVObject.getmNativeADDataRef();
                             boolean isExposure = mNativeADDataRef.onExposured(view.getChildAt(i%vCount));
+                            mAVObject.setAdShow(isExposure);
                             LogUtil.DefalutLog("isExposure:"+isExposure);
-                            if(isExposure){
-                                mAVObject.put(KeyUtil.ADIsShowKey, isExposure);
-                            }
                         }
                     }
                 }
@@ -225,7 +224,7 @@ public class CaricatureCategoryFragment extends BaseFragment implements View.OnC
                             isNeedClear = false;
                             mList.clear();
                         }
-                        mList.addAll(list);
+                        mList.addAll(DataUtil.toCNWBeanList(list));
                         if(addAD()){
                             mAdapter.notifyDataSetChanged();
                         }
@@ -286,9 +285,9 @@ public class CaricatureCategoryFragment extends BaseFragment implements View.OnC
     }
 
     private void addXFAD(NativeADDataRef nad){
-        mADObject = new AVObject();
-        mADObject.put(KeyUtil.ADKey, nad);
-        mADObject.put(KeyUtil.ADIsShowKey, false);
+        mADObject = new CNWBean();
+        mADObject.setmNativeADDataRef(nad);
+        mADObject.setAdShow(false);
         if(!loading){
             addAD();
         }
@@ -317,8 +316,8 @@ public class CaricatureCategoryFragment extends BaseFragment implements View.OnC
                 LogUtil.DefalutLog("onADLoaded");
                 if(list != null && list.size() > 0){
                     mTXADList.add(list.get(0));
-                    mADObject = new AVObject();
-                    mADObject.put(KeyUtil.TXADView, list.get(0));
+                    mADObject = new CNWBean();
+                    mADObject.setmTXADView(list.get(0));
                     if (!loading) {
                         addAD();
                     }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Process;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.messi.languagehelper.meinv.box.BoxHelper;
 import com.messi.languagehelper.meinv.dao.DaoMaster;
 import com.messi.languagehelper.meinv.dao.DaoSession;
 import com.messi.languagehelper.meinv.db.LHContract;
@@ -14,24 +15,21 @@ import com.messi.languagehelper.meinv.util.SDCardUtil;
 import com.messi.languagehelper.meinv.util.Setings;
 import com.umeng.commonsdk.UMConfigure;
 
-import java.util.HashMap;
-
 import cn.leancloud.AVLogger;
 import cn.leancloud.AVOSCloud;
 
 public class BaseApplication extends Application {
 
-	public static HashMap<String, Object> dataMap = new HashMap<String, Object>();
 	private static DaoMaster daoMaster;
     private static DaoSession daoSession;
     public static BaseApplication mInstance;
+
 
     @Override  
     public void onCreate() {  
         super.onCreate();
         if(mInstance == null)  mInstance = this;
         initAVOS();
-
     }
 
     private void initAVOS(){
@@ -40,6 +38,7 @@ public class BaseApplication extends Application {
             public void run() {
                 AVOSCloud.setLogLevel(AVLogger.Level.VERBOSE);
                 UMConfigure.setLogEnabled(true);
+                BoxHelper.init(BaseApplication.this);
                 Setings.appVersion = Setings.getVersion(getApplicationContext());
                 Setings.appChannel = Setings.getMetaData(getApplicationContext(),"UMENG_CHANNEL");
                 LogUtil.DefalutLog("appVersion:"+Setings.appVersion+"---"+"appChannel:"+Setings.appChannel);

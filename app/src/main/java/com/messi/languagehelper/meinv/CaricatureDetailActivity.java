@@ -12,27 +12,24 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.messi.languagehelper.meinv.db.DataBaseUtil;
+import com.messi.languagehelper.meinv.box.BoxHelper;
+import com.messi.languagehelper.meinv.box.CNWBean;
 import com.messi.languagehelper.meinv.event.CaricatureEventAddBookshelf;
 import com.messi.languagehelper.meinv.util.ADUtil;
-import com.messi.languagehelper.meinv.util.AVOUtil;
 import com.messi.languagehelper.meinv.util.DownLoadUtil;
 import com.messi.languagehelper.meinv.util.ImgUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
+import com.messi.languagehelper.meinv.util.NumberUtil;
 import com.messi.languagehelper.meinv.util.SDCardUtil;
-import com.messi.languagehelper.meinv.util.StringUtils;
 import com.messi.languagehelper.meinv.util.ToastUtil;
 import com.messi.languagehelper.meinv.util.XFYSAD;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.text.DecimalFormat;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.leancloud.AVObject;
 
 public class CaricatureDetailActivity extends BaseActivity {
 
@@ -66,7 +63,7 @@ public class CaricatureDetailActivity extends BaseActivity {
     @BindView(R.id.item_layout)
     LinearLayout itemLayout;
 
-    private AVObject mAVObject;
+    private CNWBean mAVObject;
     private XFYSAD mXFYSAD;
     private String sharePath;
     private String imgUrl;
@@ -108,18 +105,18 @@ public class CaricatureDetailActivity extends BaseActivity {
 
     private void init() {
         try {
-            String serializedStr = getIntent().getStringExtra(KeyUtil.AVObjectKey);
-            mAVObject = AVObject.createWithoutData(serializedStr,StringUtils.getRandomString(16));
+            mAVObject = getIntent().getParcelableExtra(KeyUtil.AVObjectKey);
             if (mAVObject != null) {
-                imgUrl = mAVObject.getString(AVOUtil.Caricature.book_img_url);
+                LogUtil.DefalutLog("mAVObject"+mAVObject.toString());
+                imgUrl = mAVObject.getImg_url();
                 itemImg.setImageURI(imgUrl);
                 item_img_bg.setImageURI(imgUrl);
-                name.setText(mAVObject.getString(AVOUtil.Caricature.name));
-                tags.setText(mAVObject.getString(AVOUtil.Caricature.tag));
-                author.setText(mAVObject.getString(AVOUtil.Caricature.author));
-                des.setText(mAVObject.getString(AVOUtil.Caricature.des));
-                views.setText("人气：" + getNumberStr(mAVObject.getNumber(AVOUtil.Caricature.views).doubleValue()));
-                source.setText("来源：" + mAVObject.getString(AVOUtil.Caricature.source_name));
+                name.setText(mAVObject.getTitle());
+                tags.setText(mAVObject.getTag());
+                author.setText(mAVObject.getAuthor());
+                des.setText(mAVObject.getDes());
+                views.setText("人气：" + NumberUtil.getNumberStr(mAVObject.getView()));
+                source.setText("来源：" + mAVObject.getSource_name());
             } else {
                 finish();
             }
@@ -128,19 +125,7 @@ public class CaricatureDetailActivity extends BaseActivity {
         }
     }
 
-    private String getNumberStr(double num){
-        String numStr = "" + num;
-        if(num > 100000000){
-            num = num / 100000000.0;
-            DecimalFormat df = new DecimalFormat("#.00");
-            numStr = df.format(num)+ "亿";
-        }else if(num > 10000){
-            num = num / 10000.0;
-            DecimalFormat df = new DecimalFormat("#.00");
-            numStr = df.format(num)+ "万";
-        }
-        return numStr;
-    }
+
 
     private void loadAD() {
         mXFYSAD = new XFYSAD(this, xx_ad_layout, ADUtil.MRYJYSNRLAd);
@@ -149,7 +134,7 @@ public class CaricatureDetailActivity extends BaseActivity {
 
     private void onItemClick() {
         Intent intent = new Intent(this, WebViewForCaricatureActivity.class);
-        intent.putExtra(KeyUtil.AVObjectKey, mAVObject.toString());
+        intent.putExtra(KeyUtil.AVObjectKey, mAVObject);
         intent.putExtra(KeyUtil.IsHideToolbar, true);
         startActivity(intent);
     }
@@ -174,11 +159,9 @@ public class CaricatureDetailActivity extends BaseActivity {
 
     @OnClick(R.id.add_bookshelf)
     public void onAddBookshelfClicked() {
-        DataBaseUtil.getInstance().updateOrInsertAVObject(
-                AVOUtil.Caricature.Caricature,
-                mAVObject,
-                mAVObject.getString(AVOUtil.Caricature.name),
-                System.currentTimeMillis());
+        mAVObject.setCollected(System.currentTimeMillis());
+        mAVObject.setUpdateTime(System.currentTimeMillis());
+        BoxHelper.updateCNWBean(mAVObject);
         EventBus.getDefault().post(new CaricatureEventAddBookshelf());
         ToastUtil.diaplayMesShort(this, getString(R.string.add_bookshelf_success));
     }

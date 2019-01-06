@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.messi.languagehelper.meinv.R;
+import com.messi.languagehelper.meinv.box.BoxHelper;
+import com.messi.languagehelper.meinv.box.WebFilter;
 
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class AppUpdateUtil {
     public static void runCheckUpdateTask(final Activity mActivity) {
         checkUpdate(mActivity);
         initXMLY(mActivity);
+        getWebFilter();
 //        PushManager.getInstance().initialize(mActivity.getApplicationContext(),null);
     }
 
@@ -40,6 +43,19 @@ public class AppUpdateUtil {
         SystemUtil.SCREEN_WIDTH = dm.widthPixels;
         SystemUtil.SCREEN_HEIGHT = dm.heightPixels;
         SystemUtil.screen = SystemUtil.SCREEN_WIDTH + "x" + SystemUtil.SCREEN_HEIGHT;
+    }
+
+    public static void getWebFilter(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                AVQuery<AVObject> query = new AVQuery<AVObject>(AVOUtil.AdFilter.AdFilter);
+                query.whereContains(AVOUtil.AdFilter.category, "ca_novel");
+                List<AVObject> list = query.find();
+                List<WebFilter> beans = DataUtil.toWebFilter(list);
+                BoxHelper.updateWebFilter(beans);
+            }
+        }).start();
     }
 
     public static void checkUpdate(final Activity mActivity) {

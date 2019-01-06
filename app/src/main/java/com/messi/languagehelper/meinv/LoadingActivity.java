@@ -23,6 +23,7 @@ import com.iflytek.voiceads.AdKeys;
 import com.iflytek.voiceads.IFLYNativeAd;
 import com.iflytek.voiceads.IFLYNativeListener;
 import com.iflytek.voiceads.NativeADDataRef;
+import com.messi.languagehelper.meinv.db.MoveDataTask;
 import com.messi.languagehelper.meinv.util.ADUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
@@ -61,6 +62,7 @@ public class LoadingActivity extends AppCompatActivity {
             TransparentStatusbar();
             setContentView(R.layout.loading_activity);
             ButterKnife.bind(this);
+            MoveDataTask.moveCaricatureData(this);
             TXADUtil.initTXADID(this);
             ADUtil.loadAd(this);
             init();

@@ -11,7 +11,6 @@ import android.widget.FrameLayout;
 
 import com.karumi.headerrecyclerview.HeaderSpanSizeLookup;
 import com.messi.languagehelper.meinv.adapter.RcCaricatureSourceListAdapter;
-import com.messi.languagehelper.meinv.db.DataBaseUtil;
 import com.messi.languagehelper.meinv.util.ADUtil;
 import com.messi.languagehelper.meinv.util.AVOUtil;
 import com.messi.languagehelper.meinv.util.ToastUtil;
@@ -123,7 +122,7 @@ public class CaricatureWebListFragment extends BaseFragment implements View.OnCl
         query.whereEqualTo(AVOUtil.EnglishWebsite.category, "caricature");
         query.orderByDescending(AVOUtil.EnglishWebsite.Order);
         query.skip(skip);
-        query.limit(30);
+        query.limit(50);
         query.findInBackground().subscribe(ObserverBuilder.buildSingleObserver(new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
@@ -148,23 +147,12 @@ public class CaricatureWebListFragment extends BaseFragment implements View.OnCl
                             hasMore = true;
                             showFooterview();
                         }
-                        saveData(list);
                     }
                 }else{
                     ToastUtil.diaplayMesShort(getContext(), "加载失败，下拉可刷新");
                 }
             }
         }));
-    }
-
-    private void saveData(List<AVObject> list){
-        for (AVObject object : list){
-            DataBaseUtil.getInstance().updateOrInsertAVObject(
-                    AVOUtil.EnglishWebsite.EnglishWebsite,
-                    object,
-                    object.getString(AVOUtil.EnglishWebsite.Title),
-                    0);
-        }
     }
 
     private void hideFooterview(){
