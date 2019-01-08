@@ -3,11 +3,9 @@ package com.messi.languagehelper.meinv;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.karumi.headerrecyclerview.HeaderSpanSizeLookup;
 import com.messi.languagehelper.meinv.adapter.RcCaricatureSourceListAdapter;
@@ -26,12 +24,10 @@ import cn.leancloud.AVQuery;
 import cn.leancloud.callback.FindCallback;
 import cn.leancloud.convertor.ObserverBuilder;
 
-public class CaricatureWebListFragment extends BaseFragment implements View.OnClickListener{
+public class CaricatureWebListFragment extends BaseFragment{
 
     private static final int NUMBER_OF_COLUMNS = 3;
     private RecyclerView category_lv;
-    private FrameLayout search_btn;
-    private Toolbar my_awesome_toolbar;
     private RcCaricatureSourceListAdapter mAdapter;
     private GridLayoutManager layoutManager;
     private List<AVObject> mList;
@@ -58,11 +54,7 @@ public class CaricatureWebListFragment extends BaseFragment implements View.OnCl
     private void initViews(View view) {
         mXFYSAD = new XFYSAD(getActivity(), ADUtil.SecondaryPage);
         mList = new ArrayList<AVObject>();
-        my_awesome_toolbar = (Toolbar) view.findViewById(R.id.my_awesome_toolbar);
         category_lv = (RecyclerView) view.findViewById(R.id.listview);
-        search_btn = (FrameLayout) view.findViewById(R.id.search_btn);
-        my_awesome_toolbar.setTitle(R.string.title_source);
-        search_btn.setOnClickListener(this);
         category_lv.setHasFixedSize(true);
         mAdapter = new RcCaricatureSourceListAdapter(mXFYSAD);
         layoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
@@ -163,14 +155,4 @@ public class CaricatureWebListFragment extends BaseFragment implements View.OnCl
         mAdapter.showFooter();
     }
 
-    @Override
-    public void onClick(View view) {
-        if(view.getId() == R.id.search_btn){
-            toSearchActivity();
-        }
-    }
-
-    private void toSearchActivity(){
-        toActivity(CaricatureSearchActivity.class,null);
-    }
 }

@@ -21,6 +21,20 @@
             android:background="@color/theme_color"
             app:tabTextAppearance="@style/TabLayoutTextStyle"
             app:tabIndicatorColor="@color/white" />
+        <FrameLayout
+            android:id="@+id/more_btn"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:foreground="@drawable/framelayout_selector"
+            >
+            <ImageView
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_more_white"
+                />
+        </FrameLayout>
+
     </LinearLayout>
 
     <android.support.v4.view.ViewPager

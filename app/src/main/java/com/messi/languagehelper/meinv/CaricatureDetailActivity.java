@@ -1,11 +1,9 @@
 package com.messi.languagehelper.meinv;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -92,15 +90,6 @@ public class CaricatureDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         init();
         loadAD();
-    }
-
-    private void transparentStatusbar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            //透明状态栏 透明导航栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        } else {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
     }
 
     private void init() {

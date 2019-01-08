@@ -3,12 +3,10 @@ package com.messi.languagehelper.meinv;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.iflytek.voiceads.AdError;
 import com.iflytek.voiceads.AdKeys;
@@ -40,12 +38,10 @@ import cn.leancloud.AVQuery;
 import cn.leancloud.callback.FindCallback;
 import cn.leancloud.convertor.ObserverBuilder;
 
-public class CaricatureCategoryFragment extends BaseFragment implements View.OnClickListener,AdapterStringListener {
+public class CaricatureCategoryFragment extends BaseFragment implements AdapterStringListener {
 
     private static final int NUMBER_OF_COLUMNS = 3;
     private RecyclerView category_lv;
-    private FrameLayout search_btn;
-    private Toolbar my_awesome_toolbar;
     private RcCaricatureCategoryAdapter mAdapter;
     private GridLayoutManager layoutManager;
     private List<CNWBean> mList;
@@ -68,7 +64,7 @@ public class CaricatureCategoryFragment extends BaseFragment implements View.OnC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.caricature_home_fragment, null);
+        View view = inflater.inflate(R.layout.caricature_category_fragment, null);
         initViews(view);
         initSwipeRefresh(view);
         randomPage();
@@ -89,11 +85,7 @@ public class CaricatureCategoryFragment extends BaseFragment implements View.OnC
         mList = new ArrayList<CNWBean>();
         calist = new ArrayList<AVObject>();
         mTXADList = new ArrayList<NativeExpressADView>();
-        my_awesome_toolbar = (Toolbar) view.findViewById(R.id.my_awesome_toolbar);
-        search_btn = (FrameLayout) view.findViewById(R.id.search_btn);
         category_lv = (RecyclerView) view.findViewById(R.id.listview);
-        my_awesome_toolbar.setTitle(R.string.title_category);
-        search_btn.setOnClickListener(this);
         category_lv.setHasFixedSize(true);
         mAdapter = new RcCaricatureCategoryAdapter(calist,this);
         layoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
@@ -379,17 +371,6 @@ public class CaricatureCategoryFragment extends BaseFragment implements View.OnC
 
     private void showFooterview(){
         mAdapter.showFooter();
-    }
-
-    @Override
-    public void onClick(View view) {
-        if(view.getId() == R.id.search_btn){
-            toSearchActivity();
-        }
-    }
-
-    private void toSearchActivity(){
-        toActivity(CaricatureSearchActivity.class,null);
     }
 
     @Override

@@ -376,6 +376,7 @@
     <string name="title_notifications">Notifications</string>
     <string name="xmly_tab_eng">英语</string>
     <string name="title_bookshelf">书架</string>
+    <string name="title_novel">小说</string>
     <string name="title_history">历史</string>
     <string name="title_live">直播</string>
     <string name="title_all_fm">全部</string>
@@ -392,6 +393,7 @@
     <string name="xmly_track">声音</string>
     <string name="xmly_radio">电台</string>
     <string name="click_to_skip">跳过</string>
+    <string name="go_on">继续</string>
     <string name="list_empty">空空的，快去添加图书吧</string>
     <string name="history_empty">什么也没有</string>
 

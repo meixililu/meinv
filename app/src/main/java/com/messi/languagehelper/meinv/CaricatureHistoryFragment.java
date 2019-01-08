@@ -212,6 +212,7 @@ public class CaricatureHistoryFragment extends BaseFragment implements View.OnCl
             }else {
                 deleteBooks();
                 isDeleteModel = false;
+                action_delete_all.setVisibility(View.GONE);
                 setDeleteModel(mList,"0");
             }
         } else if(view.getId() == R.id.action_delete_all) {

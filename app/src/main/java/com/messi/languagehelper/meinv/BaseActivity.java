@@ -53,13 +53,32 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TransparentStatusbar();
     }
 
-    protected void TransparentStatusbar() {
-        if (VERSION.SDK_INT >= VERSION_CODES.KITKAT && VERSION.SDK_INT <= VERSION_CODES.LOLLIPOP) {
-            //透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+    public void transparentStatusbar() {
+        try {
+            if (VERSION.SDK_INT >= VERSION_CODES.KITKAT) {
+                //透明状态栏 透明导航栏
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            } else {
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void changeStatusBarTextColor(boolean isBlack) {
+        try {
+            if (VERSION.SDK_INT > VERSION_CODES.M) {
+                if (isBlack) {
+                    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);//设置状态栏黑色字体
+                }else {
+                    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);//恢复状态栏白色字体
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

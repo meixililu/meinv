@@ -25,7 +25,7 @@ public class CaricatureBHFragment extends BaseFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.tablayout_fragment, null);
+        View view = inflater.inflate(R.layout.tablayout_with_more_fragment, null);
         initViews(view);
         return view;
     }

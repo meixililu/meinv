@@ -17,6 +17,7 @@ import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
 import com.messi.languagehelper.meinv.util.AppUpdateUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
+import com.messi.languagehelper.meinv.util.Setings;
 import com.messi.languagehelper.meinv.util.ToastUtil;
 
 import butterknife.BindView;
@@ -38,6 +39,7 @@ public class CaricatureMainActivity extends BaseActivity {
     private Fragment categoryFragment;
     private Fragment dashboardFragment;
     private Fragment radioHomeFragment;
+    private Fragment webviewFragment;
     private long exitTime = 0;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -63,6 +65,10 @@ public class CaricatureMainActivity extends BaseActivity {
                     hideAllFragment();
                     getSupportFragmentManager().beginTransaction().show(radioHomeFragment).commit();
                     return true;
+                case R.id.navigation_novel:
+                    hideAllFragment();
+                    getSupportFragmentManager().beginTransaction().show(webviewFragment).commit();
+                    return true;
             }
             return false;
         }
@@ -81,18 +87,21 @@ public class CaricatureMainActivity extends BaseActivity {
 
     private void initFragment(){
         SpeechUtility.createUtility(this, SpeechConstant.APPID + "=" + getString(R.string.app_id));
+        navigation.inflateMenu(R.menu.caricature_main_novel_tabs);
         navigation.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         engFragment = CaricatureHomeFragment.newInstance();
-        categoryFragment = CaricatureCategoryFragment.newInstance();
+        categoryFragment = CaricatureCategoryMainFragment.getInstance();
         dashboardFragment = CaricatureWebListFragment.newInstance();
         radioHomeFragment = CaricatureBHFragment.getInstance();
+        webviewFragment = WebViewForNovelFragment.newInstance(Setings.XMNovel,"小米小说");
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.content, engFragment)
                 .add(R.id.content, categoryFragment)
                 .add(R.id.content, dashboardFragment)
                 .add(R.id.content, radioHomeFragment)
+                .add(R.id.content, webviewFragment)
                 .commit();
         hideAllFragment();
         getSupportFragmentManager()
@@ -106,6 +115,7 @@ public class CaricatureMainActivity extends BaseActivity {
                 .hide(radioHomeFragment)
                 .hide(engFragment)
                 .hide(categoryFragment)
+                .hide(webviewFragment)
                 .commit();
     }
 
