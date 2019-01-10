@@ -17,7 +17,6 @@ import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
 import com.messi.languagehelper.meinv.util.AppUpdateUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
-import com.messi.languagehelper.meinv.util.Setings;
 import com.messi.languagehelper.meinv.util.ToastUtil;
 
 import butterknife.BindView;
@@ -37,7 +36,6 @@ public class CaricatureMainActivity extends BaseActivity {
     BottomNavigationView navigation;
     private Fragment engFragment;
     private Fragment categoryFragment;
-    private Fragment dashboardFragment;
     private Fragment radioHomeFragment;
     private Fragment webviewFragment;
     private long exitTime = 0;
@@ -55,11 +53,6 @@ public class CaricatureMainActivity extends BaseActivity {
                 case R.id.navigation_category:
                     hideAllFragment();
                     getSupportFragmentManager().beginTransaction().show(categoryFragment).commit();
-                    return true;
-                case R.id.navigation_dashboard:
-                    hideAllFragment();
-                    getSupportFragmentManager().beginTransaction().show(dashboardFragment).commit();
-                    dashboardFragment.setUserVisibleHint(true);
                     return true;
                 case R.id.navigation_history:
                     hideAllFragment();
@@ -92,14 +85,12 @@ public class CaricatureMainActivity extends BaseActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         engFragment = CaricatureHomeFragment.newInstance();
         categoryFragment = CaricatureCategoryMainFragment.getInstance();
-        dashboardFragment = CaricatureWebListFragment.newInstance();
         radioHomeFragment = CaricatureBHFragment.getInstance();
-        webviewFragment = WebViewForNovelFragment.newInstance(Setings.XMNovel,"小米小说");
+        webviewFragment = CaricatureNovelHomeFragment.getInstance();
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.content, engFragment)
                 .add(R.id.content, categoryFragment)
-                .add(R.id.content, dashboardFragment)
                 .add(R.id.content, radioHomeFragment)
                 .add(R.id.content, webviewFragment)
                 .commit();
@@ -111,7 +102,6 @@ public class CaricatureMainActivity extends BaseActivity {
     private void hideAllFragment(){
         getSupportFragmentManager()
                 .beginTransaction()
-                .hide(dashboardFragment)
                 .hide(radioHomeFragment)
                 .hide(engFragment)
                 .hide(categoryFragment)

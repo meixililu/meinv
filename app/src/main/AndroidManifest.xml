@@ -110,6 +110,9 @@
             android:name=".WebViewForCaricatureActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".WebViewForNovelActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".CaricatureSourceActivity"
             android:screenOrientation="portrait" />
         <activity

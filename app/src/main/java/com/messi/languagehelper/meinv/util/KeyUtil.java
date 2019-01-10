@@ -270,7 +270,8 @@ public class KeyUtil {
 	public static final String AVObjectKey = "AVObjectKey";
 	public static final String HasMoveCaricatureData = "HasMoveCaricatureData";
 
-
+	public static final String Lei_DVideo = "Lei_DVideo";
+	public static final String Lei_Novel = "Lei_Novel";
 
 
 
