@@ -101,7 +101,7 @@
     <color name="speak_btn_parentlayout_bg">#66000000</color>
     <color name="speak_btn_bg">#f1f1f1</color>
 
-    <color name="background_tab_pressed">#6633B5E5</color>
+    <color name="background_tab_pressed">#12000000</color>
     <color name="line_color_gray">#c5ced6</color>
     <color name="line_color_blue">#a8cceb</color>
     <color name="list_item_bg">#f7fafe</color>

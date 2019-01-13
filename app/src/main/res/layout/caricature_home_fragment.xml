@@ -16,7 +16,7 @@
         <FrameLayout
             android:id="@+id/search_btn"
             android:layout_width="50dp"
-            android:layout_height="match_parent"
+            android:layout_height="56dp"
             android:layout_gravity="right"
             android:foreground="@drawable/framelayout_selector"
             >

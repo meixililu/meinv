@@ -1,5 +1,6 @@
 package com.messi.languagehelper.meinv;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -9,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.messi.languagehelper.meinv.adapter.CaricatureCategoryMainAdapter;
+import com.messi.languagehelper.meinv.util.KeyUtil;
+import com.messi.languagehelper.meinv.util.Setings;
 
 public class CaricatureCategoryMainFragment extends BaseFragment implements View.OnClickListener{
 
@@ -49,6 +52,16 @@ public class CaricatureCategoryMainFragment extends BaseFragment implements View
     }
 
     private void toSearchActivity(){
-        toActivity(CaricatureSearchActivity.class,null);
+        if(Setings.IsShowNovel){
+            toKSearch();
+        }else {
+            toActivity(CaricatureSearchActivity.class,null);
+        }
+    }
+
+    private void toKSearch(){
+        Intent intent = new Intent(getContext(),CNSearchActivity.class);
+        intent.putExtra(KeyUtil.PositionKey,0);
+        startActivity(intent);
     }
 }

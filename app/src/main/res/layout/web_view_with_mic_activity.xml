@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/contentbg" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/my_awesome_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/theme_color"
+            android:minHeight="@dimen/actionBar" />
+
+        <ProgressBar
+            android:id="@+id/progressdeterminate"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            style="@style/HorizontalProgressGreen"
+            android:background="@color/green_500"
+            android:visibility="gone"
+            android:max="100" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" >
+        <RelativeLayout
+            android:id="@+id/nonVideoLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <com.messi.languagehelper.meinv.view.VideoEnabledWebView
+                    android:id="@+id/refreshable_webview"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" />
+            </android.support.v4.widget.SwipeRefreshLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/videoLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tap_to_reload"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/actionBar"
+        android:background="@color/white"
+        android:gravity="center"
+        android:text="@string/webview_reload"
+        android:textColor="@color/text_grey"
+        android:textSize="@dimen/bigger"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/ad_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/novel_bg"
+        android:visibility="gone"
+        >
+        <TextView
+            android:id="@+id/ad_go_on"
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+            android:background="@color/novel_bg"
+            android:layout_alignParentBottom="true"
+            android:textSize="@dimen/bigger"
+            android:textColor="@color/text_dark"
+            android:gravity="center"
+            android:text="@string/go_on"
+            />
+        <LinearLayout
+            android:id="@+id/ad_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/ad_go_on"
+            android:orientation="vertical"
+            />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/speak_round_layout"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="-5dp"
+        android:background="@drawable/round_gray_bgl_old"
+        android:layout_gravity="bottom|center_horizontal"
+        android:gravity="center"
+        android:orientation="horizontal" >
+        <Button
+            android:id="@+id/voice_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/ic_voice_padded_normal"
+            android:clickable="false"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:textColor="@color/white"
+            android:textSize="@dimen/middle" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/record_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/round_bg_record"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:visibility="gone" >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/voice_pic" />
+
+        <ImageView
+            android:id="@+id/record_anim_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/speak_voice_1" />
+    </LinearLayout>
+
+</FrameLayout>

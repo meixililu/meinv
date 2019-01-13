@@ -64,6 +64,7 @@ public class CaricatureNovelHomeFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.search_btn:
+                toKSearch();
                 break;
             case R.id.layout_free_novel:
                 toNovelActivity();
@@ -75,10 +76,11 @@ public class CaricatureNovelHomeFragment extends BaseFragment {
                 toNovelActivity(Setings.NovelShort,"lnovel小说");
                 break;
             case R.id.layout_search_novel:
+                toKSearch();
                 break;
         }
     }
-    //42440a9c
+
     private void toNovelActivity() {
         Intent intent = new Intent(getContext(), WebViewForNovelActivity.class);
         intent.putExtra(KeyUtil.URL, getNovelUrl());
@@ -93,6 +95,12 @@ public class CaricatureNovelHomeFragment extends BaseFragment {
         intent.putExtra(KeyUtil.FilterName, filter);
         getContext().startActivity(intent);
         AVAnalytics.onEvent(getActivity(), "caricature_to_free_novel");
+    }
+
+    private void toKSearch(){
+        Intent intent = new Intent(getContext(),CNSearchActivity.class);
+        intent.putExtra(KeyUtil.PositionKey,1);
+        startActivity(intent);
     }
 
     private String getNovelUrl(){

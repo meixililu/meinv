@@ -1,14 +1,11 @@
 package com.messi.languagehelper.meinv;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.iflytek.voiceads.AdError;
 import com.iflytek.voiceads.AdKeys;
@@ -21,7 +18,6 @@ import com.messi.languagehelper.meinv.box.CNWBean;
 import com.messi.languagehelper.meinv.util.ADUtil;
 import com.messi.languagehelper.meinv.util.AVOUtil;
 import com.messi.languagehelper.meinv.util.DataUtil;
-import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
 import com.messi.languagehelper.meinv.util.NumberUtil;
 import com.messi.languagehelper.meinv.util.Setings;
@@ -31,6 +27,7 @@ import com.qq.e.ads.nativ.NativeExpressAD;
 import com.qq.e.ads.nativ.NativeExpressADView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cn.leancloud.AVException;
@@ -39,49 +36,43 @@ import cn.leancloud.AVQuery;
 import cn.leancloud.callback.FindCallback;
 import cn.leancloud.convertor.ObserverBuilder;
 
-public class CaricatureHomeFragment extends BaseFragment implements View.OnClickListener{
+public class CaricatureSearchResultFragment extends BaseFragment{
 
     private static final int NUMBER_OF_COLUMNS = 3;
     private RecyclerView category_lv;
-    private FrameLayout search_btn;
-    private Toolbar my_awesome_toolbar;
     private RcCaricatureHomeListAdapter mAdapter;
     private GridLayoutManager layoutManager;
     private List<CNWBean> mList;
     private int skip = 0;
-    private int max_count = 8000;
     private boolean loading;
     private boolean hasMore = true;
-    private boolean isNeedClear = true;
+    public String search_text;
     private IFLYNativeAd nativeAd;
     private CNWBean mADObject;
     private List<NativeExpressADView> mTXADList;
 
-    public static CaricatureHomeFragment newInstance(){
-        CaricatureHomeFragment fragment = new CaricatureHomeFragment();
+    public static CaricatureSearchResultFragment getInstance(String text){
+        CaricatureSearchResultFragment fragment = new CaricatureSearchResultFragment();
+        fragment.search_text = text;
         return fragment;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.caricature_home_fragment, null);
+        View view = inflater.inflate(R.layout.activity_caricature_search_result, null);
         initViews(view);
         initSwipeRefresh(view);
-        randomPage();
         loadAD();
         RequestAsyncTask();
         return view;
     }
 
+
     private void initViews(View view) {
-        mList = new ArrayList<CNWBean>();
         mTXADList = new ArrayList<NativeExpressADView>();
-        my_awesome_toolbar = (Toolbar) view.findViewById(R.id.my_awesome_toolbar);
-        search_btn = (FrameLayout) view.findViewById(R.id.search_btn);
+        mList = new ArrayList<CNWBean>();
         category_lv = (RecyclerView) view.findViewById(R.id.listview);
-        my_awesome_toolbar.setTitle(R.string.recommend);
-        search_btn.setOnClickListener(this);
         category_lv.setHasFixedSize(true);
         mAdapter = new RcCaricatureHomeListAdapter();
         layoutManager = new GridLayoutManager(getContext(), NUMBER_OF_COLUMNS);
@@ -134,7 +125,7 @@ public class CaricatureHomeFragment extends BaseFragment implements View.OnClick
     @Override
     public void onSwipeRefreshLayoutRefresh() {
         loadAD();
-        randomPage();
+        skip = 0;
         hasMore = true;
         RequestAsyncTask();
     }
@@ -149,26 +140,22 @@ public class CaricatureHomeFragment extends BaseFragment implements View.OnClick
         }
     }
 
-    private void randomPage(){
-        isNeedClear = true;
-        if(max_count > 0){
-            skip = NumberUtil.getRandomNumber(max_count);
-            LogUtil.DefalutLog("spip:"+skip);
-        }else {
-            skip = 0;
-        }
-    }
-
     private void RequestAsyncTask() {
         showProgressbar();
         loading = true;
-        AVQuery<AVObject> query = new AVQuery<AVObject>(AVOUtil.Caricature.Caricature);
+        AVQuery<AVObject> priorityQuery = new AVQuery<>(AVOUtil.Caricature.Caricature);
+        priorityQuery.whereContains(AVOUtil.Caricature.name, search_text);
+
+        AVQuery<AVObject> statusQuery = new AVQuery<>(AVOUtil.Caricature.Caricature);
+        statusQuery.whereContains(AVOUtil.Caricature.tag, search_text);
+
+        AVQuery<AVObject> query = AVQuery.or(Arrays.asList(priorityQuery,statusQuery));
         query.orderByDescending(AVOUtil.Caricature.views);
         query.skip(skip);
         query.limit(Setings.ca_psize);
         query.findInBackground().subscribe(ObserverBuilder.buildSingleObserver(new FindCallback<AVObject>() {
             @Override
-            public void done(List<AVObject> list, AVException e) {
+            public void done(List<AVObject> list, AVException avException) {
                 hideProgressbar();
                 loading = false;
                 onSwipeRefreshLayoutFinish();
@@ -177,8 +164,7 @@ public class CaricatureHomeFragment extends BaseFragment implements View.OnClick
                         hasMore = false;
                         hideFooterview();
                     }else {
-                        if(isNeedClear){
-                            isNeedClear = false;
+                        if(skip == 0){
                             mList.clear();
                         }
                         mList.addAll(DataUtil.toCNWBeanList(list));
@@ -328,24 +314,4 @@ public class CaricatureHomeFragment extends BaseFragment implements View.OnClick
         mAdapter.showFooter();
     }
 
-    @Override
-    public void onClick(View view) {
-        if(view.getId() == R.id.search_btn){
-            toSearchActivity();
-        }
-    }
-
-    private void toSearchActivity(){
-        if(Setings.IsShowNovel){
-            toKSearch();
-        }else {
-            toActivity(CaricatureSearchActivity.class,null);
-        }
-    }
-
-    private void toKSearch(){
-        Intent intent = new Intent(getContext(),CNSearchActivity.class);
-        intent.putExtra(KeyUtil.PositionKey,0);
-        startActivity(intent);
-    }
 }

@@ -6,23 +6,6 @@
     android:background="@color/app_background"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/my_awesome_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/theme_color"
-        android:minHeight="@dimen/actionBar">
-
-        <ProgressBar
-            android:id="@+id/progressBarCircularIndetermininate"
-            style="@style/CircularProgressWhite"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="right"
-            android:visibility="gone"
-            />
-    </android.support.v7.widget.Toolbar>
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/mswiperefreshlayout"
         android:layout_width="match_parent"

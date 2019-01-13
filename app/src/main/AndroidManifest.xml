@@ -3,6 +3,7 @@
     package="com.messi.languagehelper.meinv">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -104,10 +105,16 @@
             android:name=".MeinvTagActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".WebViewWithMicActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".WebViewNoAdActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".WebViewForCaricatureActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CNSearchActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".WebViewForNovelActivity"

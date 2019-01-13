@@ -272,6 +272,8 @@ public class KeyUtil {
 
 	public static final String Lei_DVideo = "Lei_DVideo";
 	public static final String Lei_Novel = "Lei_Novel";
+	public static final String SearchUrl = "SearchUrl";
+	public static final String isHideMic = "isHideMic";
 
 
 

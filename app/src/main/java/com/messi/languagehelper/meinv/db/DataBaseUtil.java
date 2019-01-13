@@ -8,6 +8,7 @@ import com.messi.languagehelper.meinv.dao.Avobject;
 import com.messi.languagehelper.meinv.dao.AvobjectDao;
 import com.messi.languagehelper.meinv.dao.DaoSession;
 import com.messi.languagehelper.meinv.util.AVOUtil;
+import com.messi.languagehelper.meinv.util.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,15 @@ public class DataBaseUtil {
         List<Avobject> list = mAvobjectDao.loadAll();
         if(list != null && list.size() > 0){
             for(Avobject item : list){
-                AVObject object = AVObject.parseAVObject(item.getSerializedString());
+                LogUtil.DefalutLog("-------------------------------");
+                LogUtil.DefalutLog(item.getSerializedString());
+                LogUtil.DefalutLog("-------------------------------");
+                AVObject object = null;
+                try{
+                    object = AVObject.parseAVObject(item.getSerializedString());
+                }catch (Exception e){
+                    LogUtil.DefalutLog("---------------Exception----------------");
+                }
                 if(object != null){
                     CNWBean bean = new CNWBean();
                     bean.setTable(item.getTableName());

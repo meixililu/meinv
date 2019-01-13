@@ -19,21 +19,21 @@ public class StringUtils {
 		return result;
 	}
 
-//	public static void setSpeakerByLan(String lan) {
-//		if(lan.equals("en")){
-//			Settings.role = XFUtil.SpeakerEn;
-//		}else{
-//			Settings.role = XFUtil.SpeakerZh;
-//		}
-//	}
-//
-//	public static void setSpeaker(String content) {
-//		LogUtil.DefalutLog(content+"---"+isEnglish(content));
-//		Settings.role = XFUtil.SpeakerZh;
-//		if (isEnglish(content)) {
-//			Settings.role = XFUtil.SpeakerEn;
-//		}
-//	}
+	public static void setSpeakerByLan(String lan) {
+		if(lan.equals("en")){
+			Setings.role = XFUtil.SpeakerEn;
+		}else{
+			Setings.role = XFUtil.SpeakerZh;
+		}
+	}
+
+	public static void setSpeaker(String content) {
+		LogUtil.DefalutLog(content+"---"+isEnglish(content));
+		Setings.role = XFUtil.SpeakerZh;
+		if (isEnglish(content)) {
+			Setings.role = XFUtil.SpeakerEn;
+		}
+	}
 
 	public static boolean isEnglish(String charaString) {
 		char[] arr = charaString.toCharArray();
