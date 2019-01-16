@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import cn.leancloud.AVObject;
+import com.avos.avoscloud.AVObject;
 import com.messi.languagehelper.meinv.R;
 import com.messi.languagehelper.meinv.util.XFYSAD;
 

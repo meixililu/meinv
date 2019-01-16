@@ -28,6 +28,9 @@
                 />
         </FrameLayout>
     </android.support.v7.widget.Toolbar>
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,15 +45,10 @@
             android:background="@color/white"
             android:layout_marginBottom="@dimen/padding_5"
             >
-            <TextView
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/big"
-                android:textColor="@color/text_black"
-                android:gravity="center"
-                android:text="@string/title_free_novel"
-                android:paddingTop="40dp"
-                android:paddingBottom="40dp"
+                android:layout_height="200dp"
+                android:src="@drawable/novel_free"
                 />
         </FrameLayout>
         <FrameLayout
@@ -61,15 +59,10 @@
             android:background="@color/white"
             android:layout_marginBottom="@dimen/padding_5"
             >
-            <TextView
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/big"
-                android:textColor="@color/text_black"
-                android:gravity="center"
-                android:text="@string/title_rank_novel"
-                android:paddingTop="40dp"
-                android:paddingBottom="40dp"
+                android:layout_height="200dp"
+                android:src="@drawable/novel_rank"
                 />
         </FrameLayout>
         <FrameLayout
@@ -80,15 +73,10 @@
             android:background="@color/white"
             android:layout_marginBottom="@dimen/padding_5"
             >
-            <TextView
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/big"
-                android:textColor="@color/text_black"
-                android:gravity="center"
-                android:text="@string/title_short_novel"
-                android:paddingTop="40dp"
-                android:paddingBottom="40dp"
+                android:layout_height="200dp"
+                android:src="@drawable/novel_short"
                 />
         </FrameLayout>
         <FrameLayout
@@ -99,17 +87,13 @@
             android:background="@color/white"
             android:layout_margin="@dimen/padding_margin"
             >
-            <TextView
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/big"
-                android:textColor="@color/text_black"
-                android:gravity="center"
-                android:text="@string/title_search_novel"
-                android:paddingTop="40dp"
-                android:paddingBottom="40dp"
+                android:layout_height="200dp"
+                android:src="@drawable/collected_history"
                 />
         </FrameLayout>
     </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
 </LinearLayout>

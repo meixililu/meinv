@@ -2,6 +2,7 @@ package com.messi.languagehelper.meinv;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -16,7 +17,9 @@ import android.widget.Toast;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
 import com.messi.languagehelper.meinv.util.AppUpdateUtil;
+import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
+import com.messi.languagehelper.meinv.util.Setings;
 import com.messi.languagehelper.meinv.util.ToastUtil;
 
 import butterknife.BindView;
@@ -39,6 +42,7 @@ public class CaricatureMainActivity extends BaseActivity {
     private Fragment radioHomeFragment;
     private Fragment webviewFragment;
     private long exitTime = 0;
+    private SharedPreferences sp;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -73,14 +77,29 @@ public class CaricatureMainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_caricature_main);
         ButterKnife.bind(this);
+        init();
         initFragment();
         initSDKAndPermission();
-        AppUpdateUtil.runCheckUpdateTask(this);
+        AppUpdateUtil.isNeedUpdate(this);
+    }
+
+    private void init(){
+        LogUtil.DefalutLog("CaricatureMainActivity---init");
+        sp = Setings.getSharedPreferences(this);
+        if(Setings.appVersion >= sp.getInt(KeyUtil.Caricature_version,0)){
+            Setings.IsShowNovel = false;
+        }else {
+            Setings.IsShowNovel = true;
+        }
     }
 
     private void initFragment(){
         SpeechUtility.createUtility(this, SpeechConstant.APPID + "=" + getString(R.string.app_id));
-        navigation.inflateMenu(R.menu.caricature_main_novel_tabs);
+        if(Setings.IsShowNovel){
+            navigation.inflateMenu(R.menu.caricature_main_novel_tabs);
+        }else {
+            navigation.inflateMenu(R.menu.caricature_main_tabs);
+        }
         navigation.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         engFragment = CaricatureHomeFragment.newInstance();

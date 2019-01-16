@@ -25,6 +25,7 @@ import com.iflytek.voiceads.IFLYNativeListener;
 import com.iflytek.voiceads.NativeADDataRef;
 import com.messi.languagehelper.meinv.db.MoveDataTask;
 import com.messi.languagehelper.meinv.util.ADUtil;
+import com.messi.languagehelper.meinv.util.AppUpdateUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
 import com.messi.languagehelper.meinv.util.Setings;
@@ -64,6 +65,7 @@ public class LoadingActivity extends AppCompatActivity {
             ButterKnife.bind(this);
             MoveDataTask.moveCaricatureData(this);
             TXADUtil.initTXADID(this);
+            AppUpdateUtil.runCheckUpdateTask(this);
             ADUtil.loadAd(this);
             init();
         } catch (Exception e) {

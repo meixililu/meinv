@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import cn.leancloud.AVObject;
+import com.avos.avoscloud.AVObject;
 import com.google.android.flexbox.FlexboxLayout;
 import com.messi.languagehelper.meinv.R;
 import com.messi.languagehelper.meinv.impl.AdapterStringListener;

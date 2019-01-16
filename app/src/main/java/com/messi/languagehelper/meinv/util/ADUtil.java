@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import cn.leancloud.AVObject;
-import cn.leancloud.AVQuery;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
 import com.iflytek.voiceads.NativeADDataRef;
 import com.messi.languagehelper.meinv.WebViewActivity;
 import com.messi.languagehelper.meinv.bean.NativeADDataRefForZYHY;

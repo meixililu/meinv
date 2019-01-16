@@ -11,7 +11,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.SslErrorHandler;
@@ -25,7 +24,6 @@ import android.widget.TextView;
 import com.messi.languagehelper.meinv.box.BoxHelper;
 import com.messi.languagehelper.meinv.box.CNWBean;
 import com.messi.languagehelper.meinv.box.WebFilter;
-import com.messi.languagehelper.meinv.dialog.AdDialog;
 import com.messi.languagehelper.meinv.event.CaricatureEventHistory;
 import com.messi.languagehelper.meinv.util.ADUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
@@ -67,6 +65,7 @@ public class WebViewForCaricatureActivity extends BaseActivity{
 		isReedPullDownRefresh = getIntent().getBooleanExtra(KeyUtil.IsReedPullDownRefresh, false);
 		isHideToolbar = getIntent().getBooleanExtra(KeyUtil.IsHideToolbar, false);
 		mItem = getIntent().getParcelableExtra(KeyUtil.AVObjectKey);
+		BoxHelper.getNewestData(mItem);
 		if (mItem != null) {
 			LogUtil.DefalutLog("lasturl:"+mItem.getLast_read_url());
 			if(!TextUtils.isEmpty(mItem.getLast_read_url())){
@@ -235,27 +234,27 @@ public class WebViewForCaricatureActivity extends BaseActivity{
 		}
 	}
 
-	@Override
-	public boolean onKeyDown(final int keyCode,final KeyEvent event) {
-		if((keyCode == KeyEvent.KEYCODE_BACK) && mWebView.canGoBack()){
-			mWebView.goBack();
-			return true;
-		}else {
-			AdDialog dialog = new AdDialog(this);
-			dialog.setListener(new AdDialog.PopViewItemOnclickListener() {
-				@Override
-				public void onFirstClick(View v) {
-				}
-
-				@Override
-				public void onSecondClick(View v) {
-					finish();
-				}
-			});
-			dialog.show();
-			return true;
-		}
-	}
+//	@Override
+//	public boolean onKeyDown(final int keyCode,final KeyEvent event) {
+//		if((keyCode == KeyEvent.KEYCODE_BACK) && mWebView.canGoBack()){
+//			mWebView.goBack();
+//			return true;
+//		}else {
+//			AdDialog dialog = new AdDialog(this);
+//			dialog.setListener(new AdDialog.PopViewItemOnclickListener() {
+//				@Override
+//				public void onFirstClick(View v) {
+//				}
+//
+//				@Override
+//				public void onSecondClick(View v) {
+//					finish();
+//				}
+//			});
+//			dialog.show();
+//			return true;
+//		}
+//	}
 	
 	@Override
 	protected void onDestroy() {

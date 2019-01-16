@@ -24,6 +24,10 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.FindCallback;
 import com.messi.languagehelper.meinv.util.ADUtil;
 import com.messi.languagehelper.meinv.util.AVOUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
@@ -31,12 +35,6 @@ import com.messi.languagehelper.meinv.util.LogUtil;
 import com.messi.languagehelper.meinv.util.ShareUtil;
 
 import java.util.List;
-
-import cn.leancloud.AVException;
-import cn.leancloud.AVObject;
-import cn.leancloud.AVQuery;
-import cn.leancloud.callback.FindCallback;
-import cn.leancloud.convertor.ObserverBuilder;
 
 
 public class WebViewActivity extends BaseActivity{
@@ -96,7 +94,7 @@ public class WebViewActivity extends BaseActivity{
 			try {
 				AVQuery<AVObject> query = new AVQuery<AVObject>(AVOUtil.AdFilter.AdFilter);
 				query.whereEqualTo(AVOUtil.AdFilter.name, filter_source_name);
-				query.findInBackground().subscribe(ObserverBuilder.buildSingleObserver(new FindCallback<AVObject>() {
+				query.findInBackground(new FindCallback<AVObject>() {
 					@Override
 					public void done(List<AVObject> list, AVException e) {
 						if(list != null){
@@ -107,7 +105,7 @@ public class WebViewActivity extends BaseActivity{
 							}
 						}
 					}
-				}));
+				});
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

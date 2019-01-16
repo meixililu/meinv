@@ -1,13 +1,12 @@
 package com.messi.languagehelper.meinv.util;
 
+import com.avos.avoscloud.AVObject;
 import com.messi.languagehelper.meinv.box.BoxHelper;
 import com.messi.languagehelper.meinv.box.CNWBean;
 import com.messi.languagehelper.meinv.box.WebFilter;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import cn.leancloud.AVObject;
 
 public class DataUtil {
 
@@ -26,6 +25,7 @@ public class DataUtil {
             bean = new CNWBean();
             bean.setTable(AVOUtil.Caricature.Caricature);
         }
+        bean.setItemId(mAVObject.getObjectId());
         bean.setRead_url(mAVObject.getString(AVOUtil.Caricature.read_url));
         bean.setTitle(mAVObject.getString(AVOUtil.Caricature.name));
         bean.setDes(mAVObject.getString(AVOUtil.Caricature.des));

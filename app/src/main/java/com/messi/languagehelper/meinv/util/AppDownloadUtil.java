@@ -23,7 +23,7 @@ import com.messi.languagehelper.meinv.impl.ProgressListener;
 import java.io.File;
 import java.io.IOException;
 
-import cn.leancloud.AVObject;
+import com.avos.avoscloud.AVObject;
 import okhttp3.Response;
 
 public class AppDownloadUtil {

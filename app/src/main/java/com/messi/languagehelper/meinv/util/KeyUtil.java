@@ -274,6 +274,8 @@ public class KeyUtil {
 	public static final String Lei_Novel = "Lei_Novel";
 	public static final String SearchUrl = "SearchUrl";
 	public static final String isHideMic = "isHideMic";
+	public static final String Caricature_version = "Caricature_version";
+	public static final String UpdateBean = "UpdateBean";
 
 
 

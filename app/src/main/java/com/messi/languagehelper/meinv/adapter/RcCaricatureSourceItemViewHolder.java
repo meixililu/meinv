@@ -12,7 +12,7 @@ import com.messi.languagehelper.meinv.R;
 import com.messi.languagehelper.meinv.util.AVOUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 
-import cn.leancloud.AVObject;
+import com.avos.avoscloud.AVObject;
 
 /**
  * Created by luli on 10/23/16.

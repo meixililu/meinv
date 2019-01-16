@@ -34,6 +34,10 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.FindCallback;
 import com.iflytek.cloud.RecognizerListener;
 import com.iflytek.cloud.RecognizerResult;
 import com.iflytek.cloud.SpeechError;
@@ -56,11 +60,6 @@ import com.qq.e.ads.nativ.NativeExpressADView;
 
 import java.util.List;
 
-import cn.leancloud.AVException;
-import cn.leancloud.AVObject;
-import cn.leancloud.AVQuery;
-import cn.leancloud.callback.FindCallback;
-import cn.leancloud.convertor.ObserverBuilder;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.OnShowRationale;
@@ -442,7 +441,7 @@ public class WebViewWithMicActivity extends BaseActivity implements OnClickListe
 			try {
 				AVQuery<AVObject> query = new AVQuery<AVObject>(AVOUtil.AdFilter.AdFilter);
 				query.whereEqualTo(AVOUtil.AdFilter.name, filter_source_name);
-				query.findInBackground().subscribe(ObserverBuilder.buildSingleObserver(new FindCallback<AVObject>() {
+				query.findInBackground(new FindCallback<AVObject>() {
 					@Override
 					public void done(List<AVObject> list, AVException e) {
 						if(list != null && list.size() > 0){
@@ -455,7 +454,7 @@ public class WebViewWithMicActivity extends BaseActivity implements OnClickListe
 							}
 						}
 					}
-				}));
+				});
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

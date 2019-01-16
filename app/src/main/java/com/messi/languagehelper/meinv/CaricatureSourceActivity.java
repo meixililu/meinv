@@ -7,6 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.FindCallback;
 import com.iflytek.voiceads.AdError;
 import com.iflytek.voiceads.AdKeys;
 import com.iflytek.voiceads.IFLYNativeAd;
@@ -29,12 +33,6 @@ import com.qq.e.ads.nativ.NativeExpressADView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import cn.leancloud.AVException;
-import cn.leancloud.AVObject;
-import cn.leancloud.AVQuery;
-import cn.leancloud.callback.FindCallback;
-import cn.leancloud.convertor.ObserverBuilder;
 
 public class CaricatureSourceActivity extends BaseActivity implements View.OnClickListener{
 
@@ -147,7 +145,7 @@ public class CaricatureSourceActivity extends BaseActivity implements View.OnCli
         query.orderByDescending(AVOUtil.Caricature.views);
         query.skip(skip);
         query.limit(Setings.ca_psize);
-        query.findInBackground().subscribe(ObserverBuilder.buildSingleObserver(new FindCallback<AVObject>() {
+        query.findInBackground(new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 hideProgressbar();
@@ -183,7 +181,7 @@ public class CaricatureSourceActivity extends BaseActivity implements View.OnCli
                     ToastUtil.diaplayMesShort(CaricatureSourceActivity.this, "加载失败，下拉可刷新");
                 }
             }
-        }));
+        });
     }
 
     private void loadAD(){

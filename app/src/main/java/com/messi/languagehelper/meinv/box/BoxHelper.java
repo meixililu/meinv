@@ -1,6 +1,9 @@
 package com.messi.languagehelper.meinv.box;
 
+import android.text.TextUtils;
+
 import com.messi.languagehelper.meinv.BaseApplication;
+import com.messi.languagehelper.meinv.util.LogUtil;
 
 import java.util.List;
 
@@ -29,7 +32,16 @@ public class BoxHelper {
     }
 
     public static void updateCNWBean(CNWBean bean){
-        getCNWBeanBox().put(bean);
+        CNWBean oldBean = findCNWBeanByItemId(bean.getItemId());
+        if(oldBean != null){
+            oldBean.setHistory(bean.getHistory());
+            oldBean.setCollected(bean.getCollected());
+            oldBean.setUpdateTime(bean.getUpdateTime());
+            oldBean.setLast_read_url(bean.getLast_read_url());
+            getCNWBeanBox().put(oldBean);
+        }else {
+            getCNWBeanBox().put(bean);
+        }
     }
 
     public static void updateCNWBean(List<CNWBean> list){
@@ -37,11 +49,23 @@ public class BoxHelper {
     }
 
     public static CNWBean findCNWBeanByItemId(String  mItemId){
-        return getCNWBeanBox()
-                .query()
-                .equal(CNWBean_.itemId,mItemId)
-                .build()
-                .findFirst();
+        if(!TextUtils.isEmpty(mItemId)){
+            return getCNWBeanBox()
+                    .query()
+                    .equal(CNWBean_.itemId,mItemId)
+                    .build()
+                    .findFirst();
+        }else {
+            return null;
+        }
+    }
+
+    public static void getNewestData(CNWBean bean){
+        CNWBean oldBean = findCNWBeanByItemId(bean.getItemId());
+        if(oldBean != null){
+            bean.setLast_read_url(oldBean.getLast_read_url());
+            LogUtil.DefalutLog("getNewestData:"+oldBean.getLast_read_url());
+        }
     }
 
     public static List<CNWBean> getCaricatureList(String table,int offset,int psize,

@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Process;
 
+import com.avos.avoscloud.AVOSCloud;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.messi.languagehelper.meinv.box.BoxHelper;
 import com.messi.languagehelper.meinv.dao.DaoMaster;
@@ -14,9 +15,6 @@ import com.messi.languagehelper.meinv.util.LogUtil;
 import com.messi.languagehelper.meinv.util.SDCardUtil;
 import com.messi.languagehelper.meinv.util.Setings;
 import com.umeng.commonsdk.UMConfigure;
-
-import cn.leancloud.AVLogger;
-import cn.leancloud.AVOSCloud;
 
 public class BaseApplication extends Application {
 
@@ -36,7 +34,6 @@ public class BaseApplication extends Application {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                AVOSCloud.setLogLevel(AVLogger.Level.VERBOSE);
                 UMConfigure.setLogEnabled(true);
                 BoxHelper.init(BaseApplication.this);
                 Setings.appVersion = Setings.getVersion(getApplicationContext());

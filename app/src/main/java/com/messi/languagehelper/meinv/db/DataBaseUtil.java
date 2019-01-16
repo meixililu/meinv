@@ -13,7 +13,7 @@ import com.messi.languagehelper.meinv.util.LogUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.leancloud.AVObject;
+import com.avos.avoscloud.AVObject;
 
 public class DataBaseUtil {
 

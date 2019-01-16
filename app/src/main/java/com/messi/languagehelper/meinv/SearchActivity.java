@@ -13,6 +13,10 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.FindCallback;
 import com.google.android.flexbox.FlexboxLayout;
 import com.messi.languagehelper.meinv.util.AVOUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
@@ -25,11 +29,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.leancloud.AVException;
-import cn.leancloud.AVObject;
-import cn.leancloud.AVQuery;
-import cn.leancloud.callback.FindCallback;
-import cn.leancloud.convertor.ObserverBuilder;
 
 public class SearchActivity extends BaseActivity {
 
@@ -252,7 +251,7 @@ public class SearchActivity extends BaseActivity {
     private void checkAndSaveData(final String quest){
         AVQuery<AVObject> query = new AVQuery<>(AVOUtil.SearchMeinvHot.SearchMeinvHot);
         query.whereEqualTo(AVOUtil.SearchMeinvHot.name, quest);
-        query.findInBackground().subscribe(ObserverBuilder.buildSingleObserver(new FindCallback<AVObject>() {
+        query.findInBackground(new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (list.size() > 0) {
@@ -266,7 +265,7 @@ public class SearchActivity extends BaseActivity {
                     object.saveInBackground();
                 }
             }
-        }));
+        });
     }
 
     @Override

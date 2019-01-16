@@ -22,6 +22,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.FindCallback;
 import com.google.android.flexbox.FlexboxLayout;
 import com.iflytek.cloud.RecognizerListener;
 import com.iflytek.cloud.RecognizerResult;
@@ -43,11 +47,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.leancloud.AVException;
-import cn.leancloud.AVObject;
-import cn.leancloud.AVQuery;
-import cn.leancloud.callback.FindCallback;
-import cn.leancloud.convertor.ObserverBuilder;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.OnShowRationale;
@@ -423,7 +422,7 @@ public class CNSearchActivity extends BaseActivity {
             query.whereEqualTo(AVOUtil.CaricatureSearchHot.type,"caricature");
         }
         query.whereEqualTo(AVOUtil.CaricatureSearchHot.name, quest);
-        query.findInBackground().subscribe(ObserverBuilder.buildSingleObserver(new FindCallback<AVObject>() {
+        query.findInBackground(new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if (list.size() > 0) {
@@ -445,7 +444,7 @@ public class CNSearchActivity extends BaseActivity {
                     LogUtil.DefalutLog("saveInBackground:"+quest);
                 }
             }
-        }));
+        });
     }
 
     /**

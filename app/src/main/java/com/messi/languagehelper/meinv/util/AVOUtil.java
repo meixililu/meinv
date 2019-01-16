@@ -1,6 +1,6 @@
 package com.messi.languagehelper.meinv.util;
 
-import cn.leancloud.AVObject;
+import com.avos.avoscloud.AVObject;
 
 public class AVOUtil {
 
@@ -312,6 +312,8 @@ public class AVOUtil {
 		public final static String IsValid = "IsValid";
 		
 		public final static String DownloadTimes = "DownloadTimes";
+
+		public final static String Caricature_version = "Caricature_version";
 
 	}
 	

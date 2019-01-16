@@ -13,6 +13,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.FindCallback;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
 import com.messi.languagehelper.meinv.adapter.JokePageAdapter;
@@ -27,11 +31,6 @@ import com.messi.languagehelper.meinv.util.ToastUtil;
 
 import java.util.List;
 
-import cn.leancloud.AVException;
-import cn.leancloud.AVObject;
-import cn.leancloud.AVQuery;
-import cn.leancloud.callback.FindCallback;
-import cn.leancloud.convertor.ObserverBuilder;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.OnShowRationale;
@@ -114,14 +113,14 @@ public class MeixiuActivity extends BaseActivity implements FragmentProgressbarL
         AVQuery<AVObject> query = new AVQuery<AVObject>(AVOUtil.MeinvCategory.MeinvCategory);
         query.whereEqualTo(AVOUtil.MeinvCategory.isValid,"1");
         query.whereEqualTo(AVOUtil.MeinvCategory.app,"meixiu");
-        query.findInBackground().subscribe(ObserverBuilder.buildSingleObserver(new FindCallback<AVObject>() {
+        query.findInBackground(new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
                 if(list != null && list.size() > 0){
                     setPageAdapter(list.get(0));
                 }
             }
-        }));
+        });
     }
 
     @Override
