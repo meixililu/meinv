@@ -1,6 +1,5 @@
 package com.messi.languagehelper.meinv;
 
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
@@ -9,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -65,7 +63,7 @@ public class WebViewForCaricatureActivity extends BaseActivity{
 		isReedPullDownRefresh = getIntent().getBooleanExtra(KeyUtil.IsReedPullDownRefresh, false);
 		isHideToolbar = getIntent().getBooleanExtra(KeyUtil.IsHideToolbar, false);
 		mItem = getIntent().getParcelableExtra(KeyUtil.AVObjectKey);
-		BoxHelper.getNewestData(mItem);
+		mItem = BoxHelper.getNewestData(mItem);
 		if (mItem != null) {
 			LogUtil.DefalutLog("lasturl:"+mItem.getLast_read_url());
 			if(!TextUtils.isEmpty(mItem.getLast_read_url())){
@@ -159,40 +157,40 @@ public class WebViewForCaricatureActivity extends BaseActivity{
 
 			@Override
 			public void onReceivedSslError(WebView view,final SslErrorHandler handler, SslError error) {
-				final AlertDialog.Builder builder = new AlertDialog.Builder(WebViewForCaricatureActivity.this);
-				String message = "SSL Certificate error.";
-				switch (error.getPrimaryError()) {
-					case SslError.SSL_UNTRUSTED:
-						message = "The certificate authority is not trusted.";
-						break;
-					case SslError.SSL_EXPIRED:
-						message = "The certificate has expired.";
-						break;
-					case SslError.SSL_IDMISMATCH:
-						message = "The certificate Hostname mismatch.";
-						break;
-					case SslError.SSL_NOTYETVALID:
-						message = "The certificate is not yet valid.";
-						break;
-				}
-				message += " Do you want to continue anyway?";
-
-				builder.setTitle("SSL Certificate Error");
-				builder.setMessage(message);
-				builder.setPositiveButton("continue", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						handler.proceed();
-					}
-				});
-				builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						handler.cancel();
-					}
-				});
-				final AlertDialog dialog = builder.create();
-				dialog.show();
+//				final AlertDialog.Builder builder = new AlertDialog.Builder(WebViewForCaricatureActivity.this);
+//				String message = "SSL Certificate error.";
+//				switch (error.getPrimaryError()) {
+//					case SslError.SSL_UNTRUSTED:
+//						message = "The certificate authority is not trusted.";
+//						break;
+//					case SslError.SSL_EXPIRED:
+//						message = "The certificate has expired.";
+//						break;
+//					case SslError.SSL_IDMISMATCH:
+//						message = "The certificate Hostname mismatch.";
+//						break;
+//					case SslError.SSL_NOTYETVALID:
+//						message = "The certificate is not yet valid.";
+//						break;
+//				}
+//				message += " Do you want to continue anyway?";
+//
+//				builder.setTitle("SSL Certificate Error");
+//				builder.setMessage(message);
+//				builder.setPositiveButton("continue", new DialogInterface.OnClickListener() {
+//					@Override
+//					public void onClick(DialogInterface dialog, int which) {
+//						handler.proceed();
+//					}
+//				});
+//				builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+//					@Override
+//					public void onClick(DialogInterface dialog, int which) {
+//						handler.cancel();
+//					}
+//				});
+//				final AlertDialog dialog = builder.create();
+//				dialog.show();
 			}
 		});
 		
@@ -233,39 +231,21 @@ public class WebViewForCaricatureActivity extends BaseActivity{
 			LogUtil.DefalutLog("adFilte:"+adFilte);
 		}
 	}
-
-//	@Override
-//	public boolean onKeyDown(final int keyCode,final KeyEvent event) {
-//		if((keyCode == KeyEvent.KEYCODE_BACK) && mWebView.canGoBack()){
-//			mWebView.goBack();
-//			return true;
-//		}else {
-//			AdDialog dialog = new AdDialog(this);
-//			dialog.setListener(new AdDialog.PopViewItemOnclickListener() {
-//				@Override
-//				public void onFirstClick(View v) {
-//				}
-//
-//				@Override
-//				public void onSecondClick(View v) {
-//					finish();
-//				}
-//			});
-//			dialog.show();
-//			return true;
-//		}
-//	}
 	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		LogUtil.DefalutLog("Url:"+mWebView.getUrl());
-		mItem.setHistory(System.currentTimeMillis());
-		mItem.setUpdateTime(System.currentTimeMillis());
-		mItem.setLast_read_url(mWebView.getUrl());
-		BoxHelper.updateCNWBean(mItem);
-		EventBus.getDefault().post(new CaricatureEventHistory());
-		mWebView.destroy();
+		if(!TextUtils.isEmpty(mWebView.getUrl())){
+			mItem.setHistory(System.currentTimeMillis());
+			mItem.setUpdateTime(System.currentTimeMillis());
+			mItem.setLast_read_url(mWebView.getUrl());
+			BoxHelper.updateCNWBean(mItem);
+			EventBus.getDefault().post(new CaricatureEventHistory());
+		}
+		if(mWebView != null){
+			mWebView.destroy();
+		}
 	}
 
 	private void hideAd(final WebView view){

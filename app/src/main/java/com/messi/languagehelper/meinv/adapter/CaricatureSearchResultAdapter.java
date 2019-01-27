@@ -6,8 +6,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.messi.languagehelper.meinv.CaricatureSearchResultFragment;
+import com.messi.languagehelper.meinv.MiaosouResultListFragment;
 import com.messi.languagehelper.meinv.R;
-import com.messi.languagehelper.meinv.WebViewForNovelFragment;
 
 
 public class CaricatureSearchResultAdapter extends FragmentPagerAdapter {
@@ -34,7 +34,7 @@ public class CaricatureSearchResultAdapter extends FragmentPagerAdapter {
         if( position == 0 ){
             return CaricatureSearchResultFragment.getInstance(search_text);
         }else if( position == 1 ){
-            return WebViewForNovelFragment.newInstance(url,"喵搜");
+            return MiaosouResultListFragment.newInstance(url);
         }
         return null;
     }

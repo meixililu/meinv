@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,10 +18,8 @@ import com.messi.languagehelper.meinv.util.ADUtil;
 import com.messi.languagehelper.meinv.util.DownLoadUtil;
 import com.messi.languagehelper.meinv.util.ImgUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
-import com.messi.languagehelper.meinv.util.LogUtil;
 import com.messi.languagehelper.meinv.util.NumberUtil;
 import com.messi.languagehelper.meinv.util.SDCardUtil;
-import com.messi.languagehelper.meinv.util.ToastUtil;
 import com.messi.languagehelper.meinv.util.XFYSAD;
 
 import org.greenrobot.eventbus.EventBus;
@@ -95,8 +94,8 @@ public class CaricatureDetailActivity extends BaseActivity {
     private void init() {
         try {
             mAVObject = getIntent().getParcelableExtra(KeyUtil.AVObjectKey);
+            mAVObject = BoxHelper.getNewestData(mAVObject);
             if (mAVObject != null) {
-                LogUtil.DefalutLog("mAVObject"+mAVObject.toString());
                 imgUrl = mAVObject.getImg_url();
                 itemImg.setImageURI(imgUrl);
                 item_img_bg.setImageURI(imgUrl);
@@ -106,6 +105,7 @@ public class CaricatureDetailActivity extends BaseActivity {
                 des.setText(mAVObject.getDes());
                 views.setText("人气：" + NumberUtil.getNumberStr(mAVObject.getView()));
                 source.setText("来源：" + mAVObject.getSource_name());
+                initButton();
             } else {
                 finish();
             }
@@ -114,7 +114,13 @@ public class CaricatureDetailActivity extends BaseActivity {
         }
     }
 
-
+    private void initButton(){
+        if(mAVObject.getCollected() > 100){
+            addBookshelf.setText(getString(R.string.add_bookshelf_already));
+        }else {
+            addBookshelf.setText(getString(R.string.add_bookshelf));
+        }
+    }
 
     private void loadAD() {
         mXFYSAD = new XFYSAD(this, xx_ad_layout, ADUtil.MRYJYSNRLAd);
@@ -125,7 +131,15 @@ public class CaricatureDetailActivity extends BaseActivity {
         Intent intent = new Intent(this, WebViewForCaricatureActivity.class);
         intent.putExtra(KeyUtil.AVObjectKey, mAVObject);
         intent.putExtra(KeyUtil.IsHideToolbar, true);
-        startActivity(intent);
+        startActivityForResult(intent,10002);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 10002){
+            mAVObject = BoxHelper.getNewestData(mAVObject);
+        }
     }
 
     private void shareImg() {
@@ -148,11 +162,15 @@ public class CaricatureDetailActivity extends BaseActivity {
 
     @OnClick(R.id.add_bookshelf)
     public void onAddBookshelfClicked() {
-        mAVObject.setCollected(System.currentTimeMillis());
+        if(mAVObject.getCollected() > 100){
+            mAVObject.setCollected(0);
+        }else {
+            mAVObject.setCollected(System.currentTimeMillis());
+        }
         mAVObject.setUpdateTime(System.currentTimeMillis());
+        initButton();
         BoxHelper.updateCNWBean(mAVObject);
         EventBus.getDefault().post(new CaricatureEventAddBookshelf());
-        ToastUtil.diaplayMesShort(this, getString(R.string.add_bookshelf_success));
     }
 
     @OnClick(R.id.to_read)
@@ -167,7 +185,6 @@ public class CaricatureDetailActivity extends BaseActivity {
 
     @OnClick(R.id.share_img)
     public void onViewClicked() {
-        LogUtil.DefalutLog("onViewClicked:"+share_img);
         shareImg();
     }
 }

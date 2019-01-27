@@ -1,6 +1,5 @@
 package com.messi.languagehelper.meinv;
 
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
@@ -9,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -29,7 +27,7 @@ import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
 import com.messi.languagehelper.meinv.util.ShareUtil;
 
-public class WebViewNoAdActivity extends BaseActivity{
+public class WebViewNoAdActivity extends BaseActivity {
 	
 	private ProgressBar progressdeterminate;
 	private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -98,6 +96,7 @@ public class WebViewNoAdActivity extends BaseActivity{
 				lastClick = System.currentTimeMillis();
 			}
 		});
+
 		//当前页面加载
 		mWebView.setWebViewClient(new WebViewClient() {
 
@@ -148,40 +147,40 @@ public class WebViewNoAdActivity extends BaseActivity{
 
 			@Override
 			public void onReceivedSslError(WebView view,final SslErrorHandler handler, SslError error) {
-				final AlertDialog.Builder builder = new AlertDialog.Builder(WebViewNoAdActivity.this);
-				String message = "SSL Certificate error.";
-				switch (error.getPrimaryError()) {
-					case SslError.SSL_UNTRUSTED:
-						message = "The certificate authority is not trusted.";
-						break;
-					case SslError.SSL_EXPIRED:
-						message = "The certificate has expired.";
-						break;
-					case SslError.SSL_IDMISMATCH:
-						message = "The certificate Hostname mismatch.";
-						break;
-					case SslError.SSL_NOTYETVALID:
-						message = "The certificate is not yet valid.";
-						break;
-				}
-				message += " Do you want to continue anyway?";
-
-				builder.setTitle("SSL Certificate Error");
-				builder.setMessage(message);
-				builder.setPositiveButton("continue", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						handler.proceed();
-					}
-				});
-				builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						handler.cancel();
-					}
-				});
-				final AlertDialog dialog = builder.create();
-				dialog.show();
+//				final AlertDialog.Builder builder = new AlertDialog.Builder(WebViewNoAdActivity.this);
+//				String message = "SSL Certificate error.";
+//				switch (error.getPrimaryError()) {
+//					case SslError.SSL_UNTRUSTED:
+//						message = "The certificate authority is not trusted.";
+//						break;
+//					case SslError.SSL_EXPIRED:
+//						message = "The certificate has expired.";
+//						break;
+//					case SslError.SSL_IDMISMATCH:
+//						message = "The certificate Hostname mismatch.";
+//						break;
+//					case SslError.SSL_NOTYETVALID:
+//						message = "The certificate is not yet valid.";
+//						break;
+//				}
+//				message += " Do you want to continue anyway?";
+//
+//				builder.setTitle("SSL Certificate Error");
+//				builder.setMessage(message);
+//				builder.setPositiveButton("continue", new DialogInterface.OnClickListener() {
+//					@Override
+//					public void onClick(DialogInterface dialog, int which) {
+//						handler.proceed();
+//					}
+//				});
+//				builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+//					@Override
+//					public void onClick(DialogInterface dialog, int which) {
+//						handler.cancel();
+//					}
+//				});
+//				final AlertDialog dialog = builder.create();
+//				dialog.show();
 			}
 		});
 		
@@ -294,5 +293,4 @@ public class WebViewNoAdActivity extends BaseActivity{
 			}
 		},60);
 	}
-	
 }

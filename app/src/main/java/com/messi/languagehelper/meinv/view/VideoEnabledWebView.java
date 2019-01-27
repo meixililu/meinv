@@ -22,13 +22,11 @@ import java.util.Map;
  * @author Cristian Perez (http://cpr.name)
  *
  */
-public class VideoEnabledWebView extends WebView
-{
-    public class JavascriptInterface
-    {
+public class VideoEnabledWebView extends WebView {
+
+    public class JavascriptInterface {
         @android.webkit.JavascriptInterface @SuppressWarnings("unused")
-        public void notifyVideoEnd() // Must match Javascript interface method of VideoEnabledWebChromeClient
-        {
+        public void notifyVideoEnd(){
             Log.d("___", "GOT IT");
             // This code is not executed in the UI thread, so we must force that to happen
             new Handler(Looper.getMainLooper()).post(new Runnable()
@@ -133,6 +131,34 @@ public class VideoEnabledWebView extends WebView
 
             addedJavascriptInterface = true;
         }
+    }
+
+    private VideoEnabledWebView.OnScrollChangedCallback mOnScrollChangedCallback;
+
+
+    @Override
+    protected void onScrollChanged(final int l, final int t, final int oldl, final int oldt)
+    {
+        super.onScrollChanged(l, t, oldl, oldt);
+        if(mOnScrollChangedCallback != null) mOnScrollChangedCallback.onScroll(l, t, oldl, oldt);
+    }
+
+    public VideoEnabledWebView.OnScrollChangedCallback getOnScrollChangedCallback()
+    {
+        return mOnScrollChangedCallback;
+    }
+
+    public void setOnScrollChangedCallback(final VideoEnabledWebView.OnScrollChangedCallback onScrollChangedCallback)
+    {
+        mOnScrollChangedCallback = onScrollChangedCallback;
+    }
+
+    /**
+     * Impliment in the activity/fragment/view that you want to listen to the webview
+     */
+    public static interface OnScrollChangedCallback
+    {
+        public void onScroll(int l, int t, int oldl, int oldt);
     }
 
 }

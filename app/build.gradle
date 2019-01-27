@@ -26,7 +26,7 @@ android {
 //                GETUI_APP_KEY : "fkXv9lrOy06unUVmdqUHH7",
 //                GETUI_APP_SECRET : "4I4S00yfCx6pNF9hn99k51"
 //        ]
-//        multiDexEnabled true
+        multiDexEnabled true
         splits {
             abi {
                 enable true
@@ -72,6 +72,7 @@ dependencies {
     implementation 'com.jakewharton:butterknife:9.0.0-rc2'
     annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc2'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    implementation 'org.jsoup:jsoup:1.11.3'
     //    implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.squareup.okio:okio:1.14.1'

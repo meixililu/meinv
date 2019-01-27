@@ -32,16 +32,8 @@ public class BoxHelper {
     }
 
     public static void updateCNWBean(CNWBean bean){
-        CNWBean oldBean = findCNWBeanByItemId(bean.getItemId());
-        if(oldBean != null){
-            oldBean.setHistory(bean.getHistory());
-            oldBean.setCollected(bean.getCollected());
-            oldBean.setUpdateTime(bean.getUpdateTime());
-            oldBean.setLast_read_url(bean.getLast_read_url());
-            getCNWBeanBox().put(oldBean);
-        }else {
-            getCNWBeanBox().put(bean);
-        }
+        LogUtil.DefalutLog("updateCNWBean:"+bean.toString());
+        getCNWBeanBox().put(bean);
     }
 
     public static void updateCNWBean(List<CNWBean> list){
@@ -60,12 +52,15 @@ public class BoxHelper {
         }
     }
 
-    public static void getNewestData(CNWBean bean){
-        CNWBean oldBean = findCNWBeanByItemId(bean.getItemId());
-        if(oldBean != null){
-            bean.setLast_read_url(oldBean.getLast_read_url());
-            LogUtil.DefalutLog("getNewestData:"+oldBean.getLast_read_url());
+    public static CNWBean getNewestData(CNWBean bean){
+        if(bean != null && !TextUtils.isEmpty(bean.getItemId())){
+            CNWBean oldBean = findCNWBeanByItemId(bean.getItemId());
+            if(oldBean != null){
+                LogUtil.DefalutLog("getNewestData:"+oldBean.toString());
+                return oldBean;
+            }
         }
+        return bean;
     }
 
     public static List<CNWBean> getCaricatureList(String table,int offset,int psize,
@@ -108,6 +103,7 @@ public class BoxHelper {
     }
 
     public static void updateWebFilter(List<WebFilter> list){
+        getWebFilterBox().removeAll();
         getWebFilterBox().put(list);
     }
 

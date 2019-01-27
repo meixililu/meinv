@@ -86,7 +86,8 @@ public class CaricatureMainActivity extends BaseActivity {
     private void init(){
         LogUtil.DefalutLog("CaricatureMainActivity---init");
         sp = Setings.getSharedPreferences(this);
-        if(Setings.appVersion >= sp.getInt(KeyUtil.Caricature_version,0)){
+        if(Setings.appVersion >= sp.getInt(KeyUtil.Caricature_version,0) &&
+                sp.getString(KeyUtil.Caricature_channel,"").contains(Setings.appChannel)){
             Setings.IsShowNovel = false;
         }else {
             Setings.IsShowNovel = true;

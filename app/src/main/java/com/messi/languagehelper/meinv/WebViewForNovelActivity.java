@@ -1,13 +1,11 @@
 package com.messi.languagehelper.meinv;
 
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -148,25 +146,25 @@ public class WebViewForNovelActivity extends BaseActivity implements View.OnClic
 
 			@Override
 			public void onReceivedSslError(WebView view,final SslErrorHandler handler, SslError error) {
-				final AlertDialog.Builder builder = new AlertDialog.Builder(WebViewForNovelActivity.this);
-				String message = "SSL Certificate error.";
-				message += " Do you want to continue anyway?";
-				builder.setTitle("SSL Certificate Error");
-				builder.setMessage(message);
-				builder.setPositiveButton("continue", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						handler.proceed();
-					}
-				});
-				builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						handler.cancel();
-					}
-				});
-				final AlertDialog dialog = builder.create();
-				dialog.show();
+//				final AlertDialog.Builder builder = new AlertDialog.Builder(WebViewForNovelActivity.this);
+//				String message = "SSL Certificate error.";
+//				message += " Do you want to continue anyway?";
+//				builder.setTitle("SSL Certificate Error");
+//				builder.setMessage(message);
+//				builder.setPositiveButton("continue", new DialogInterface.OnClickListener() {
+//					@Override
+//					public void onClick(DialogInterface dialog, int which) {
+//						handler.proceed();
+//					}
+//				});
+//				builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+//					@Override
+//					public void onClick(DialogInterface dialog, int which) {
+//						handler.cancel();
+//					}
+//				});
+//				final AlertDialog dialog = builder.create();
+//				dialog.show();
 			}
 		});
 		

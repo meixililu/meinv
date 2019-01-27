@@ -2,6 +2,7 @@ package com.messi.languagehelper.meinv;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -15,8 +16,8 @@ import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,12 +43,16 @@ import com.iflytek.cloud.RecognizerListener;
 import com.iflytek.cloud.RecognizerResult;
 import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
+import com.messi.languagehelper.meinv.box.BoxHelper;
+import com.messi.languagehelper.meinv.box.CNWBean;
+import com.messi.languagehelper.meinv.box.WebFilter;
 import com.messi.languagehelper.meinv.util.ADUtil;
 import com.messi.languagehelper.meinv.util.AVAnalytics;
 import com.messi.languagehelper.meinv.util.AVOUtil;
 import com.messi.languagehelper.meinv.util.JsonParser;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
+import com.messi.languagehelper.meinv.util.MD5;
 import com.messi.languagehelper.meinv.util.Setings;
 import com.messi.languagehelper.meinv.util.ShareUtil;
 import com.messi.languagehelper.meinv.util.TXADUtil;
@@ -58,6 +63,7 @@ import com.messi.languagehelper.meinv.view.VideoEnabledWebView;
 import com.qq.e.ads.nativ.NativeExpressAD;
 import com.qq.e.ads.nativ.NativeExpressADView;
 
+import java.net.URLDecoder;
 import java.util.List;
 
 import permissions.dispatcher.NeedsPermission;
@@ -67,7 +73,7 @@ import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
 
 @RuntimePermissions
-public class WebViewWithMicActivity extends BaseActivity implements OnClickListener{
+public class WebViewWithCollectedActivity extends BaseActivity implements OnClickListener{
 
 	private final String STATE_RESUME_WINDOW = "resumeWindow";
 	private final String STATE_RESUME_POSITION = "resumePosition";
@@ -84,20 +90,22 @@ public class WebViewWithMicActivity extends BaseActivity implements OnClickListe
 	private LinearLayout record_layout;
 	private ImageView record_anim_img;
 	private Button voice_btn;
-    private TextView ad_go_on;
-    private RelativeLayout ad_layout;
-    private LinearLayout ad_content;
+	private TextView ad_go_on;
+	private CardView collected_btn;
+	private RelativeLayout ad_layout;
+	private LinearLayout ad_content;
 
 	private SpeechRecognizer recognizer;
 	private SharedPreferences mSharedPreferences;
 
-    private String Url;
-    private String title;
-    private String ShareUrlMsg;
-    private int ToolbarBackgroundColor;
-    private boolean isReedPullDownRefresh;
-    private boolean isHideToolbar;
-    private long lastClick;
+	private String Url;
+	private String title;
+	private String ShareUrlMsg;
+	private int ToolbarBackgroundColor;
+	private boolean isReedPullDownRefresh;
+	private boolean isHideToolbar;
+	private boolean isShowCollectedBtn;
+	private long lastClick;
 	private String adFilte;
 	private boolean is_need_get_filter;
 	private String filter_source_name;
@@ -108,13 +116,14 @@ public class WebViewWithMicActivity extends BaseActivity implements OnClickListe
 	private long mResumePosition;
 	private StringBuilder sb;
 	private String SearchUrl;
-    private String ad_url;
-    private NativeExpressADView mTXADView;
+	private String ad_url;
+	private String img_url;
+	private NativeExpressADView mTXADView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.web_view_with_mic_activity);
+		setContentView(R.layout.web_view_novel_collected_activity);
 		setStatusbarColor(R.color.white);
 		changeStatusBarTextColor(true);
 		if (savedInstanceState != null) {
@@ -129,7 +138,8 @@ public class WebViewWithMicActivity extends BaseActivity implements OnClickListe
 	private void initData(){
 		sb = new StringBuilder();
 		Url = getIntent().getStringExtra(KeyUtil.URL);
-        SearchUrl = getIntent().getStringExtra(KeyUtil.SearchUrl);
+		img_url = getIntent().getStringExtra(KeyUtil.ImgUrl);
+		SearchUrl = getIntent().getStringExtra(KeyUtil.SearchUrl);
 		title = getIntent().getStringExtra(KeyUtil.ActionbarTitle);
 		ShareUrlMsg = getIntent().getStringExtra(KeyUtil.ShareUrlMsg);
 		isHideMic = getIntent().getBooleanExtra(KeyUtil.isHideMic,false);
@@ -139,6 +149,7 @@ public class WebViewWithMicActivity extends BaseActivity implements OnClickListe
 		ToolbarBackgroundColor = getIntent().getIntExtra(KeyUtil.ToolbarBackgroundColorKey,0);
 		isReedPullDownRefresh = getIntent().getBooleanExtra(KeyUtil.IsReedPullDownRefresh, true);
 		isHideToolbar = getIntent().getBooleanExtra(KeyUtil.IsHideToolbar, false);
+		isShowCollectedBtn = getIntent().getBooleanExtra(KeyUtil.IsShowCollectedBtn, false);
 		LogUtil.DefalutLog("ToolbarBackgroundColor:"+ToolbarBackgroundColor);
 		if(ToolbarBackgroundColor != 0){
 			setToolbarBackground(ToolbarBackgroundColor);
@@ -148,9 +159,6 @@ public class WebViewWithMicActivity extends BaseActivity implements OnClickListe
 		}
 		if (isHideToolbar) {
 			getSupportActionBar().hide();
-		}
-		if(is_need_get_filter){
-			getFilter();
 		}
 	}
 
@@ -167,9 +175,14 @@ public class WebViewWithMicActivity extends BaseActivity implements OnClickListe
 		progressdeterminate = (ProgressBar) findViewById(R.id.progressdeterminate);
 		mWebView = (VideoEnabledWebView) findViewById(R.id.refreshable_webview);
 		tap_to_reload = (TextView) findViewById(R.id.tap_to_reload);
-        ad_go_on = (TextView) findViewById(R.id.ad_go_on);
-        ad_layout = (RelativeLayout) findViewById(R.id.ad_layout);
-        ad_content = (LinearLayout) findViewById(R.id.ad_content);
+		ad_go_on = (TextView) findViewById(R.id.ad_go_on);
+		ad_layout = (RelativeLayout) findViewById(R.id.ad_layout);
+		ad_content = (LinearLayout) findViewById(R.id.ad_content);
+		collected_btn = (CardView) findViewById(R.id.collected_btn);
+		collected_btn.setOnClickListener(this);
+		if(isShowCollectedBtn){
+			collected_btn.setVisibility(View.VISIBLE);
+		}
 		View loadingView = getLayoutInflater().inflate(R.layout.view_loading_video, null);
 		setScrollable(mSwipeRefreshLayout);
 		mWebView.requestFocus();//如果不设置，则在点击网页文本输入框时，不能弹出软键盘及不响应其他的一些事件。
@@ -184,13 +197,29 @@ public class WebViewWithMicActivity extends BaseActivity implements OnClickListe
 		if(isHideMic){
 			speak_round_layout.setVisibility(View.GONE);
 		}
-        tap_to_reload.setOnClickListener(this);
-        ad_go_on.setOnClickListener(this);
+		tap_to_reload.setOnClickListener(this);
+		ad_go_on.setOnClickListener(this);
 		speak_round_layout.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				WebViewWithMicActivityPermissionsDispatcher.showIatDialogWithPermissionCheck(WebViewWithMicActivity.this);
-				AVAnalytics.onEvent(WebViewWithMicActivity.this, "WebViewWithMic_speak_btn");
+				WebViewWithCollectedActivityPermissionsDispatcher.showIatDialogWithPermissionCheck(WebViewWithCollectedActivity.this);
+				AVAnalytics.onEvent(WebViewWithCollectedActivity.this, "WebViewWithMic_speak_btn");
+			}
+		});
+
+		mWebView.setOnScrollChangedCallback(new VideoEnabledWebView.OnScrollChangedCallback(){
+			public void onScroll(int l, int t, int oldl, int oldt){
+				if(isShowCollectedBtn){
+					if(t > oldt){
+						if(collected_btn.isShown()){
+							collected_btn.setVisibility(View.GONE);
+						}
+					} else if(t< oldt){
+						if(!collected_btn.isShown()) {
+							collected_btn.setVisibility(View.VISIBLE);
+						}
+					}
+				}
 			}
 		});
 
@@ -235,65 +264,78 @@ public class WebViewWithMicActivity extends BaseActivity implements OnClickListe
 				if(url.contains("openapp.jdmobile") || url.contains("taobao")){
 					Uri uri = Uri.parse(url);
 					view.loadUrl("");
-					ADUtil.toAdActivity(WebViewWithMicActivity.this,uri);
-					WebViewWithMicActivity.this.finish();
+					ADUtil.toAdActivity(WebViewWithCollectedActivity.this,uri);
+					WebViewWithCollectedActivity.this.finish();
 					return true;
-				}else if(url.contains("bilibili:")){
+				}else if(url.contains("https://www.owllook.net/search?wd=")){
+					String question = "";
+					String[] items = url.split("=");
+					if(items != null && items.length > 1){
+						try {
+							question = URLDecoder.decode(items[1],"UTF-8");
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+					Intent intent = new Intent(WebViewWithCollectedActivity.this, OwllookResultListActivity.class);
+					intent.putExtra(KeyUtil.ActionbarTitle, question);
+					intent.putExtra(KeyUtil.SearchKey, question);
+					intent.putExtra(KeyUtil.URL, url);
+					startActivity(intent);
 					return true;
 				}
 				return super.shouldOverrideUrlLoading(view, url);
 			}
 
-            @Override
-            public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-//                LogUtil.DefalutLog("ad_url:"+ad_url);
-                LogUtil.DefalutLog(url);
-                int action = getAdAction(url);
-                if(action == 1){
-                    return new WebResourceResponse(null, null, null);
-                }else if(action == 2){
-                    showAD();
-                    return new WebResourceResponse(null, null, null);
-                }
-                return super.shouldInterceptRequest(view, url);
-            }
+			@Override
+			public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+				LogUtil.DefalutLog(url);
+				int action = getAdAction(url);
+				if(action == 1){
+					return new WebResourceResponse(null, null, null);
+				}else if(action == 2){
+					showAD();
+					return new WebResourceResponse(null, null, null);
+				}
+				return super.shouldInterceptRequest(view, url);
+			}
 
 			@Override
 			public void onReceivedSslError(WebView view,final SslErrorHandler handler, SslError error) {
-				final AlertDialog.Builder builder = new AlertDialog.Builder(WebViewWithMicActivity.this);
-				String message = "SSL Certificate error.";
-				switch (error.getPrimaryError()) {
-					case SslError.SSL_UNTRUSTED:
-						message = "The certificate authority is not trusted.";
-						break;
-					case SslError.SSL_EXPIRED:
-						message = "The certificate has expired.";
-						break;
-					case SslError.SSL_IDMISMATCH:
-						message = "The certificate Hostname mismatch.";
-						break;
-					case SslError.SSL_NOTYETVALID:
-						message = "The certificate is not yet valid.";
-						break;
-				}
-				message += " Do you want to continue anyway?";
-
-				builder.setTitle("SSL Certificate Error");
-				builder.setMessage(message);
-				builder.setPositiveButton("continue", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						handler.proceed();
-					}
-				});
-				builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						handler.cancel();
-					}
-				});
-				final AlertDialog dialog = builder.create();
-				dialog.show();
+//				final AlertDialog.Builder builder = new AlertDialog.Builder(WebViewWithCollectedActivity.this);
+//				String message = "SSL Certificate error.";
+//				switch (error.getPrimaryError()) {
+//					case SslError.SSL_UNTRUSTED:
+//						message = "The certificate authority is not trusted.";
+//						break;
+//					case SslError.SSL_EXPIRED:
+//						message = "The certificate has expired.";
+//						break;
+//					case SslError.SSL_IDMISMATCH:
+//						message = "The certificate Hostname mismatch.";
+//						break;
+//					case SslError.SSL_NOTYETVALID:
+//						message = "The certificate is not yet valid.";
+//						break;
+//				}
+//				message += " Do you want to continue anyway?";
+//
+//				builder.setTitle("SSL Certificate Error");
+//				builder.setMessage(message);
+//				builder.setPositiveButton("continue", new DialogInterface.OnClickListener() {
+//					@Override
+//					public void onClick(DialogInterface dialog, int which) {
+//						handler.proceed();
+//					}
+//				});
+//				builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+//					@Override
+//					public void onClick(DialogInterface dialog, int which) {
+//						handler.cancel();
+//					}
+//				});
+//				final AlertDialog dialog = builder.create();
+//				dialog.show();
 			}
 		});
 		webChromeClient = new VideoEnabledWebChromeClient(nonVideoLayout, videoLayout, loadingView, mWebView) // See all available constructors...
@@ -314,38 +356,38 @@ public class WebViewWithMicActivity extends BaseActivity implements OnClickListe
 			}
 		};
 		webChromeClient.setOnToggledFullscreen(new VideoEnabledWebChromeClient.ToggledFullscreenCallback() {
-		   @Override
-		   public void toggledFullscreen(boolean fullscreen) {
-			   // Your code to handle the full-screen change, for example showing and hiding the title bar. Example:
-			   if (fullscreen) {
-				   setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-				   WindowManager.LayoutParams attrs = getWindow().getAttributes();
-				   attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
-				   attrs.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
-				   getWindow().setAttributes(attrs);
-				   if (Build.VERSION.SDK_INT >= 14) {
-					   //noinspection all
-					   getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-				   }
-			   } else {
-				   setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-				   WindowManager.LayoutParams attrs = getWindow().getAttributes();
-				   attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
-				   attrs.flags &= ~WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
-				   getWindow().setAttributes(attrs);
-				   if (Build.VERSION.SDK_INT >= 14) {
-					   //noinspection all
-					   getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-				   }
-			   }
+			@Override
+			public void toggledFullscreen(boolean fullscreen) {
+				// Your code to handle the full-screen change, for example showing and hiding the title bar. Example:
+				if (fullscreen) {
+					setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+					WindowManager.LayoutParams attrs = getWindow().getAttributes();
+					attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+					attrs.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+					getWindow().setAttributes(attrs);
+					if (Build.VERSION.SDK_INT >= 14) {
+						//noinspection all
+						getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+					}
+				} else {
+					setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+					WindowManager.LayoutParams attrs = getWindow().getAttributes();
+					attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
+					attrs.flags &= ~WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+					getWindow().setAttributes(attrs);
+					if (Build.VERSION.SDK_INT >= 14) {
+						//noinspection all
+						getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+					}
+				}
 
-		   }});
+			}});
 		mWebView.setWebChromeClient(webChromeClient);
-		
-		mSwipeRefreshLayout.setColorSchemeResources(R.color.holo_blue_bright, 
-	            R.color.holo_green_light, 
-	            R.color.holo_orange_light, 
-	            R.color.holo_red_light);
+
+		mSwipeRefreshLayout.setColorSchemeResources(R.color.holo_blue_bright,
+				R.color.holo_green_light,
+				R.color.holo_orange_light,
+				R.color.holo_red_light);
 		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
 			public void onRefresh() {
@@ -355,108 +397,119 @@ public class WebViewWithMicActivity extends BaseActivity implements OnClickListe
 		if(!isReedPullDownRefresh){
 			mSwipeRefreshLayout.setEnabled(false);
 		}
+		if(is_need_get_filter){
+			getFilter();
+		}
 		mWebView.loadUrl(Url);
 	}
 
-    private void showAD(){
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                loadTXAD();
-            }
-        });
-    }
+	private void showAD(){
+		this.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				loadTXAD();
+			}
+		});
+	}
 
-    private void loadTXAD() {
-        ad_layout.setVisibility(View.VISIBLE);
-        ad_content.removeAllViews();
-        TXADUtil.showCDTZX(this, new NativeExpressAD.NativeExpressADListener() {
-            @Override
-            public void onNoAD(com.qq.e.comm.util.AdError adError) {
-                LogUtil.DefalutLog(adError.getErrorMsg());
-                ad_layout.setVisibility(View.GONE);
-            }
+	private void loadTXAD() {
+		ad_layout.setVisibility(View.VISIBLE);
+		ad_content.removeAllViews();
+		TXADUtil.showCDTZX(this, new NativeExpressAD.NativeExpressADListener() {
+			@Override
+			public void onNoAD(com.qq.e.comm.util.AdError adError) {
+				LogUtil.DefalutLog(adError.getErrorMsg());
+				ad_layout.setVisibility(View.GONE);
+			}
 
-            @Override
-            public void onADLoaded(List<NativeExpressADView> list) {
-                LogUtil.DefalutLog("onADLoaded");
-                if (list != null && list.size() > 0) {
-                    ad_layout.setVisibility(View.VISIBLE);
-                    if (mTXADView != null) {
-                        mTXADView.destroy();
-                    }
-                    ad_content.removeAllViews();
-                    mTXADView = list.get(0);
-                    ad_content.addView(mTXADView);
-                    mTXADView.render();
-                }
+			@Override
+			public void onADLoaded(List<NativeExpressADView> list) {
+				LogUtil.DefalutLog("onADLoaded");
+				if (list != null && list.size() > 0) {
+					ad_layout.setVisibility(View.VISIBLE);
+					if (mTXADView != null) {
+						mTXADView.destroy();
+					}
+					ad_content.removeAllViews();
+					mTXADView = list.get(0);
+					ad_content.addView(mTXADView);
+					mTXADView.render();
+				}
 
-            }
+			}
 
-            @Override
-            public void onRenderFail(NativeExpressADView nativeExpressADView) {
-                nativeExpressADView.render();
-                LogUtil.DefalutLog("onRenderFail");
-            }
+			@Override
+			public void onRenderFail(NativeExpressADView nativeExpressADView) {
+				nativeExpressADView.render();
+				LogUtil.DefalutLog("onRenderFail");
+			}
 
-            @Override
-            public void onRenderSuccess(NativeExpressADView nativeExpressADView) {
-                LogUtil.DefalutLog("onRenderSuccess");
-            }
+			@Override
+			public void onRenderSuccess(NativeExpressADView nativeExpressADView) {
+				LogUtil.DefalutLog("onRenderSuccess");
+			}
 
-            @Override
-            public void onADExposure(NativeExpressADView nativeExpressADView) {
-                LogUtil.DefalutLog("onADExposure");
-            }
+			@Override
+			public void onADExposure(NativeExpressADView nativeExpressADView) {
+				LogUtil.DefalutLog("onADExposure");
+			}
 
-            @Override
-            public void onADClicked(NativeExpressADView nativeExpressADView) {
-                LogUtil.DefalutLog("onADClicked");
-            }
+			@Override
+			public void onADClicked(NativeExpressADView nativeExpressADView) {
+				LogUtil.DefalutLog("onADClicked");
+			}
 
-            @Override
-            public void onADClosed(NativeExpressADView nativeExpressADView) {
-                LogUtil.DefalutLog("onADClosed");
-            }
+			@Override
+			public void onADClosed(NativeExpressADView nativeExpressADView) {
+				LogUtil.DefalutLog("onADClosed");
+			}
 
-            @Override
-            public void onADLeftApplication(NativeExpressADView nativeExpressADView) {
-                LogUtil.DefalutLog("onADLeftApplication");
-            }
+			@Override
+			public void onADLeftApplication(NativeExpressADView nativeExpressADView) {
+				LogUtil.DefalutLog("onADLeftApplication");
+			}
 
-            @Override
-            public void onADOpenOverlay(NativeExpressADView nativeExpressADView) {
-                LogUtil.DefalutLog("onADOpenOverlay");
-            }
+			@Override
+			public void onADOpenOverlay(NativeExpressADView nativeExpressADView) {
+				LogUtil.DefalutLog("onADOpenOverlay");
+			}
 
-            @Override
-            public void onADCloseOverlay(NativeExpressADView nativeExpressADView) {
-                LogUtil.DefalutLog("onADCloseOverlay");
-            }
-        });
-    }
+			@Override
+			public void onADCloseOverlay(NativeExpressADView nativeExpressADView) {
+				LogUtil.DefalutLog("onADCloseOverlay");
+			}
+		});
+	}
 
 	private void getFilter(){
 		if(!TextUtils.isEmpty(filter_source_name)){
-			try {
-				AVQuery<AVObject> query = new AVQuery<AVObject>(AVOUtil.AdFilter.AdFilter);
-				query.whereEqualTo(AVOUtil.AdFilter.name, filter_source_name);
-				query.findInBackground(new FindCallback<AVObject>() {
-					@Override
-					public void done(List<AVObject> list, AVException e) {
-						if(list != null && list.size() > 0){
-							AVObject mAVObject = list.get(0);
-							if(mAVObject != null){
-								adFilte = mAVObject.getString(AVOUtil.AdFilter.filter);
-                                ad_url = mAVObject.getString(AVOUtil.AdFilter.ad_url);
-                                LogUtil.DefalutLog("adFilte:"+adFilte+"--"+"ad_url:"+ad_url);
-								hideAd(mWebView);
+			WebFilter mWebFilter = BoxHelper.findWebFilterByName(filter_source_name);
+			if(mWebFilter != null){
+				adFilte = mWebFilter.getAd_filter();
+				ad_url = mWebFilter.getAd_url();
+				hideAd(mWebView);
+				LogUtil.DefalutLog("getFilter---WebFilter:"+adFilte+"--"+"ad_url:"+ad_url);
+			}else {
+				try {
+					AVQuery<AVObject> query = new AVQuery<AVObject>(AVOUtil.AdFilter.AdFilter);
+					query.whereEqualTo(AVOUtil.AdFilter.name, filter_source_name);
+					query.findInBackground(new FindCallback<AVObject>() {
+						@Override
+						public void done(List<AVObject> list, AVException e) {
+							if(list != null && list.size() > 0){
+								AVObject mAVObject = list.get(0);
+								if(mAVObject != null){
+									adFilte = mAVObject.getString(AVOUtil.AdFilter.filter);
+									ad_url = mAVObject.getString(AVOUtil.AdFilter.ad_url);
+									hideAd(mWebView);
+									LogUtil.DefalutLog("getFilter---internet:"+adFilte+"--"+"ad_url:"+ad_url);
+								}
 							}
 						}
-					}
-				});
-			} catch (Exception e) {
-				e.printStackTrace();
+					});
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -471,7 +524,7 @@ public class WebViewWithMicActivity extends BaseActivity implements OnClickListe
 		public void onError(SpeechError err) {
 			LogUtil.DefalutLog("onError:" + err.getErrorDescription());
 			finishRecord();
-			ToastUtil.diaplayMesShort(WebViewWithMicActivity.this, err.getErrorDescription());
+			ToastUtil.diaplayMesShort(WebViewWithCollectedActivity.this, err.getErrorDescription());
 		}
 
 		@Override
@@ -568,7 +621,7 @@ public class WebViewWithMicActivity extends BaseActivity implements OnClickListe
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		try {
@@ -578,31 +631,22 @@ public class WebViewWithMicActivity extends BaseActivity implements OnClickListe
 		}
 		return true;
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case 0:
-			if(!TextUtils.isEmpty(ShareUrlMsg)){
-				ShareUtil.shareText(WebViewWithMicActivity.this, ShareUrlMsg);
-			}else {
-				ShareUtil.shareText(WebViewWithMicActivity.this,mWebView.getTitle() + " (share from:中英互译) " + Url);
-			}
-			AVAnalytics.onEvent(this, "webview_share_link");
-			break;
+			case 0:
+				if(!TextUtils.isEmpty(ShareUrlMsg)){
+					ShareUtil.shareText(WebViewWithCollectedActivity.this, ShareUrlMsg);
+				}else {
+					ShareUtil.shareText(WebViewWithCollectedActivity.this,mWebView.getTitle() + " (share from:中英互译) " + Url);
+				}
+				AVAnalytics.onEvent(this, "webview_share_link");
+				break;
 		}
-       return super.onOptionsItemSelected(item);
+		return super.onOptionsItemSelected(item);
 	}
 
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if((keyCode == KeyEvent.KEYCODE_BACK) && mWebView.canGoBack()){
-			mWebView.goBack();
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -651,40 +695,66 @@ public class WebViewWithMicActivity extends BaseActivity implements OnClickListe
 		},60);
 	}
 
-    private int getAdAction(String url){
-        int action = 0;
-        if(!TextUtils.isEmpty(ad_url)){
-            String[] filters = ad_url.split("#");
-            if(filters != null && filters.length > 0){
-                for(final String item : filters) {
-                    String[] fls = item.split(":");
-                    if(fls != null && fls.length == 2){
-                        if(url.contains(fls[0])){
-                            action = Integer.parseInt(fls[1]);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        return action;
-    }
+	private int getAdAction(String url){
+		int action = 0;
+		if(!TextUtils.isEmpty(ad_url)){
+			String[] filters = ad_url.split("#");
+			if(filters != null && filters.length > 0){
+				for(final String item : filters) {
+					String[] fls = item.split(":");
+					if(fls != null && fls.length == 2){
+						if(url.contains(fls[0])){
+							action = Integer.parseInt(fls[1]);
+							break;
+						}
+					}
+				}
+			}
+		}
+		return action;
+	}
 
-    @Override
-    public void onClick(View view) {
-        if(view.getId() == R.id.tap_to_reload){
-            mWebView.loadUrl(Url);
-            tap_to_reload.setVisibility(View.GONE);
-            lastClick = System.currentTimeMillis();
-        }else if(view.getId() == R.id.ad_go_on){
-            ad_layout.setVisibility(View.GONE);
-        }
-    }
+	@Override
+	public void onClick(View view) {
+		if(view.getId() == R.id.tap_to_reload){
+			mWebView.loadUrl(Url);
+			tap_to_reload.setVisibility(View.GONE);
+			lastClick = System.currentTimeMillis();
+		}else if(view.getId() == R.id.ad_go_on){
+			ad_layout.setVisibility(View.GONE);
+		}else if(view.getId() == R.id.collected_btn){
+			String itemId = MD5.encode(Url);
+			CNWBean mbean = BoxHelper.findCNWBeanByItemId(itemId);
+			if(mbean == null){
+				mbean = new CNWBean();
+				if(filter_source_name.equals("找小说")){
+					mbean.setTable(AVOUtil.Novel.Novel);
+				}else{
+					mbean.setTable(AVOUtil.Caricature.Caricature);
+				}
+				mbean.setItemId(itemId);
+			}
+			mbean.setTitle(mWebView.getTitle());
+			if(!TextUtils.isEmpty(mWebView.getUrl())){
+				mbean.setRead_url(mWebView.getUrl());
+				mbean.setSource_url(mWebView.getUrl());
+			}else {
+				mbean.setRead_url(Url);
+				mbean.setSource_url(Url);
+			}
+			mbean.setSource_name(filter_source_name);
+			mbean.setImg_url(img_url);
+			mbean.setCollected(System.currentTimeMillis());
+			mbean.setUpdateTime(System.currentTimeMillis());
+			BoxHelper.updateCNWBean(mbean);
+			ToastUtil.diaplayMesShort(this,"收藏成功");
+		}
+	}
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-		WebViewWithMicActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+		WebViewWithCollectedActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
 	}
 
 	@OnShowRationale(Manifest.permission.RECORD_AUDIO)

@@ -5,7 +5,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.iflytek.voiceads.NativeADDataRef;
+import com.messi.languagehelper.meinv.bean.MiaosouLinkBean;
 import com.qq.e.ads.nativ.NativeExpressADView;
+
+import java.util.List;
 
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
@@ -61,6 +64,16 @@ public class CNWBean implements Parcelable {
     private NativeADDataRef mNativeADDataRef;
     @Transient
     private NativeExpressADView mTXADView;
+    @Transient
+    private List<MiaosouLinkBean> miaosouLinks;
+
+    public List<MiaosouLinkBean> getMiaosouLinks() {
+        return miaosouLinks;
+    }
+
+    public void setMiaosouLinks(List<MiaosouLinkBean> miaosouLinks) {
+        this.miaosouLinks = miaosouLinks;
+    }
 
     public String getLast_read_url() {
         return last_read_url;
@@ -334,6 +347,7 @@ public class CNWBean implements Parcelable {
         this.mTXADView = mTXADView;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -356,6 +370,7 @@ public class CNWBean implements Parcelable {
         dest.writeString(this.img_url);
         dest.writeString(this.imgs_url);
         dest.writeString(this.read_url);
+        dest.writeString(this.last_read_url);
         dest.writeString(this.source_url);
         dest.writeString(this.source_name);
         dest.writeString(this.json_str);
@@ -393,6 +408,7 @@ public class CNWBean implements Parcelable {
         this.img_url = in.readString();
         this.imgs_url = in.readString();
         this.read_url = in.readString();
+        this.last_read_url = in.readString();
         this.source_url = in.readString();
         this.source_name = in.readString();
         this.json_str = in.readString();
@@ -411,7 +427,7 @@ public class CNWBean implements Parcelable {
         this.isAdShow = in.readByte() != 0;
     }
 
-    public static final Parcelable.Creator<CNWBean> CREATOR = new Parcelable.Creator<CNWBean>() {
+    public static final Creator<CNWBean> CREATOR = new Creator<CNWBean>() {
         @Override
         public CNWBean createFromParcel(Parcel source) {
             return new CNWBean(source);
@@ -441,6 +457,7 @@ public class CNWBean implements Parcelable {
                 ", img_url='" + img_url + '\'' +
                 ", imgs_url='" + imgs_url + '\'' +
                 ", read_url='" + read_url + '\'' +
+                ", last_read_url='" + last_read_url + '\'' +
                 ", source_url='" + source_url + '\'' +
                 ", source_name='" + source_name + '\'' +
                 ", json_str='" + json_str + '\'' +
@@ -459,6 +476,7 @@ public class CNWBean implements Parcelable {
                 ", isAdShow=" + isAdShow +
                 ", mNativeADDataRef=" + mNativeADDataRef +
                 ", mTXADView=" + mTXADView +
+                ", miaosouLinks=" + miaosouLinks +
                 '}';
     }
 }

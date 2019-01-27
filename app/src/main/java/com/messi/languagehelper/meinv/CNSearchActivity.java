@@ -358,21 +358,19 @@ public class CNSearchActivity extends BaseActivity {
 
     private void toResult(String url,String question) {
         if (position == 2) {
-            Intent intent = new Intent(this, WebViewWithMicActivity.class);
+            Intent intent = new Intent(this, WebViewWithCollectedActivity.class);
             intent.putExtra(KeyUtil.URL, url);
             intent.putExtra(KeyUtil.SearchUrl, Setings.UCSearchUrl);
+            intent.putExtra(KeyUtil.isHideMic,true);
             intent.putExtra(KeyUtil.IsHideToolbar, true);
             intent.putExtra(KeyUtil.IsReedPullDownRefresh, false);
+            intent.putExtra(KeyUtil.IsShowCollectedBtn, false);
             startActivity(intent);
         } else if (position == 1) {
-            Intent intent = new Intent(this, WebViewWithMicActivity.class);
+            Intent intent = new Intent(this, OwllookResultListActivity.class);
+            intent.putExtra(KeyUtil.ActionbarTitle, question);
+            intent.putExtra(KeyUtil.SearchKey, question);
             intent.putExtra(KeyUtil.URL, url);
-            intent.putExtra(KeyUtil.isHideMic,true);
-            intent.putExtra(KeyUtil.FilterName,"找小说");
-            intent.putExtra(KeyUtil.IsNeedGetFilter, true);
-            intent.putExtra(KeyUtil.SearchUrl, Setings.NovelSearchUrl);
-            intent.putExtra(KeyUtil.IsHideToolbar, true);
-            intent.putExtra(KeyUtil.IsReedPullDownRefresh, false);
             startActivity(intent);
         } else {
             searchCaricature(url,question);

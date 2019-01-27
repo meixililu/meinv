@@ -117,8 +117,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/input_layout"
-        android:paddingRight="@dimen/padding_20"
-        android:paddingLeft="@dimen/padding_20"
+        android:paddingRight="@dimen/padding_10"
+        android:paddingLeft="@dimen/padding_10"
         >
         <LinearLayout
             android:layout_width="match_parent"

@@ -7,13 +7,14 @@ import com.messi.languagehelper.meinv.box.BoxHelper;
 import com.messi.languagehelper.meinv.box.CNWBean;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
+import com.messi.languagehelper.meinv.util.Setings;
 
 import java.util.List;
 
 public class MoveDataTask {
 
     public static void moveCaricatureData(final Context mContext){
-        SharedPreferences sp = mContext.getSharedPreferences(mContext.getPackageName(), Context.MODE_PRIVATE);
+        final SharedPreferences sp = mContext.getSharedPreferences(mContext.getPackageName(), Context.MODE_PRIVATE);
         if(!sp.getBoolean(KeyUtil.HasMoveCaricatureData,false)){
             new Thread(new Runnable() {
                 @Override
@@ -24,6 +25,7 @@ public class MoveDataTask {
                         BoxHelper.updateCNWBean(dataList);
                         DataBaseUtil.getInstance().clearAvobject();
                     }
+                    Setings.saveSharedPreferences(sp,KeyUtil.HasMoveCaricatureData,true);
                     LogUtil.DefalutLog("moveCaricatureData finish");
                 }
             }).start();

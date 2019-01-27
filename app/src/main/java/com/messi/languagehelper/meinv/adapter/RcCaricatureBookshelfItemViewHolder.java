@@ -11,8 +11,10 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.messi.languagehelper.meinv.CaricatureDetailActivity;
+import com.messi.languagehelper.meinv.MiaosouDetailActivity;
 import com.messi.languagehelper.meinv.R;
 import com.messi.languagehelper.meinv.box.CNWBean;
+import com.messi.languagehelper.meinv.util.ColorUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 
 /**
@@ -41,7 +43,11 @@ public class RcCaricatureBookshelfItemViewHolder extends RecyclerView.ViewHolder
     public void render(final CNWBean mAVObject) {
         delete_layout.setVisibility(View.GONE);
         delete_img.setImageResource(R.drawable.ic_check_white);
-        img.setImageURI(mAVObject.getImg_url());
+        if(!TextUtils.isEmpty(mAVObject.getImg_url())){
+            img.setImageURI(mAVObject.getImg_url());
+        }else {
+            img.setImageResource(ColorUtil.getRadomColor());
+        }
         name.setText( mAVObject.getTitle());
         if(!TextUtils.isEmpty(mAVObject.getDelete_model())){
             if (mAVObject.getDelete_model().equals("1")) {
@@ -79,10 +85,16 @@ public class RcCaricatureBookshelfItemViewHolder extends RecyclerView.ViewHolder
     }
 
     private void onItemClick(CNWBean mAVObject){
-        Intent intent = new Intent(context, CaricatureDetailActivity.class);
-        intent.putExtra(KeyUtil.AVObjectKey, mAVObject);
-        intent.putExtra(KeyUtil.ActionbarTitle, mAVObject.getTitle());
-        context.startActivity(intent);
+        if(mAVObject.getSource_name().equals("找漫画")){
+            Intent intent = new Intent(context, MiaosouDetailActivity.class);
+            intent.putExtra(KeyUtil.AVObjectKey, mAVObject);
+            context.startActivity(intent);
+        }else {
+            Intent intent = new Intent(context, CaricatureDetailActivity.class);
+            intent.putExtra(KeyUtil.AVObjectKey, mAVObject);
+            intent.putExtra(KeyUtil.ActionbarTitle, mAVObject.getTitle());
+            context.startActivity(intent);
+        }
     }
 
 }

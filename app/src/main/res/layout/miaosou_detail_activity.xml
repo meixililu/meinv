@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/item_img_bg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            fresco:actualImageScaleType="focusCrop"
+            fresco:placeholderImage="@drawable/img_loading"
+            fresco:placeholderImageScaleType="fitCenter"
+            fresco:failureImage="@drawable/img_lost"
+            fresco:failureImageScaleType="fitCenter"
+            fresco:viewAspectRatio="0.75" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/none_thin"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/item_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="120dp"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_10">
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/item_img"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:layout_marginLeft="@dimen/padding_5"
+                    fresco:actualImageScaleType="focusCrop"
+                    fresco:placeholderImage="@drawable/img_loading"
+                    fresco:placeholderImageScaleType="fitCenter"
+                    fresco:failureImage="@drawable/img_lost"
+                    fresco:failureImageScaleType="fitCenter"
+                    fresco:roundedCornerRadius="8dp"
+                    fresco:viewAspectRatio="0.75" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/padding_15"
+                    android:layout_weight="5"
+                    android:gravity="left"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:gravity="left"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/bigest" />
+
+                    <TextView
+                        android:id="@+id/tags"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_7"
+                        android:gravity="left"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/middle" />
+
+                    <TextView
+                        android:id="@+id/author"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_7"
+                        android:gravity="left"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/middle" />
+
+                    <TextView
+                        android:id="@+id/source"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_7"
+                        android:gravity="left"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/middle" />
+
+                    <TextView
+                        android:id="@+id/views"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_7"
+                        android:gravity="left"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/middle" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="70dp"
+                android:background="@color/white"
+                android:orientation="vertical"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_10"
+                    android:layout_marginLeft="@dimen/padding_10"
+                    android:layout_marginRight="@dimen/padding_10"
+                    android:background="@color/white"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        android:id="@+id/add_bookshelf"
+                        android:layout_width="0dp"
+                        android:layout_height="42dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_btn_orange"
+                        android:gravity="center"
+                        android:text="@string/add_bookshelf"
+                        android:textColor="@drawable/txt_color_gray_white_selector"
+                        android:textSize="@dimen/big" />
+
+
+                    <TextView
+                        android:id="@+id/to_read"
+                        android:layout_width="0dp"
+                        android:layout_height="42dp"
+                        android:layout_marginLeft="@dimen/padding_15"
+                        android:layout_weight="2"
+                        android:background="@drawable/green_btn_bg_selector"
+                        android:gravity="center"
+                        android:text="@string/to_read"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/big" />
+
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/des"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_black"
+                    android:lineSpacingExtra="3dp"
+                    android:lineSpacingMultiplier="1.3"
+                    android:padding="@dimen/padding_10"
+                    android:textSize="@dimen/big" />
+                <FrameLayout
+                    android:id="@+id/xx_ad_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/padding_7"
+                    android:layout_marginLeft="@dimen/padding_7"
+                    android:layout_marginRight="@dimen/padding_7"
+                    android:background="@color/white"
+                    android:visibility="gone">
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/ad_img"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        fresco:actualImageScaleType="focusCrop"
+                        fresco:placeholderImage="@drawable/img_loading"
+                        fresco:placeholderImageScaleType="fitCenter"
+                        fresco:failureImage="@drawable/img_lost"
+                        fresco:failureImageScaleType="fitCenter"
+                        fresco:viewAspectRatio="1.77" />
+
+                    <TextView
+                        android:id="@+id/ad_sign"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|left"
+                        android:background="@color/none_alpha"
+                        android:paddingBottom="1dp"
+                        android:paddingLeft="1dp"
+                        android:text="广告"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/smaller" />
+                </FrameLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_15"
+            android:layout_marginTop="35dp"
+            android:src="@drawable/ic_arrow_back"
+            />
+        <ImageView
+            android:id="@+id/share_img"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="35dp"
+            android:layout_gravity="right|top"
+            android:src="@drawable/ic_share_white_24dp"
+            android:layout_marginRight="@dimen/padding_15"
+            />
+    </FrameLayout>
+
+</ScrollView>

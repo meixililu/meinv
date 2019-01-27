@@ -315,6 +315,8 @@ public class AVOUtil {
 
 		public final static String Caricature_version = "Caricature_version";
 
+		public final static String Caricature_channel = "Caricature_channel";
+
 	}
 	
 	public static class SymbolDetail {
@@ -808,6 +810,31 @@ public class AVOUtil {
 
 	public static class Caricature {
 		public final static String Caricature = "Caricature";
+		public final static String name = "name";
+		public final static String author = "author";
+		public final static String book_img_url = "book_img_url";
+		public final static String category = "category";
+		public final static String createdAt = "createdAt";
+		public final static String des = "des";
+		public final static String isFree = "isFree";
+		public final static String isValid = "isValid";
+		public final static String order = "order";
+		public final static String read_url = "read_url";
+		public final static String source_name = "source_name";
+		public final static String tag = "tag";
+		public final static String type = "type";
+		public final static String update = "update";
+		public final static String url = "url";
+		public final static String views = "views";
+		//local
+		public final static String history = "history";
+		public final static String collected = "collected";
+		public final static String lastUrl = "lastUrl";
+		public final static String lastPosition = "lastPosition";
+	}
+
+	public static class Novel {
+		public final static String Novel = "Novel";
 		public final static String name = "name";
 		public final static String author = "author";
 		public final static String book_img_url = "book_img_url";

@@ -90,6 +90,7 @@ public class AppUpdateUtil {
         String ucsearch_url = mAVObject.getString(AVOUtil.UpdateInfo.ucsearch_url);
         String ad_ids = mAVObject.getString(AVOUtil.UpdateInfo.ad_ids);
         String no_ad_channel = mAVObject.getString(AVOUtil.UpdateInfo.no_ad_channel);
+        String Caricature_channel = mAVObject.getString(AVOUtil.UpdateInfo.Caricature_channel);
         int Caricature_version = mAVObject.getInt(AVOUtil.UpdateInfo.Caricature_version);
         Setings.saveSharedPreferences(sp,KeyUtil.APP_Advertiser,app_advertiser);
         Setings.saveSharedPreferences(sp,KeyUtil.Lei_DVideo,uctt_url);
@@ -100,6 +101,7 @@ public class AppUpdateUtil {
         Setings.saveSharedPreferences(sp,KeyUtil.VersionCode,
                 mAVObject.getInt(AVOUtil.UpdateInfo.VersionCode));
         Setings.saveSharedPreferences(sp,KeyUtil.Caricature_version, Caricature_version);
+        Setings.saveSharedPreferences(sp,KeyUtil.Caricature_channel, Caricature_channel);
         Setings.saveSharedPreferences(sp,KeyUtil.UpdateBean, mAVObject.toString());
         LogUtil.DefalutLog("saveSetting");
     }

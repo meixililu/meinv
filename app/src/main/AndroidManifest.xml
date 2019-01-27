@@ -105,10 +105,19 @@
             android:name=".MeinvTagActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".WebViewWithMicActivity"
+            android:name=".WebViewForMiaosouActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".WebViewNoAdActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MiaosouDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".OwllookResultListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".WebViewWithCollectedActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".WebViewForCaricatureActivity"

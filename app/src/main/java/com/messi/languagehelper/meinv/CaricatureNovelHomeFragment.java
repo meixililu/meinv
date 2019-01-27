@@ -70,10 +70,10 @@ public class CaricatureNovelHomeFragment extends BaseFragment {
                 toNovelActivity();
                 break;
             case R.id.layout_rank_novel:
-                toNovelActivity(Setings.NovelRank,"owllook排行榜");
+                toNovelActivity(Setings.NovelRank,"找小说",false);
                 break;
             case R.id.layout_short_novel:
-                toNovelActivity(Setings.NovelShort,"lnovel小说");
+                toNovelActivity(Setings.NovelShort,"找小说",true);
                 break;
             case R.id.layout_search_novel:
                 toKSearch();
@@ -89,10 +89,15 @@ public class CaricatureNovelHomeFragment extends BaseFragment {
         AVAnalytics.onEvent(getActivity(), "caricature_to_free_novel");
     }
 
-    private void toNovelActivity(String url,String filter) {
-        Intent intent = new Intent(getContext(), WebViewForNovelActivity.class);
+    private void toNovelActivity(String url,String filter,boolean isShowCollectedBtn) {
+        Intent intent = new Intent(getContext(), WebViewWithCollectedActivity.class);
         intent.putExtra(KeyUtil.URL, url);
         intent.putExtra(KeyUtil.FilterName, filter);
+        intent.putExtra(KeyUtil.IsNeedGetFilter, true);
+        intent.putExtra(KeyUtil.IsHideToolbar, true);
+        intent.putExtra(KeyUtil.isHideMic,true);
+        intent.putExtra(KeyUtil.IsReedPullDownRefresh, false);
+        intent.putExtra(KeyUtil.IsShowCollectedBtn, isShowCollectedBtn);
         getContext().startActivity(intent);
         AVAnalytics.onEvent(getActivity(), "caricature_to_free_novel");
     }

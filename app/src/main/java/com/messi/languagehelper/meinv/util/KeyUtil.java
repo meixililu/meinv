@@ -30,6 +30,8 @@ public class KeyUtil {
 
 	public static final String URL = "urlkey";
 
+	public static final String ImgUrl = "ImgUrl";
+
 	public static final String Id = "Id";
 
 	public static final String DownloadUrl = "DownloadUrl";
@@ -92,6 +94,8 @@ public class KeyUtil {
 	public static final String IsReedPullDownRefresh = "IsReedPullDownRefresh";
 
 	public static final String IsHideToolbar = "IsHideToolbar";
+
+	public static final String IsShowCollectedBtn = "IsShowCollectedBtn";
 
 	public static final String IsCanShowAD_Loading = "IsCanShowAD_Loading";
 	
@@ -275,6 +279,7 @@ public class KeyUtil {
 	public static final String SearchUrl = "SearchUrl";
 	public static final String isHideMic = "isHideMic";
 	public static final String Caricature_version = "Caricature_version";
+	public static final String Caricature_channel = "Caricature_channel";
 	public static final String UpdateBean = "UpdateBean";
 
 
