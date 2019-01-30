@@ -12,20 +12,20 @@ import com.messi.languagehelper.meinv.box.CNWBean;
  * Created by luli on 10/23/16.
  */
 
-public class RcOwllookListAdapter extends HeaderFooterRecyclerViewAdapter<RecyclerView.ViewHolder, Object, CNWBean, Object> {
+public class RcNovelListAdapter extends HeaderFooterRecyclerViewAdapter<RecyclerView.ViewHolder, Object, CNWBean, Object> {
 
 
     @Override
     protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = getLayoutInflater(parent);
-        View characterView = inflater.inflate(R.layout.owllook_list_item, parent, false);
-        return new RcOwllookListItemViewHolder(characterView);
+        View characterView = inflater.inflate(R.layout.novel_collected_list_item, parent, false);
+        return new RcNovelListItemViewHolder(characterView);
     }
 
     @Override
     protected void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
         CNWBean mAVObject = getItem(position);
-        RcOwllookListItemViewHolder itemViewHolder = (RcOwllookListItemViewHolder)holder;
+        RcNovelListItemViewHolder itemViewHolder = (RcNovelListItemViewHolder)holder;
         itemViewHolder.render(mAVObject);
     }
 

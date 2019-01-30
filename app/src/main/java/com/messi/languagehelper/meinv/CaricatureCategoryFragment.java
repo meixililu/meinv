@@ -71,12 +71,9 @@ public class CaricatureCategoryFragment extends BaseFragment implements AdapterS
     }
 
     private void Request(){
-        if(calist.size() == 0){
-            RequestCategoryTask();
-        }else {
-            loadAD();
-            RequestAsyncTask();
-        }
+        RequestCategoryTask();
+        loadAD();
+        RequestAsyncTask();
     }
 
     private void initViews(View view) {
@@ -154,7 +151,7 @@ public class CaricatureCategoryFragment extends BaseFragment implements AdapterS
     private void RequestCategoryTask() {
         showProgressbar();
         AVQuery<AVObject> query = new AVQuery<AVObject>(AVOUtil.CaricatureSearchHot.CaricatureSearchHot);
-        query.whereEqualTo(AVOUtil.CaricatureSearchHot.type,"tag");
+        query.whereGreaterThan(AVOUtil.CaricatureSearchHot.click_time,98000080);
         query.orderByDescending(AVOUtil.CaricatureSearchHot.click_time);
         query.findInBackground(new FindCallback<AVObject>() {
             @Override
@@ -169,8 +166,6 @@ public class CaricatureCategoryFragment extends BaseFragment implements AdapterS
                     calist.addAll(list);
                     addTag();
                     mAdapter.notifyDataSetChanged();
-                    RequestAsyncTask();
-                    loadAD();
                 }
             }
         });

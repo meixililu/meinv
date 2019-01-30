@@ -33,8 +33,8 @@ public class CaricatureNovelHomeFragment extends BaseFragment {
     FrameLayout layoutRankNovel;
     @BindView(R.id.layout_short_novel)
     FrameLayout layoutShortNovel;
-    @BindView(R.id.layout_search_novel)
-    FrameLayout layoutSearchNovel;
+    @BindView(R.id.layout_novel_collected)
+    FrameLayout layout_novel_collected;
     @BindView(R.id.main_content)
     LinearLayout mainContent;
     Unbinder unbinder;
@@ -60,7 +60,8 @@ public class CaricatureNovelHomeFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.search_btn, R.id.layout_free_novel, R.id.layout_rank_novel, R.id.layout_short_novel, R.id.layout_search_novel})
+    @OnClick({R.id.search_btn, R.id.layout_free_novel, R.id.layout_rank_novel,
+            R.id.layout_short_novel, R.id.layout_novel_collected})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.search_btn:
@@ -70,13 +71,13 @@ public class CaricatureNovelHomeFragment extends BaseFragment {
                 toNovelActivity();
                 break;
             case R.id.layout_rank_novel:
-                toNovelActivity(Setings.NovelRank,"找小说",false);
+                toNovelActivity(Setings.NovelRank,"找小说",false,false);
                 break;
             case R.id.layout_short_novel:
-                toNovelActivity(Setings.NovelShort,"找小说",true);
+                toNovelActivity(Setings.NovelShort,"找小说",true,true);
                 break;
-            case R.id.layout_search_novel:
-                toKSearch();
+            case R.id.layout_novel_collected:
+                toNovelCollected();
                 break;
         }
     }
@@ -89,7 +90,7 @@ public class CaricatureNovelHomeFragment extends BaseFragment {
         AVAnalytics.onEvent(getActivity(), "caricature_to_free_novel");
     }
 
-    private void toNovelActivity(String url,String filter,boolean isShowCollectedBtn) {
+    private void toNovelActivity(String url,String filter,boolean isShowCollectedBtn,boolean isNeedWebViewGoback) {
         Intent intent = new Intent(getContext(), WebViewWithCollectedActivity.class);
         intent.putExtra(KeyUtil.URL, url);
         intent.putExtra(KeyUtil.FilterName, filter);
@@ -98,6 +99,7 @@ public class CaricatureNovelHomeFragment extends BaseFragment {
         intent.putExtra(KeyUtil.isHideMic,true);
         intent.putExtra(KeyUtil.IsReedPullDownRefresh, false);
         intent.putExtra(KeyUtil.IsShowCollectedBtn, isShowCollectedBtn);
+        intent.putExtra(KeyUtil.IsNeedWebViewGoback, isNeedWebViewGoback);
         getContext().startActivity(intent);
         AVAnalytics.onEvent(getActivity(), "caricature_to_free_novel");
     }
@@ -105,6 +107,12 @@ public class CaricatureNovelHomeFragment extends BaseFragment {
     private void toKSearch(){
         Intent intent = new Intent(getContext(),CNSearchActivity.class);
         intent.putExtra(KeyUtil.PositionKey,1);
+        startActivity(intent);
+    }
+
+    private void toNovelCollected(){
+        Intent intent = new Intent(getContext(),NovelCollectedActivity.class);
+        intent.putExtra(KeyUtil.ActionbarTitle,this.getString(R.string.collect));
         startActivity(intent);
     }
 

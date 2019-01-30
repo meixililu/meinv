@@ -81,7 +81,7 @@ public class RcCaricatureHomeListItemViewHolder extends RecyclerView.ViewHolder 
 
     private void onItemClick(CNWBean mAVObject){
         Intent intent = new Intent(context, CaricatureDetailActivity.class);
-        intent.putExtra(KeyUtil.AVObjectKey, mAVObject);
+        intent.putExtra(KeyUtil.ObjectKey, mAVObject);
         intent.putExtra(KeyUtil.ActionbarTitle, mAVObject.getTitle());
         context.startActivity(intent);
     }

@@ -93,9 +93,10 @@ public class CaricatureDetailActivity extends BaseActivity {
 
     private void init() {
         try {
-            mAVObject = getIntent().getParcelableExtra(KeyUtil.AVObjectKey);
+            mAVObject = getIntent().getParcelableExtra(KeyUtil.ObjectKey);
             mAVObject = BoxHelper.getNewestData(mAVObject);
             if (mAVObject != null) {
+                initButton();
                 imgUrl = mAVObject.getImg_url();
                 itemImg.setImageURI(imgUrl);
                 item_img_bg.setImageURI(imgUrl);
@@ -105,7 +106,6 @@ public class CaricatureDetailActivity extends BaseActivity {
                 des.setText(mAVObject.getDes());
                 views.setText("人气：" + NumberUtil.getNumberStr(mAVObject.getView()));
                 source.setText("来源：" + mAVObject.getSource_name());
-                initButton();
             } else {
                 finish();
             }
@@ -129,7 +129,7 @@ public class CaricatureDetailActivity extends BaseActivity {
 
     private void onItemClick() {
         Intent intent = new Intent(this, WebViewForCaricatureActivity.class);
-        intent.putExtra(KeyUtil.AVObjectKey, mAVObject);
+        intent.putExtra(KeyUtil.ObjectKey, mAVObject);
         intent.putExtra(KeyUtil.IsHideToolbar, true);
         startActivityForResult(intent,10002);
     }

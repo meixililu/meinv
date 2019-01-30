@@ -4,16 +4,94 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/mswiperefreshlayout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/listview"
+        android:orientation="vertical"
+        >
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/my_awesome_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </android.support.v4.widget.SwipeRefreshLayout>
+            android:layout_height="wrap_content"
+            android:background="@color/theme_color"
+            android:minHeight="@dimen/actionBar">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:id="@+id/manage_btn"
+                    android:layout_width="50dp"
+                    android:layout_height="@dimen/actionBar"
+                    android:text="@string/manage"
+                    android:gravity="center"
+                    android:textSize="@dimen/middle"
+                    android:textColor="@drawable/txt_color_white_gray_selector"
+                    />
+                <FrameLayout
+                    android:id="@+id/more_btn"
+                    android:layout_width="40dp"
+                    android:layout_height="@dimen/actionBar"
+                    android:foreground="@drawable/framelayout_selector"
+                    >
+                    <ImageView
+                        android:layout_width="27dp"
+                        android:layout_height="27dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_more_white"
+                        />
+                </FrameLayout>
+            </LinearLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/mswiperefreshlayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/white">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/listview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+        <LinearLayout
+            android:id="@+id/delete_layout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:background="@color/white"
+            android:visibility="gone"
+            >
+            <TextView
+                android:id="@+id/empty_btn"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:layout_marginLeft="1px"
+                android:background="@color/holo_orange_light"
+                android:textSize="@dimen/big"
+                android:text="@string/empty"
+                />
+            <TextView
+                android:id="@+id/delete_btn"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:background="@color/material_color_red"
+                android:textSize="@dimen/big"
+                android:text="@string/delete"
+                />
+        </LinearLayout>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/empty_tv"
@@ -27,53 +105,7 @@
         android:visibility="gone"
         />
 
-    <LinearLayout
-        android:id="@+id/action_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginRight="15dp"
-        android:layout_marginBottom="10dp"
-        >
-        <android.support.v7.widget.CardView
-            android:id="@+id/action_delete_all"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_marginBottom="@dimen/padding_15"
-            app:cardCornerRadius="21dp"
-            app:cardBackgroundColor="@color/none_alpha8"
-            android:visibility="gone"
-            app:cardElevation="1dp"
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/clear_all"
-                android:textColor="@color/white"
-                android:textSize="@dimen/small"
-                />
-        </android.support.v7.widget.CardView>
-        <android.support.v7.widget.CardView
-            android:id="@+id/action_delete_btn"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_marginBottom="@dimen/padding_10"
-            app:cardCornerRadius="21dp"
-            app:cardBackgroundColor="@color/none_alpha8"
-            app:cardElevation="1dp"
-            >
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:scaleType="centerInside"
-                android:layout_gravity="center"
-                app:srcCompat="@drawable/ic_delete_forever_white_24dp" />
-        </android.support.v7.widget.CardView>
 
-    </LinearLayout>
 
 </RelativeLayout>
 

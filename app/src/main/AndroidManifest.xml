@@ -52,7 +52,7 @@
             android:value="${applicationId}.provider" />
 
         <!--<meta-data android:value="5b7ed6a08f4a9d303c000060" android:name="UMENG_APPKEY"/>-->
-        <meta-data android:value="huawei" android:name="UMENG_CHANNEL"/>
+        <meta-data android:value="tencent" android:name="UMENG_CHANNEL"/>
 
         <!-- 讯飞广告sdk -->
         <meta-data
@@ -114,7 +114,10 @@
             android:name=".MiaosouDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".OwllookResultListActivity"
+            android:name=".NovelCollectedActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NovelResultListActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".WebViewWithCollectedActivity"

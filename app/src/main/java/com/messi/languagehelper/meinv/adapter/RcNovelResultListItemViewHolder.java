@@ -22,7 +22,7 @@ import com.qq.e.ads.nativ.NativeExpressADView;
  * Created by luli on 10/23/16.
  */
 
-public class RcOwllookListItemViewHolder extends RecyclerView.ViewHolder {
+public class RcNovelResultListItemViewHolder extends RecyclerView.ViewHolder {
 
     private final View cover;
     private final TextView name;
@@ -32,7 +32,7 @@ public class RcOwllookListItemViewHolder extends RecyclerView.ViewHolder {
     private final LinearLayout content;
     private Context context;
 
-    public RcOwllookListItemViewHolder(View convertView) {
+    public RcNovelResultListItemViewHolder(View convertView) {
         super(convertView);
         this.context = convertView.getContext();
         cover = (View) convertView.findViewById(R.id.layout_cover);
@@ -89,12 +89,13 @@ public class RcOwllookListItemViewHolder extends RecyclerView.ViewHolder {
     private void onItemClick(CNWBean mAVObject){
         Intent intent = new Intent(context, WebViewWithCollectedActivity.class);
         intent.putExtra(KeyUtil.URL, mAVObject.getRead_url());
+        intent.putExtra(KeyUtil.ObjectKey, mAVObject);
         intent.putExtra(KeyUtil.FilterName, mAVObject.getSource_name());
         intent.putExtra(KeyUtil.IsNeedGetFilter, true);
         intent.putExtra(KeyUtil.IsHideToolbar, true);
         intent.putExtra(KeyUtil.isHideMic,true);
         intent.putExtra(KeyUtil.IsReedPullDownRefresh, false);
-        intent.putExtra(KeyUtil.IsShowCollectedBtn, false);
+        intent.putExtra(KeyUtil.IsShowCollectedBtn, true);
         context.startActivity(intent);
     }
 

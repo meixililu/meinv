@@ -12,7 +12,7 @@ import com.iflytek.voiceads.AdKeys;
 import com.iflytek.voiceads.IFLYNativeAd;
 import com.iflytek.voiceads.IFLYNativeListener;
 import com.iflytek.voiceads.NativeADDataRef;
-import com.messi.languagehelper.meinv.adapter.RcOwllookListAdapter;
+import com.messi.languagehelper.meinv.adapter.RcNovelResultListAdapter;
 import com.messi.languagehelper.meinv.box.CNWBean;
 import com.messi.languagehelper.meinv.http.LanguagehelperHttpClient;
 import com.messi.languagehelper.meinv.http.UICallback;
@@ -31,10 +31,10 @@ import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OwllookResultListActivity extends BaseActivity implements OnClickListener {
+public class NovelResultListActivity extends BaseActivity implements OnClickListener {
 
     private RecyclerView category_lv;
-    private RcOwllookListAdapter mAdapter;
+    private RcNovelResultListAdapter mAdapter;
     private LinearLayoutManager mLinearLayoutManager;
     private List<CNWBean> mList;
     private IFLYNativeAd nativeAd;
@@ -46,7 +46,7 @@ public class OwllookResultListActivity extends BaseActivity implements OnClickLi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.owllook_list_activity);
+        setContentView(R.layout.novel_result_list_activity);
         init();
         initSwipeRefresh();
         loadAD();
@@ -59,7 +59,7 @@ public class OwllookResultListActivity extends BaseActivity implements OnClickLi
         mTXADList = new ArrayList<NativeExpressADView>();
         initSwipeRefresh();
         category_lv = (RecyclerView) findViewById(R.id.listview);
-        mAdapter = new RcOwllookListAdapter();
+        mAdapter = new RcNovelResultListAdapter();
         mAdapter.setItems(mList);
         mLinearLayoutManager = new LinearLayoutManager(this);
         category_lv.setLayoutManager(mLinearLayoutManager);

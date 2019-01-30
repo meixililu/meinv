@@ -71,7 +71,7 @@ public class WebViewForMiaosouActivity extends BaseActivity implements OnClickLi
 	}
 
 	private void initData(){
-		mAVObject = getIntent().getParcelableExtra(KeyUtil.AVObjectKey);
+		mAVObject = getIntent().getParcelableExtra(KeyUtil.ObjectKey);
 		if(mAVObject != null){
 			mAVObject = BoxHelper.getNewestData(mAVObject);
 			if(!TextUtils.isEmpty(mAVObject.getLast_read_url())){

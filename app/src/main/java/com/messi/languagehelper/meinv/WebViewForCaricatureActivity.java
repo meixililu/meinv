@@ -22,12 +22,9 @@ import android.widget.TextView;
 import com.messi.languagehelper.meinv.box.BoxHelper;
 import com.messi.languagehelper.meinv.box.CNWBean;
 import com.messi.languagehelper.meinv.box.WebFilter;
-import com.messi.languagehelper.meinv.event.CaricatureEventHistory;
 import com.messi.languagehelper.meinv.util.ADUtil;
 import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
-
-import org.greenrobot.eventbus.EventBus;
 
 
 public class WebViewForCaricatureActivity extends BaseActivity{
@@ -62,7 +59,7 @@ public class WebViewForCaricatureActivity extends BaseActivity{
 		ToolbarBackgroundColor = getIntent().getIntExtra(KeyUtil.ToolbarBackgroundColorKey,0);
 		isReedPullDownRefresh = getIntent().getBooleanExtra(KeyUtil.IsReedPullDownRefresh, false);
 		isHideToolbar = getIntent().getBooleanExtra(KeyUtil.IsHideToolbar, false);
-		mItem = getIntent().getParcelableExtra(KeyUtil.AVObjectKey);
+		mItem = getIntent().getParcelableExtra(KeyUtil.ObjectKey);
 		mItem = BoxHelper.getNewestData(mItem);
 		if (mItem != null) {
 			LogUtil.DefalutLog("lasturl:"+mItem.getLast_read_url());
@@ -236,12 +233,11 @@ public class WebViewForCaricatureActivity extends BaseActivity{
 	protected void onDestroy() {
 		super.onDestroy();
 		LogUtil.DefalutLog("Url:"+mWebView.getUrl());
-		if(!TextUtils.isEmpty(mWebView.getUrl())){
+		if(!TextUtils.isEmpty(mWebView.getUrl()) && mItem.getCollected() > 100){
 			mItem.setHistory(System.currentTimeMillis());
 			mItem.setUpdateTime(System.currentTimeMillis());
 			mItem.setLast_read_url(mWebView.getUrl());
 			BoxHelper.updateCNWBean(mItem);
-			EventBus.getDefault().post(new CaricatureEventHistory());
 		}
 		if(mWebView != null){
 			mWebView.destroy();

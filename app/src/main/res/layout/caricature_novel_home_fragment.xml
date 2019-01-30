@@ -80,7 +80,7 @@
                 />
         </FrameLayout>
         <FrameLayout
-            android:id="@+id/layout_search_novel"
+            android:id="@+id/layout_novel_collected"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:foreground="@drawable/framelayout_selector"

@@ -102,7 +102,7 @@ public class MiaosouDetailActivity extends BaseActivity {
     }
 
     private void init() {
-        mAVObject = getIntent().getParcelableExtra(KeyUtil.AVObjectKey);
+        mAVObject = getIntent().getParcelableExtra(KeyUtil.ObjectKey);
         mAVObject = BoxHelper.getNewestData(mAVObject);
         imgUrl = mAVObject.getImg_url();
     }
@@ -217,7 +217,7 @@ public class MiaosouDetailActivity extends BaseActivity {
 
     private void onItemClick(){
         Intent intent = new Intent(this, WebViewForMiaosouActivity.class);
-        intent.putExtra(KeyUtil.AVObjectKey, mAVObject);
+        intent.putExtra(KeyUtil.ObjectKey, mAVObject);
         intent.putExtra(KeyUtil.isHideMic,true);
         intent.putExtra(KeyUtil.FilterName,mAVObject.getSource_name());
         intent.putExtra(KeyUtil.IsNeedGetFilter, true);

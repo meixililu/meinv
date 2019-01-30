@@ -367,7 +367,7 @@ public class CNSearchActivity extends BaseActivity {
             intent.putExtra(KeyUtil.IsShowCollectedBtn, false);
             startActivity(intent);
         } else if (position == 1) {
-            Intent intent = new Intent(this, OwllookResultListActivity.class);
+            Intent intent = new Intent(this, NovelResultListActivity.class);
             intent.putExtra(KeyUtil.ActionbarTitle, question);
             intent.putExtra(KeyUtil.SearchKey, question);
             intent.putExtra(KeyUtil.URL, url);

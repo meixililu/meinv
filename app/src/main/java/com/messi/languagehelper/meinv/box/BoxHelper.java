@@ -32,12 +32,22 @@ public class BoxHelper {
     }
 
     public static void updateCNWBean(CNWBean bean){
+        if(bean != null && !TextUtils.isEmpty(bean.getItemId())){
+            CNWBean oldData = findCNWBeanByItemId(bean.getItemId());
+            if(oldData != null){
+                bean.setId(oldData.getId());
+            }
+        }
+        long id = getCNWBeanBox().put(bean);
+        bean.setId(id);
         LogUtil.DefalutLog("updateCNWBean:"+bean.toString());
-        getCNWBeanBox().put(bean);
     }
 
     public static void updateCNWBean(List<CNWBean> list){
-        getCNWBeanBox().put(list);
+        for (CNWBean item : list){
+            updateCNWBean(item);
+        }
+//        getCNWBeanBox().put(list);
     }
 
     public static CNWBean findCNWBeanByItemId(String  mItemId){
@@ -63,16 +73,11 @@ public class BoxHelper {
         return bean;
     }
 
-    public static List<CNWBean> getCaricatureList(String table,int offset,int psize,
-                                                  boolean isHistory, boolean isCollected){
+    public static List<CNWBean> getCollectedList(String table, int offset, int psize){
         QueryBuilder<CNWBean> query = getCNWBeanBox().query();
         query.equal(CNWBean_.table,table);
-        if(isHistory){
-            query.greater(CNWBean_.history,100);
-        }
-        if(isCollected){
-            query.greater(CNWBean_.collected,100);
-        }
+        query.greater(CNWBean_.collected,100);
+        query.order(CNWBean_.updateTime,QueryBuilder.DESCENDING);
         if(psize > 0){
             return query.build().find(offset,psize);
         }else {
@@ -80,17 +85,15 @@ public class BoxHelper {
         }
     }
 
-    public static void deleteAllData(String table,boolean isHistory, boolean isCollected){
-        List<CNWBean> list = getCaricatureList(table,0,0,isHistory,isCollected);
-        for(CNWBean bean : list){
-            if(isHistory){
-                bean.setHistory(0);
-            }
-            if(isCollected){
-                bean.setCollected(0);
-            }
+    public static void deleteAllData(String table){
+        List<CNWBean> list = getCollectedList(table,0,0);
+        if(list != null && list.size() > 0){
+            getCNWBeanBox().remove(list);
         }
-        updateCNWBean(list);
+    }
+
+    public static void deleteCNWBean(CNWBean bean){
+        getCNWBeanBox().remove(bean);
     }
 
     /**WebFilter**/

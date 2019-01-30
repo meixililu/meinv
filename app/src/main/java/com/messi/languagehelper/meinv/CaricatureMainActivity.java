@@ -105,7 +105,7 @@ public class CaricatureMainActivity extends BaseActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         engFragment = CaricatureHomeFragment.newInstance();
         categoryFragment = CaricatureCategoryMainFragment.getInstance();
-        radioHomeFragment = CaricatureBHFragment.getInstance();
+        radioHomeFragment = CaricatureBookShelfFragment.newInstance();
         webviewFragment = CaricatureNovelHomeFragment.getInstance();
         getSupportFragmentManager()
                 .beginTransaction()

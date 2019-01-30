@@ -270,8 +270,9 @@ public class KeyUtil {
 	public static final String XmlyMainForYWCD = "XmlyMainForYWCD";
 	public static final String XmlyMainForYYS = "XmlyMainForYYS";
 	public static final String IsNeedGetFilter = "IsNeedGetFilter";
+	public static final String IsNeedWebViewGoback = "IsNeedWebViewGoback";
 	public static final String FilterName = "FilterName";
-	public static final String AVObjectKey = "AVObjectKey";
+	public static final String ObjectKey = "ObjectKey";
 	public static final String HasMoveCaricatureData = "HasMoveCaricatureData";
 
 	public static final String Lei_DVideo = "Lei_DVideo";

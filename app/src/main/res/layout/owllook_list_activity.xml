@@ -13,20 +13,23 @@
         android:background="@color/theme_color"
         android:minHeight="@dimen/actionBar">
 
-        <ProgressBar
-            android:id="@+id/progressBarCircularIndetermininate"
-            style="@style/CircularProgressWhite"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+        <TextView
+            android:id="@+id/manage_btn"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:text="@string/manage"
             android:layout_gravity="right"
-            android:visibility="gone"
+            android:gravity="center"
+            android:textSize="@dimen/middle"
+            android:textColor="@color/white"
             />
     </android.support.v7.widget.Toolbar>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/mswiperefreshlayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="@color/contentbg">
 
         <android.support.v7.widget.RecyclerView
@@ -34,4 +37,36 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </android.support.v4.widget.SwipeRefreshLayout>
+    <LinearLayout
+        android:id="@+id/delete_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:visibility="gone"
+        >
+        <TextView
+            android:id="@+id/empty_btn"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:layout_marginLeft="1px"
+            android:background="@color/holo_orange_light"
+            android:textSize="@dimen/big"
+            android:text="@string/empty"
+            />
+        <TextView
+            android:id="@+id/delete_btn"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:background="@color/material_color_red"
+            android:textSize="@dimen/big"
+            android:text="@string/delete"
+            />
+    </LinearLayout>
 </LinearLayout>

@@ -81,7 +81,7 @@ public class RcMiaosouItemViewHolder extends RecyclerView.ViewHolder {
 
     private void onItemClick(CNWBean mAVObject){
         Intent intent = new Intent(context, MiaosouDetailActivity.class);
-        intent.putExtra(KeyUtil.AVObjectKey, mAVObject);
+        intent.putExtra(KeyUtil.ObjectKey, mAVObject);
         context.startActivity(intent);
     }
 

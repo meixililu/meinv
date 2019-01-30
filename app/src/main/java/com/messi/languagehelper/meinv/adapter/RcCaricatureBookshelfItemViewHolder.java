@@ -87,12 +87,11 @@ public class RcCaricatureBookshelfItemViewHolder extends RecyclerView.ViewHolder
     private void onItemClick(CNWBean mAVObject){
         if(mAVObject.getSource_name().equals("找漫画")){
             Intent intent = new Intent(context, MiaosouDetailActivity.class);
-            intent.putExtra(KeyUtil.AVObjectKey, mAVObject);
+            intent.putExtra(KeyUtil.ObjectKey, mAVObject);
             context.startActivity(intent);
         }else {
             Intent intent = new Intent(context, CaricatureDetailActivity.class);
-            intent.putExtra(KeyUtil.AVObjectKey, mAVObject);
-            intent.putExtra(KeyUtil.ActionbarTitle, mAVObject.getTitle());
+            intent.putExtra(KeyUtil.ObjectKey, mAVObject);
             context.startActivity(intent);
         }
     }

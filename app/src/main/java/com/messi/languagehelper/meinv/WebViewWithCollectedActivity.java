@@ -18,6 +18,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -112,12 +113,14 @@ public class WebViewWithCollectedActivity extends BaseActivity implements OnClic
 
 	private boolean mExoPlayerFullscreen = false;
 	private boolean isHideMic = false;
+	private boolean isNeedWebViewGoback = false;
 	private int mResumeWindow;
 	private long mResumePosition;
 	private StringBuilder sb;
 	private String SearchUrl;
 	private String ad_url;
 	private String img_url;
+	private CNWBean mCNWBean;
 	private NativeExpressADView mTXADView;
 
 	@Override
@@ -138,6 +141,13 @@ public class WebViewWithCollectedActivity extends BaseActivity implements OnClic
 	private void initData(){
 		sb = new StringBuilder();
 		Url = getIntent().getStringExtra(KeyUtil.URL);
+		mCNWBean = getIntent().getParcelableExtra(KeyUtil.ObjectKey);
+		if(mCNWBean != null){
+			mCNWBean = BoxHelper.getNewestData(mCNWBean);
+			if(!TextUtils.isEmpty(mCNWBean.getLast_read_url())){
+				Url = mCNWBean.getLast_read_url();
+			}
+		}
 		img_url = getIntent().getStringExtra(KeyUtil.ImgUrl);
 		SearchUrl = getIntent().getStringExtra(KeyUtil.SearchUrl);
 		title = getIntent().getStringExtra(KeyUtil.ActionbarTitle);
@@ -145,6 +155,7 @@ public class WebViewWithCollectedActivity extends BaseActivity implements OnClic
 		isHideMic = getIntent().getBooleanExtra(KeyUtil.isHideMic,false);
 		adFilte = getIntent().getStringExtra(KeyUtil.AdFilter);
 		filter_source_name = getIntent().getStringExtra(KeyUtil.FilterName);
+		isNeedWebViewGoback = getIntent().getBooleanExtra(KeyUtil.IsNeedWebViewGoback,false);
 		is_need_get_filter = getIntent().getBooleanExtra(KeyUtil.IsNeedGetFilter,false);
 		ToolbarBackgroundColor = getIntent().getIntExtra(KeyUtil.ToolbarBackgroundColorKey,0);
 		isReedPullDownRefresh = getIntent().getBooleanExtra(KeyUtil.IsReedPullDownRefresh, true);
@@ -261,6 +272,7 @@ public class WebViewWithCollectedActivity extends BaseActivity implements OnClic
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				LogUtil.DefalutLog(url);
+				Url = url;
 				if(url.contains("openapp.jdmobile") || url.contains("taobao")){
 					Uri uri = Uri.parse(url);
 					view.loadUrl("");
@@ -277,7 +289,7 @@ public class WebViewWithCollectedActivity extends BaseActivity implements OnClic
 							e.printStackTrace();
 						}
 					}
-					Intent intent = new Intent(WebViewWithCollectedActivity.this, OwllookResultListActivity.class);
+					Intent intent = new Intent(WebViewWithCollectedActivity.this, NovelResultListActivity.class);
 					intent.putExtra(KeyUtil.ActionbarTitle, question);
 					intent.putExtra(KeyUtil.SearchKey, question);
 					intent.putExtra(KeyUtil.URL, url);
@@ -657,6 +669,14 @@ public class WebViewWithCollectedActivity extends BaseActivity implements OnClic
 			recognizer.destroy();
 			recognizer = null;
 		}
+		if(mCNWBean != null){
+			String currentUrl = mWebView.getUrl();
+			if(TextUtils.isEmpty(currentUrl)){
+				currentUrl = Url;
+			}
+			mCNWBean.setLast_read_url(currentUrl);
+			BoxHelper.updateCNWBean(mCNWBean);
+		}
 	}
 
 	private void hideAd(final WebView view){
@@ -723,32 +743,52 @@ public class WebViewWithCollectedActivity extends BaseActivity implements OnClic
 		}else if(view.getId() == R.id.ad_go_on){
 			ad_layout.setVisibility(View.GONE);
 		}else if(view.getId() == R.id.collected_btn){
-			String itemId = MD5.encode(Url);
-			CNWBean mbean = BoxHelper.findCNWBeanByItemId(itemId);
-			if(mbean == null){
-				mbean = new CNWBean();
-				if(filter_source_name.equals("找小说")){
-					mbean.setTable(AVOUtil.Novel.Novel);
-				}else{
-					mbean.setTable(AVOUtil.Caricature.Caricature);
-				}
-				mbean.setItemId(itemId);
+			String currentUrl = mWebView.getUrl();
+			if(TextUtils.isEmpty(currentUrl)){
+				currentUrl = Url;
 			}
-			mbean.setTitle(mWebView.getTitle());
-			if(!TextUtils.isEmpty(mWebView.getUrl())){
-				mbean.setRead_url(mWebView.getUrl());
-				mbean.setSource_url(mWebView.getUrl());
+			if(mCNWBean != null){
+				mCNWBean.setLast_read_url(currentUrl);
+				mCNWBean.setCollected(System.currentTimeMillis());
+				mCNWBean.setUpdateTime(System.currentTimeMillis());
+				BoxHelper.updateCNWBean(mCNWBean);
 			}else {
-				mbean.setRead_url(Url);
-				mbean.setSource_url(Url);
+				String itemId = MD5.encode(currentUrl);
+				CNWBean mbean = BoxHelper.findCNWBeanByItemId(itemId);
+				if(mbean == null){
+					mbean = new CNWBean();
+					if(filter_source_name.equals("找小说")){
+						mbean.setTable(AVOUtil.Novel.Novel);
+					}else{
+						mbean.setTable(AVOUtil.Caricature.Caricature);
+					}
+					mbean.setItemId(itemId);
+				}
+				mbean.setTitle(mWebView.getTitle());
+				mbean.setRead_url(currentUrl);
+				mbean.setLast_read_url(currentUrl);
+				mbean.setSource_url(currentUrl);
+				mbean.setSource_name(filter_source_name);
+				mbean.setImg_url(img_url);
+				mbean.setCollected(System.currentTimeMillis());
+				mbean.setUpdateTime(System.currentTimeMillis());
+				BoxHelper.updateCNWBean(mbean);
 			}
-			mbean.setSource_name(filter_source_name);
-			mbean.setImg_url(img_url);
-			mbean.setCollected(System.currentTimeMillis());
-			mbean.setUpdateTime(System.currentTimeMillis());
-			BoxHelper.updateCNWBean(mbean);
+
+
 			ToastUtil.diaplayMesShort(this,"收藏成功");
 		}
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(isNeedWebViewGoback){
+			if((keyCode == KeyEvent.KEYCODE_BACK) && mWebView.canGoBack()){
+				mWebView.goBack();
+				return true;
+			}
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override

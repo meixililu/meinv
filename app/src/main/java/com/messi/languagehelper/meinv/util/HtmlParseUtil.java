@@ -136,15 +136,21 @@ public class HtmlParseUtil {
 					CNWBean mCNWBean = new CNWBean();
 					mCNWBean.setTable(AVOUtil.Novel.Novel);
 					mCNWBean.setSource_name("找小说");
-					Element alink = item.select("li > a").first();
-					if(alink != null){
-						mCNWBean.setRead_url(joinUrl(url,alink.attr("href")));
-						mCNWBean.setItemId(MD5.encode(mCNWBean.getRead_url()));
-						mCNWBean.setTitle(alink.text());
-					}
 					Element slink = item.select("li > div.netloc > i > a").first();
 					if(slink != null){
-						mCNWBean.setSource_url(slink.attr("href"));
+						String sourceUrl = slink.attr("href");
+						mCNWBean.setSource_url(sourceUrl);
+						mCNWBean.setItemId(MD5.encode(sourceUrl));
+					}
+					Element alink = item.select("li > a").first();
+					if(alink != null){
+						String currentUrl = joinUrl(url,alink.attr("href"));
+						mCNWBean.setRead_url(currentUrl);
+						mCNWBean.setLast_read_url(currentUrl);
+						mCNWBean.setTitle(alink.text());
+						if(TextUtils.isEmpty(mCNWBean.getItemId())){
+							mCNWBean.setItemId(MD5.encode(currentUrl));
+						}
 					}
 					Elements tagsElement = item.select("div.tags > span");
 					String subTitle = "";
