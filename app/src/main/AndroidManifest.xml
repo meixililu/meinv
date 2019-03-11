@@ -57,7 +57,7 @@
         <!-- 讯飞广告sdk -->
         <meta-data
             android:name="IFLYTEK_APPKEY_AD"
-            android:value="5450bd92" />
+            android:value="5b97d2b6" />
         <meta-data
             android:name="IFLYTEK_CHANNEL"
             android:value="messi" />

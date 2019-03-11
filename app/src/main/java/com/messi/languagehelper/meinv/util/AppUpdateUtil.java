@@ -112,7 +112,7 @@ public class AppUpdateUtil {
             public void run() {
                 showUpdateDialog(mActivity);
             }
-        }, 4500);
+        }, 4000);
     }
 
     public static void showUpdateDialog(final Activity mActivity) {

@@ -57,9 +57,9 @@ public class LoadingActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppTheme);
-        super.onCreate(savedInstanceState);
         try {
+            setTheme(R.style.AppTheme);
+            super.onCreate(savedInstanceState);
             TransparentStatusbar();
             setContentView(R.layout.loading_activity);
             ButterKnife.bind(this);
@@ -320,12 +320,6 @@ public class LoadingActivity extends AppCompatActivity {
         if (!(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
             lackedPermission.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
-//        if (!(checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED)) {
-//            lackedPermission.add(Manifest.permission.READ_PHONE_STATE);
-//        }
-//        if (!(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
-//            lackedPermission.add(Manifest.permission.ACCESS_FINE_LOCATION);
-//        }
         if (lackedPermission.size() == 0) {
             Setings.saveSharedPreferences(mSharedPreferences,KeyUtil.IsTXADPermissionReady,true);
         } else {

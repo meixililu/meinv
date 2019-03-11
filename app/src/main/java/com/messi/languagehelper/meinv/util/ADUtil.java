@@ -45,12 +45,12 @@ public class ADUtil {
 	public static final String XiuxianBanner = "8067D0538A5CC32E32550CCC816A23D2";
 	public static final String XiuxianYSNRLAd = "912060B856C82B204149D8DF3DD65F6E";
 	public static final String MRYJYSNRLAd = "ED72385915DAC4C681891487523EBE87";
-	public static final String KaiPingYSAD = "F707B4276F3977F1F28BF110A8A20A74";
+	public static final String KaiPingYSAD = "C7D4CE73C7C5A989B5766267F4ABD97F";
 
 	public static final String NewsDetail = "345E72CB69CE01B8B0F55F855863F82A";
 	public static final String SecondaryPage = "7AF25604C9C9826781DF4B7B04949B0F";
 
-	public static final String XXLAD = "4A1AA609B79E04759A00E75CA6C2CAAE";
+	public static final String XXLAD = "5C59DA83A14F1DEF28EFFD3B192AD8E2";
 	public static final String VideoAD = "165D1FE5D5D872794849A23BDC430B8C";
 	public static final String SanTuYiWen = "C69B39C7D8D20854DA5E8DF03E5049A0";
 
