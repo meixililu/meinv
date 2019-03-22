@@ -203,7 +203,7 @@ public class CaricatureBookShelfFragment extends BaseFragment implements View.On
     private void manageBtn(){
         if(!isDeleteModel){
             delete_layout.setVisibility(View.VISIBLE);
-            manage_btn.setText(getString(R.string.manage_finish));
+            manage_btn.setText(getString(R.string.dome));
             isDeleteModel = true;
             setDeleteModel(mList,"1");
         }else {
