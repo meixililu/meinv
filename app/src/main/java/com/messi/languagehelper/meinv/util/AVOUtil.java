@@ -308,6 +308,8 @@ public class AVOUtil {
 		public final static String AppSize = "AppSize";
 		
 		public final static String APPUrl = "APPUrl";
+
+		public final static String adConf = "adConf";
 		
 		public final static String IsValid = "IsValid";
 		

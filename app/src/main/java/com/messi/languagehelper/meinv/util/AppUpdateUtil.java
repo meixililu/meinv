@@ -90,6 +90,7 @@ public class AppUpdateUtil {
         String ucsearch_url = mAVObject.getString(AVOUtil.UpdateInfo.ucsearch_url);
         String ad_ids = mAVObject.getString(AVOUtil.UpdateInfo.ad_ids);
         String no_ad_channel = mAVObject.getString(AVOUtil.UpdateInfo.no_ad_channel);
+        String adConf = mAVObject.getString(AVOUtil.UpdateInfo.adConf);
         String Caricature_channel = mAVObject.getString(AVOUtil.UpdateInfo.Caricature_channel);
         int Caricature_version = mAVObject.getInt(AVOUtil.UpdateInfo.Caricature_version);
         Setings.saveSharedPreferences(sp,KeyUtil.APP_Advertiser,app_advertiser);

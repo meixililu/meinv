@@ -92,6 +92,7 @@ public class CaricatureMainActivity extends BaseActivity {
         }else {
             Setings.IsShowNovel = true;
         }
+        Setings.IsShowNovel = true;
     }
 
     private void initFragment(){

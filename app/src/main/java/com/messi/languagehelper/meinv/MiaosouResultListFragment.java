@@ -152,6 +152,11 @@ public class MiaosouResultListFragment extends BaseFragment implements OnClickLi
     private void getData(){
         loading = true;
         showFooterview();
+        if(TextUtils.isEmpty(url)){
+            hideFooterview();
+            ToastUtil.diaplayMesShort(getContext(), "没有找到");
+            return;
+        }
         LanguagehelperHttpClient.get(url,new UICallback(getActivity()){
             @Override
             public void onFailured() {
