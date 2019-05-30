@@ -235,7 +235,7 @@ public class CaricatureSourceActivity extends BaseActivity implements View.OnCli
 
     private void onADFaile(){
         if(ADUtil.isHasLocalAd()){
-            NativeADDataRef nad = ADUtil.getRandomAd();
+            NativeADDataRef nad = ADUtil.getRandomAd(this);
             addXFAD(nad);
         }
     }

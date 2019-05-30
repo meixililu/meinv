@@ -58,6 +58,10 @@ public class NativeADDataRefForZYHY extends NativeADDataRef {
                 .build();
     }
 
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
     @Override
     public String getAdtype() {
         return "";

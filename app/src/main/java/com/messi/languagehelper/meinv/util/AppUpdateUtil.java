@@ -67,6 +67,8 @@ public class AppUpdateUtil {
             query.whereEqualTo(AVOUtil.UpdateInfo.AppCode, "meinv");
         }else if(mActivity.getPackageName().equals(Setings.application_id_caricature)){
             query.whereEqualTo(AVOUtil.UpdateInfo.AppCode, "caricature");
+        }else if(mActivity.getPackageName().equals(Setings.application_id_caricature_ecy)){
+            query.whereEqualTo(AVOUtil.UpdateInfo.AppCode, "caricature_ecy");
         }else{
             query.whereEqualTo(AVOUtil.UpdateInfo.AppCode, "noupdate");
         }
@@ -89,15 +91,23 @@ public class AppUpdateUtil {
         String uctt_url = mAVObject.getString(AVOUtil.UpdateInfo.uctt_url);
         String ucsearch_url = mAVObject.getString(AVOUtil.UpdateInfo.ucsearch_url);
         String ad_ids = mAVObject.getString(AVOUtil.UpdateInfo.ad_ids);
+        String ad_csj = mAVObject.getString(AVOUtil.UpdateInfo.ad_csj);
+        String ad_bd = mAVObject.getString(AVOUtil.UpdateInfo.ad_bd);
         String no_ad_channel = mAVObject.getString(AVOUtil.UpdateInfo.no_ad_channel);
         String adConf = mAVObject.getString(AVOUtil.UpdateInfo.adConf);
         String Caricature_channel = mAVObject.getString(AVOUtil.UpdateInfo.Caricature_channel);
         int Caricature_version = mAVObject.getInt(AVOUtil.UpdateInfo.Caricature_version);
+        ADUtil.setAdConfig(adConf);
+        TXADUtil.setADData(ad_ids);
+        CSJADUtil.setADData(ad_csj);
+        BDADUtil.setADData(ad_bd);
         Setings.saveSharedPreferences(sp,KeyUtil.APP_Advertiser,app_advertiser);
         Setings.saveSharedPreferences(sp,KeyUtil.Lei_DVideo,uctt_url);
         Setings.saveSharedPreferences(sp,KeyUtil.Lei_Novel,wyyx_url);
         Setings.saveSharedPreferences(sp,KeyUtil.Lei_UCSearch,ucsearch_url);
         Setings.saveSharedPreferences(sp,KeyUtil.Ad_Ids,ad_ids);
+        Setings.saveSharedPreferences(sp,KeyUtil.Ad_Csj,ad_csj);
+        Setings.saveSharedPreferences(sp,KeyUtil.Ad_Bd,ad_bd);
         Setings.saveSharedPreferences(sp,KeyUtil.No_Ad_Channel,no_ad_channel);
         Setings.saveSharedPreferences(sp,KeyUtil.VersionCode,
                 mAVObject.getInt(AVOUtil.UpdateInfo.VersionCode));

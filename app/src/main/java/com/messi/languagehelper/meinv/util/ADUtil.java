@@ -2,13 +2,17 @@ package com.messi.languagehelper.meinv.util;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.iflytek.voiceads.NativeADDataRef;
+import com.messi.languagehelper.meinv.R;
 import com.messi.languagehelper.meinv.WebViewActivity;
 import com.messi.languagehelper.meinv.bean.NativeADDataRefForZYHY;
 
@@ -26,6 +30,13 @@ import io.reactivex.schedulers.Schedulers;
 
 
 public class ADUtil {
+
+	public final static String GDT = "GDT";
+	public final static String BD = "BD";
+	public final static String CSJ = "CSJ";
+	public final static String XF = "XF";
+	public final static String XBKJ = "XBKJ";
+	public static String[] adConfigs = null;
 
 	public static String Advertiser_XF = "ad_xf";
 
@@ -57,6 +68,67 @@ public class ADUtil {
 	public static final boolean IsShowAdImmediately = false;
 	public static final int adCount = 1;
 	public static final int adInterval = 4500;
+
+	public static void initTXADID(Context mContext){
+		try {
+			ADUtil.IsShowAD = true;
+			SharedPreferences sp = Setings.getSharedPreferences(mContext);
+			String ad = sp.getString(KeyUtil.APP_Advertiser,"");
+			if(ad.equals(KeyUtil.No_Ad)){
+				ADUtil.IsShowAD = false;
+			}else {
+				String noAdChannel = sp.getString(KeyUtil.No_Ad_Channel,"");
+				String channel = Setings.getMetaData(mContext,"UMENG_CHANNEL");
+				int versionCode = Setings.getVersion(mContext);
+				int lastCode = sp.getInt(KeyUtil.VersionCode,-1);
+				LogUtil.DefalutLog("lastCode:"+lastCode+"--noAdChannel:"+noAdChannel+"--channel:"+channel);
+				if(versionCode >= lastCode){
+					if(!TextUtils.isEmpty(noAdChannel) && !TextUtils.isEmpty(channel)){
+						if(noAdChannel.equals(channel)){
+							ADUtil.IsShowAD = false;
+						}
+					}
+				}
+			}
+			LogUtil.DefalutLog("IsShowAD:"+ADUtil.IsShowAD);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	public static void initAdConfig(SharedPreferences sp){
+		String configStr = sp.getString(KeyUtil.AdConfig, "CSJ#GDT#BD#XF#XBKJ");
+		setAdConfig(configStr);
+	}
+
+	public static void setAdConfig(String config){
+		if(!TextUtils.isEmpty(config) && config.contains("#")){
+			adConfigs = null;
+			adConfigs = config.split("#");
+		}
+	}
+
+	public static String getAdProvider(int position){
+		try {
+			if(adConfigs != null && adConfigs.length > 0 && position < adConfigs.length){
+				if(GDT.equals(adConfigs[position])){
+					return GDT;
+				}else if(BD.equals(adConfigs[position])){
+					return BD;
+				}else if(CSJ.equals(adConfigs[position])){
+					return CSJ;
+				}else if(XF.equals(adConfigs[position])){
+					return XF;
+				}else if(XBKJ.equals(adConfigs[position])){
+					return XBKJ;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
 
 	public static String randomAd(){
 		if(new Random().nextInt(2) > 0){
@@ -143,7 +215,11 @@ public class ADUtil {
 		try {
 			AVQuery<AVObject> query = new AVQuery<AVObject>(AVOUtil.AdList.AdList);
 			query.whereEqualTo(AVOUtil.AdList.isValid, "1");
-			query.whereContains(AVOUtil.AdList.app, "manhua");
+			if(context.getPackageName().equals(Setings.application_id_caricature)){
+				query.whereContains(AVOUtil.AdList.app, "manhua");
+			}else if(context.getPackageName().equals(Setings.application_id_caricature_ecy)){
+				query.whereContains(AVOUtil.AdList.app, "ecymh");
+			}
 			query.addDescendingOrder(AVOUtil.AdList.createdAt);
 			query.limit(20);
 			List<AVObject> list = query.find();
@@ -158,12 +234,15 @@ public class ADUtil {
 		}
 	}
 
-	public static NativeADDataRef getRandomAd(){
+	public static NativeADDataRef getRandomAd(Context mActivity){
 		if(localAd != null && localAd.size() > 0){
-			return localAd.get( new Random().nextInt(localAd.size()) );
-		}else {
-			return null;
+			NativeADDataRefForZYHY mNad = (NativeADDataRefForZYHY)localAd.get( new Random().nextInt(localAd.size()) );
+			if(mNad != null){
+				mNad.setContext(mActivity);
+				return mNad;
+			}
 		}
+		return null;
 	}
 
 	public static List<NativeADDataRef> getRandomAdList(){
@@ -182,6 +261,31 @@ public class ADUtil {
 			return true;
 		}else {
 			return false;
+		}
+	}
+
+	public static void showDownloadAppDialog(final Context mContext,final String url){
+		try{
+			AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.Theme_AppCompat_Light_Dialog_Alert);
+			builder.setTitle("");
+			builder.setMessage("是要安装吗？");
+			builder.setPositiveButton("是的", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.cancel();
+					new AppDownloadUtil(mContext,
+							url,
+							"",
+							System.currentTimeMillis()+"",
+							SDCardUtil.apkUpdatePath
+					).DownloadFile();
+				}
+			});
+			builder.setNegativeButton("不是", null);
+			AlertDialog dialog = builder.create();
+			dialog.show();
+		}catch (Exception e){
+			e.printStackTrace();
 		}
 	}
 

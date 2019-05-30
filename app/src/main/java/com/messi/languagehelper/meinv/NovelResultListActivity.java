@@ -202,7 +202,7 @@ public class NovelResultListActivity extends BaseActivity implements OnClickList
 
     private void onADFaile(){
         if(ADUtil.isHasLocalAd()){
-            NativeADDataRef nad = ADUtil.getRandomAd();
+            NativeADDataRef nad = ADUtil.getRandomAd(this);
             addXFAD(nad);
         }
     }

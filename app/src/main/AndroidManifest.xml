@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.messi.languagehelper.meinv">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -23,7 +24,10 @@
         android:usesCleartextTraffic="true"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:extractNativeLibs="true"
+        tools:replace="android:extractNativeLibs"
+        >
 
         <uses-library android:name="org.apache.http.legacy"
             android:required="false"/>
@@ -53,6 +57,37 @@
 
         <!--<meta-data android:value="5b7ed6a08f4a9d303c000060" android:name="UMENG_APPKEY"/>-->
         <meta-data android:value="tencent" android:name="UMENG_CHANNEL"/>
+
+        <!-- csj ad  -->
+        <provider
+            android:name="com.bytedance.sdk.openadsdk.TTFileProvider"
+            android:authorities="${applicationId}.TTFileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <provider
+            android:name="com.bytedance.sdk.openadsdk.multipro.TTMultiProvider"
+            android:authorities="${applicationId}.TTMultiProvider"
+            android:exported="false" />
+
+        <!-- baidu ad  -->
+        <activity
+            android:name="com.baidu.mobads.AppActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <provider
+            android:name="com.baidu.mobads.openad.FileProvider"
+            android:authorities="${applicationId}.bd.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/bd_file_paths" />
+        </provider>
 
         <!-- 讯飞广告sdk -->
         <meta-data

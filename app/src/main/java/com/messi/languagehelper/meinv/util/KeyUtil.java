@@ -147,6 +147,12 @@ public class KeyUtil {
 
 	public static final String SubjectName = "SubjectName";
 
+	public static final String BDADView = "BDADView";
+
+	public static final String BDADViewHeigh = "BDADViewHeigh";
+
+	public static final String CSJADView = "CSJADView";
+
 	public static final String NewsType = "NewsType";
 
 	public static final String isReadingDetailGuideShow = "isReadingDetailGuideShow";
@@ -260,6 +266,8 @@ public class KeyUtil {
 	public static final String Lei_UCSearch = "Lei_UCSearch";
 
 	public static final String Ad_Ids = "Ad_Ids";
+	public static final String Ad_Csj = "ad_csj";
+	public static final String Ad_Bd = "ad_bd";
 	public static final String No_Ad_Channel = "no_ad_channel";
 	public static final String VersionCode = "VersionCode";
 	public static final String IsTXADPermissionReady = "IsTXADPermissionReady";
@@ -278,6 +286,7 @@ public class KeyUtil {
 	public static final String Lei_DVideo = "Lei_DVideo";
 	public static final String Lei_Novel = "Lei_Novel";
 	public static final String SearchUrl = "SearchUrl";
+	public static final String AdConfig = "AdConfig";
 	public static final String isHideMic = "isHideMic";
 	public static final String Caricature_version = "Caricature_version";
 	public static final String Caricature_channel = "Caricature_channel";

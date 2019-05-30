@@ -16,7 +16,11 @@ public class BoxHelper {
     public static BoxStore boxStore;
 
     public static void init(BaseApplication app){
-        boxStore = MyObjectBox.builder().androidContext(app).build();
+        try {
+            boxStore = MyObjectBox.builder().androidContext(app).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static BoxStore getBoxStore(){

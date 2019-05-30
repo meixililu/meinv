@@ -233,7 +233,7 @@ public class NovelCollectedActivity extends BaseActivity implements View.OnClick
 
     private void onADFaile(){
         if(ADUtil.isHasLocalAd()){
-            NativeADDataRef nad = ADUtil.getRandomAd();
+            NativeADDataRef nad = ADUtil.getRandomAd(this);
             addXFAD(nad);
         }
     }

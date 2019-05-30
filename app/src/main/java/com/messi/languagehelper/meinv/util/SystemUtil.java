@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 
 import java.util.Locale;
 
@@ -15,13 +16,29 @@ import java.util.Locale;
 public class SystemUtil {
 
     public static int SCREEN_WIDTH;
+
     public static int SCREEN_HEIGHT;
 
     public static String screen = "";
 
+    public static String PacketName = "";
+
     public static String lan = "";
 
+    public static String dev_id = "";
 
+    public static String getDev_id(Context context){
+        if (TextUtils.isEmpty(dev_id)){
+            dev_id = Setings.getUUID(context);
+        }
+        return dev_id;
+    }
+
+    public static void setPacketName(Context context){
+        if(context != null){
+            PacketName = context.getPackageName();
+        }
+    }
     /**
      * 获取当前手机系统语言。
      *
@@ -41,7 +58,7 @@ public class SystemUtil {
      * @return 系统版本号
      */
     public static String getSystemVersion() {
-        return Build.VERSION.RELEASE;
+        return android.os.Build.VERSION.RELEASE;
     }
 
     /**
@@ -50,7 +67,7 @@ public class SystemUtil {
      * @return 手机型号
      */
     public static String getSystemModel() {
-        return Build.MODEL;
+        return android.os.Build.MODEL;
     }
 
     /**
@@ -59,14 +76,14 @@ public class SystemUtil {
      * @return 手机厂商
      */
     public static String getDeviceBrand() {
-        return Build.BRAND;
+        return android.os.Build.BRAND;
     }
 
     public static String getNetworkType(Context context) {
         String strNetworkType = "";
         try {
             ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            if(connManager == null){
+            if (connManager == null) {
                 return "";
             }
             NetworkInfo networkInfo = connManager.getActiveNetworkInfo();
@@ -117,4 +134,5 @@ public class SystemUtil {
         }
         return strNetworkType;
     }
+
 }

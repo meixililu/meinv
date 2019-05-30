@@ -1,16 +1,19 @@
 package com.messi.languagehelper.meinv.util;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Rect;
-import android.view.Display;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.baidu.mobads.AdView;
+import com.baidu.mobads.AdViewListener;
+import com.bytedance.sdk.openadsdk.AdSlot;
+import com.bytedance.sdk.openadsdk.TTAdDislike;
+import com.bytedance.sdk.openadsdk.TTAdNative;
+import com.bytedance.sdk.openadsdk.TTBannerAd;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.iflytek.voiceads.AdError;
 import com.iflytek.voiceads.AdKeys;
@@ -22,14 +25,16 @@ import com.messi.languagehelper.meinv.adapter.HeaderFooterRecyclerViewAdapter;
 import com.qq.e.ads.nativ.NativeExpressAD;
 import com.qq.e.ads.nativ.NativeExpressADView;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 public class XFYSAD {
-	
+
 	private Activity mContext;
 	private View parentView;
-	private FrameLayout xx_ad_layout;
-	private TextView ad_aign;
+	private FrameLayout ad_layout;
+	private TextView ad_sign;
 	private IFLYNativeAd nativeAd;
 	private NativeADDataRef mNativeADDataRef;
 	private NativeExpressADView mTXADView;
@@ -41,17 +46,21 @@ public class XFYSAD {
 	private boolean exposure;
 	private HeaderFooterRecyclerViewAdapter mAdapter;
 
+	public int counter;
+	public String BDADID = BDADUtil.BD_BANNer;
+
 	public XFYSAD(Activity mContext, View parentView, String adId){
 		this.mContext = mContext;
 		this.parentView = parentView;
 		this.adId = adId;
 		mInflater = LayoutInflater.from(mContext);
 		ad_img = (SimpleDraweeView)parentView.findViewById(R.id.ad_img);
-		xx_ad_layout = (FrameLayout)parentView.findViewById(R.id.xx_ad_layout);
-		ad_aign = (TextView)parentView.findViewById(R.id.ad_sign);
+		ad_layout = (FrameLayout)parentView.findViewById(R.id.ad_layout);
+		ad_sign = (TextView)parentView.findViewById(R.id.ad_sign);
+		ad_sign.setVisibility(View.GONE);
 	}
 
-	public XFYSAD(Activity mContext, String adId){
+	public XFYSAD(Activity mContext,String adId){
 		this.mContext = mContext;
 		this.adId = adId;
 		mInflater = LayoutInflater.from(mContext);
@@ -62,54 +71,63 @@ public class XFYSAD {
 		if(System.currentTimeMillis() - lastLoadAdTime > 1000*30){
 			this.parentView = parentView;
 			ad_img = (SimpleDraweeView)parentView.findViewById(R.id.ad_img);
-			xx_ad_layout = (FrameLayout)parentView.findViewById(R.id.xx_ad_layout);
-			ad_aign = (TextView)parentView.findViewById(R.id.ad_sign);
+			ad_layout = (FrameLayout)parentView.findViewById(R.id.ad_layout);
+			ad_sign = (TextView)parentView.findViewById(R.id.ad_sign);
+			ad_sign.setVisibility(View.GONE);
 		}
 	}
-	
+
 	public void isNeedReload(){
-		if(System.currentTimeMillis() - lastLoadAdTime > 1000*7){
-			lastLoadAdTime = System.currentTimeMillis();
-			showAD();
+		if(System.currentTimeMillis() - lastLoadAdTime > 1000*45){
+			showAd();
 		}
 	}
-	
-	public void showAD(){
-		LogUtil.DefalutLog("XFYSAD---showAD");
+
+	public void showAd(){
 		if(ADUtil.IsShowAD){
-			if(System.currentTimeMillis() - lastLoadAdTime > 4500){
-				ad_aign.setVisibility(View.GONE);
-				if(ADUtil.Advertiser.equals(ADUtil.Advertiser_XF)){
-					loadXFAD();
-				}else {
-					loadTXAD();
-				}
+			if(System.currentTimeMillis() - lastLoadAdTime > 1000*30){
+				parentView.setVisibility(View.VISIBLE);
+				lastLoadAdTime = System.currentTimeMillis();
+				getXXLAd();
 			}
 		}else {
-			if(parentView != null){
-				parentView.setVisibility(View.GONE);
-			}
-			if(xx_ad_layout != null){
-				xx_ad_layout.setVisibility(View.GONE);
-			}
-			if(ad_aign != null){
-				ad_aign.setVisibility(View.GONE);
-			}
+			parentView.setVisibility(View.GONE);
 		}
+	}
+
+	public void getXXLAd(){
+		try {
+			String currentAD = ADUtil.getAdProvider(counter);
+			if(!TextUtils.isEmpty(currentAD)){
+				LogUtil.DefalutLog("------ad-------"+currentAD);
+				if(ADUtil.GDT.equals(currentAD)){
+					loadTXAD();
+				}else if(ADUtil.BD.equals(currentAD)){
+					loadBDAD();
+				}else if(ADUtil.CSJ.equals(currentAD)){
+					loadCSJAD();
+				}else if(ADUtil.XF.equals(currentAD)){
+					loadXFAD();
+				}else if(ADUtil.XBKJ.equals(currentAD)){
+					loadXBKJ();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void onLoadAdFaile(){
+		counter++;
+		getXXLAd();
 	}
 
 	private void loadTXAD(){
 		LogUtil.DefalutLog("---load TXAD Data---");
-		lastLoadAdTime = System.currentTimeMillis();
 		TXADUtil.showCDT(mContext, new NativeExpressAD.NativeExpressADListener() {
 			@Override
 			public void onNoAD(com.qq.e.comm.util.AdError adError) {
-				LogUtil.DefalutLog(adError.getErrorMsg());
-				if(ADUtil.Advertiser.equals(ADUtil.Advertiser_TX)){
-					loadXFAD();
-				}else {
-					onADFaile();
-				}
+				onLoadAdFaile();
 			}
 
 			@Override
@@ -117,10 +135,9 @@ public class XFYSAD {
 				if(mTXADView != null){
 					mTXADView.destroy();
 				}
-				xx_ad_layout.setVisibility(View.VISIBLE);
-				xx_ad_layout.removeAllViews();
+				initFeiXFAD();
 				mTXADView = list.get(0);
-				xx_ad_layout.addView(mTXADView);
+				ad_layout.addView(mTXADView);
 				mTXADView.render();
 			}
 
@@ -143,9 +160,9 @@ public class XFYSAD {
 			@Override
 			public void onADClosed(NativeExpressADView nativeExpressADView) {
 				LogUtil.DefalutLog("onADClosed");
-				if(xx_ad_layout != null){
-					xx_ad_layout.removeAllViews();
-					xx_ad_layout.setVisibility(View.GONE);
+				if(ad_layout != null){
+					ad_layout.removeAllViews();
+					ad_layout.setVisibility(View.GONE);
 				}
 			}
 			@Override
@@ -162,10 +179,9 @@ public class XFYSAD {
 			}
 		});
 	}
-	
+
 	private void loadXFAD(){
 		LogUtil.DefalutLog("---load XFAD Data---");
-		lastLoadAdTime = System.currentTimeMillis();
 		nativeAd = new IFLYNativeAd(mContext, adId, new IFLYNativeListener() {
 			@Override
 			public void onConfirm() {
@@ -175,19 +191,14 @@ public class XFYSAD {
 			}
 			@Override
 			public void onAdFailed(AdError arg0) {
-				LogUtil.DefalutLog("onAdFailed---"+arg0.getErrorCode()+"---"+arg0.getErrorDescription());
-				if(ADUtil.Advertiser.equals(ADUtil.Advertiser_XF)){
-					loadTXAD();
-				}else {
-					onADFaile();
-				}
+				onLoadAdFaile();
 			}
 			@Override
 			public void onADLoaded(List<NativeADDataRef> arg0) {
 				LogUtil.DefalutLog("---onADLoaded---");
 				if(arg0 != null && arg0.size() > 0){
 					mNativeADDataRef = arg0.get(0);
-					setAdData();
+					setAdData(mNativeADDataRef);
 				}
 			}
 		});
@@ -195,39 +206,123 @@ public class XFYSAD {
 		nativeAd.loadAd(ADUtil.adCount);
 	}
 
-	private void onADFaile(){
-		parentView.setVisibility(View.GONE);
-		hideHeader(true);
-		if(ADUtil.isHasLocalAd()){
-			mNativeADDataRef = ADUtil.getRandomAd();
-			setAdData();
+	public void loadXBKJ() {
+		if (ADUtil.isHasLocalAd()) {
+			setAdData(ADUtil.getRandomAd(mContext));
 		}
 	}
-	
-	private void setAdData(){
+
+	private void setAdData(NativeADDataRef mNativeADDataRef){
 		try {
-			hideHeader(false);
-			ad_aign.setVisibility(View.VISIBLE);
-			xx_ad_layout.setVisibility(View.GONE);
+			ad_sign.setVisibility(View.VISIBLE);
+			ad_layout.setVisibility(View.GONE);
 			parentView.setVisibility(View.VISIBLE);
 			ad_img.setImageURI(mNativeADDataRef.getImage());
 			if(isDirectExPosure){
-                exposure = mNativeADDataRef.onExposured(parentView);
-                LogUtil.DefalutLog("XFYSAD-setAdData-exposure:"+exposure);
-            }
-			parentView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    boolean click = mNativeADDataRef.onClicked(view);
-                    LogUtil.DefalutLog("XFYSAD-onClick:"+click);
-                }
-            });
+				exposure = mNativeADDataRef.onExposured(parentView);
+				LogUtil.DefalutLog("XFYSAD-setAdData-exposure:"+exposure);
+			}
+			parentView.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					boolean click = mNativeADDataRef.onClicked(view);
+					LogUtil.DefalutLog("XFYSAD-onClick:"+click);
+				}
+			});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void hideHeader(boolean isFaile){
+	public void loadBDAD(){
+		AdView adView = new AdView(mContext,BDADID);
+		adView.setListener(new AdViewListener(){
+			@Override
+			public void onAdReady(AdView adView) {
+				LogUtil.DefalutLog("BDAD-onAdReady");
+			}
+			@Override
+			public void onAdShow(JSONObject jsonObject) {
+				LogUtil.DefalutLog("BDAD-onAdShow");
+			}
+			@Override
+			public void onAdClick(JSONObject jsonObject) {
+				LogUtil.DefalutLog("BDAD-onAdClick");
+			}
+			@Override
+			public void onAdFailed(String s) {
+				onLoadAdFaile();
+				LogUtil.DefalutLog("BDAD-onAdFailed:");
+			}
+			@Override
+			public void onAdSwitch() {
+				LogUtil.DefalutLog("BDAD-onAdSwitch");
+			}
+			@Override
+			public void onAdClose(JSONObject jsonObject) {
+				LogUtil.DefalutLog("BDAD-onAdClose");
+			}
+		});
+		initFeiXFAD();
+		int height = (int)(SystemUtil.SCREEN_WIDTH / 2);
+		LinearLayout.LayoutParams rllp = new LinearLayout.LayoutParams(SystemUtil.SCREEN_WIDTH, height);
+		ad_layout.addView(adView,rllp);
+	}
+
+	public void initFeiXFAD(){
+		ad_sign.setVisibility(View.GONE);
+		ad_img.setVisibility(View.GONE);
+		ad_layout.setVisibility(View.VISIBLE);
+		ad_layout.removeAllViews();
+	}
+
+	public void loadCSJAD(){
+		LogUtil.DefalutLog("loadCSJAD");
+		TTAdNative mTTAdNative = CSJADUtil.get().createAdNative(mContext);
+		AdSlot adSlot = new AdSlot.Builder()
+				.setCodeId(CSJADUtil.CSJ_BANNer2ID)
+				.setSupportDeepLink(true)
+				.setImageAcceptedSize(690, 388)
+				.build();
+		mTTAdNative.loadBannerAd(adSlot, new TTAdNative.BannerAdListener() {
+			@Override
+			public void onError(int i, String s) {
+				LogUtil.DefalutLog("loadCSJAD-onError:");
+				onLoadAdFaile();
+			}
+			@Override
+			public void onBannerAdLoad(TTBannerAd ad) {
+				if (ad == null) {
+					onLoadAdFaile();
+					return;
+				}
+				View bannerView = ad.getBannerView();
+				if (bannerView == null) {
+					onLoadAdFaile();
+					return;
+				}
+				//设置轮播的时间间隔  间隔在30s到120秒之间的值，不设置默认不轮播
+				ad.setSlideIntervalTime(30 * 1000);
+				initFeiXFAD();
+				int height = (int)(SystemUtil.SCREEN_WIDTH / 1.8);
+				LinearLayout.LayoutParams rllp = new LinearLayout.LayoutParams(SystemUtil.SCREEN_WIDTH, height);
+				ad_layout.addView(bannerView,rllp);
+				//设置广告互动监听回调
+				ad.setShowDislikeIcon(new TTAdDislike.DislikeInteractionCallback() {
+					@Override
+					public void onSelected(int position, String value) {
+						onLoadAdFaile();
+					}
+					@Override
+					public void onCancel() {
+					}
+				});
+			}
+		});
+	}
+
+
+	public void hideHeader(final boolean isFaile){
 		if(parentView != null){
 			parentView.setVisibility(View.GONE);
 		}
@@ -254,52 +349,6 @@ public class XFYSAD {
 	public void setAdapter(HeaderFooterRecyclerViewAdapter adapter){
 		this.mAdapter = adapter;
 	}
-	/**
-	 * 判断view是否在屏幕范围内（是否曝光）。
-	 * @param context
-	 * @param view
-	 * @return true view矩形在屏幕矩形内或相交
-	 */
-	public static boolean isInScreen(Context context,View view) {
-		//获取屏幕宽高（px）以及矩形
-		Rect screenRect = getScreenRect(context);
-		//获取view矩形
-		Rect viewRect=getViewRect(view);
-		int viewHight= (int) ((viewRect.bottom-viewRect.top)*0.3);
-		screenRect=new Rect(screenRect.left, screenRect.top+viewHight, screenRect.right, screenRect.bottom-viewHight);
-		//判断是否相交或包含
-		boolean intersects=Rect.intersects(screenRect, viewRect);
-		boolean contains=screenRect.contains(viewRect);
-		return intersects||contains;
 
-	}
-
-	///Ad_Android_SDK_v1/src/com/iflytek/voiceads/utils/AppState.java
-	/**
-	 * 获取屏幕矩形
-	 * @param context
-	 * @return screenRect
-	 */
-	public static Rect getScreenRect(Context context) {
-		WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-		Display display=windowManager.getDefaultDisplay();
-		int screenW=display.getWidth();
-		int screenH=display.getHeight();
-		Rect screenRect=new Rect(0,0,screenW,screenH);
-		return screenRect;
-	}
-
-///Ad_Android_SDK_v1/src/com/iflytek/voiceads/utils/AppState.java
-	/**
-	 * 获取view矩形
-	 * @param view
-	 * @return viewRect
-	 */
-	public static Rect getViewRect(View view){
-		int[] location=new int[2];
-		view.getLocationOnScreen(location);
-		Rect viewRect=new Rect(location[0],location[1],location[0]+view.getWidth(),location[1]+view.getHeight());
-		return viewRect;
-	}
 
 }

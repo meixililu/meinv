@@ -41,6 +41,8 @@ public class Setings {
 
 	public static final int ca_psize = 12;
 
+	public static String UmengAPPId = "";
+
 	public static String category = "美女";
 
 	public static String sougouApi = "http://pic.sogou.com/pics/channel/getAllRecomPicByTag.jsp?category="+category+"&len="+page_size+"&tag=";
@@ -70,6 +72,7 @@ public class Setings {
 
 	public static final String application_id_meixiu = "com.messi.languagehelper.meixiu";
 	public static final String application_id_caricature = "com.messi.languagehelper.caricature";
+	public static final String application_id_caricature_ecy = "com.messi.languagehelper.caricature.ecy";
 	public static final String application_id_meinv = "com.messi.languagehelper.meinv";
 	public static final String application_id_browser = "com.messi.languagehelper.browser";
 

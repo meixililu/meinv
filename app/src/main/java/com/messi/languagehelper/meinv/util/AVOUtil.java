@@ -291,6 +291,10 @@ public class AVOUtil {
 
 		public final static String ad_ids = "ad_ids";
 
+		public final static String ad_csj = "ad_csj";
+
+		public final static String ad_bd = "ad_bd";
+
 		public final static String no_ad_channel = "no_ad_channel";
 
 		public final static String ad_type = "ad_type";
