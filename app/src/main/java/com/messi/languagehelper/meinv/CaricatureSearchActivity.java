@@ -197,7 +197,7 @@ public class CaricatureSearchActivity extends BaseActivity {
 
     private void search(String quest) {
         if (!TextUtils.isEmpty(quest)) {
-            Intent intent = new Intent(this, CaricatureSearchResultActivity.class);
+            Intent intent = new Intent(this, CaricatureSearchResultZNActivity.class);
             intent.putExtra(KeyUtil.ActionbarTitle, quest);
             intent.putExtra(KeyUtil.SearchKey, quest);
             startActivity(intent);
@@ -243,7 +243,7 @@ public class CaricatureSearchActivity extends BaseActivity {
         query.findInBackground(new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
-                if (list.size() > 0) {
+                if (list != null && list.size() > 0) {
                     AVObject mAVObject = list.get(0);
                     int times = mAVObject.getInt(AVOUtil.CaricatureSearchHot.click_time);
                     mAVObject.put(AVOUtil.CaricatureSearchHot.click_time,times+1);
