@@ -2,6 +2,7 @@ package com.messi.languagehelper.meinv;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.avos.avoscloud.AVOSCloud;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -10,9 +11,9 @@ import com.messi.languagehelper.meinv.dao.DaoMaster;
 import com.messi.languagehelper.meinv.dao.DaoSession;
 import com.messi.languagehelper.meinv.db.LHContract;
 import com.messi.languagehelper.meinv.db.SQLiteOpenHelper;
-import com.messi.languagehelper.meinv.util.ADUtil;
 import com.messi.languagehelper.meinv.util.BDADUtil;
 import com.messi.languagehelper.meinv.util.CSJADUtil;
+import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.SDCardUtil;
 import com.messi.languagehelper.meinv.util.Setings;
 import com.messi.languagehelper.meinv.util.SystemUtil;
@@ -47,6 +48,9 @@ public class BaseApplication extends Application {
                     e.printStackTrace();
                 }
                 try {
+                    SharedPreferences sp = Setings.getSharedPreferences(BaseApplication.this);
+                    String ipAddress = sp.getString(KeyUtil.LeanCloudIPAddress,"http://leancloud.mzxbkj.com");
+                    AVOSCloud.setServer(AVOSCloud.SERVER_TYPE.API, ipAddress);
                     AVOSCloud.initialize(BaseApplication.this,"3fg5ql3r45i3apx2is4j9on5q5rf6kapxce51t5bc0ffw2y4", "twhlgs6nvdt7z7sfaw76ujbmaw7l12gb8v6sdyjw1nzk9b1a");
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -56,7 +60,6 @@ public class BaseApplication extends Application {
                 CSJADUtil.init(BaseApplication.this);
                 BDADUtil.init(BaseApplication.this);
                 BoxHelper.init(BaseApplication.this);
-                ADUtil.initTXADID(BaseApplication.this);
             }
         }).run();
     }

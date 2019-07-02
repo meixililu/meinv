@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             fresco:actualImageScaleType="focusCrop"
             fresco:placeholderImage="@drawable/img_loading"
-            fresco:placeholderImageScaleType="fitCenter"
+            fresco:placeholderImageScaleType="centerCrop"
             fresco:failureImage="@drawable/img_lost"
             fresco:failureImageScaleType="fitCenter"
             fresco:viewAspectRatio="0.75" />

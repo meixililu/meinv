@@ -56,7 +56,7 @@ public class AdDialog extends Dialog {
 		action_cancel.setOnClickListener(onClickListener);
 		action_go.setOnClickListener(onClickListener);
 		XFYSAD mXFYSAD = new XFYSAD(context, xx_ad_layout, ADUtil.MRYJYSNRLAd);
-		mXFYSAD.showAD();
+		mXFYSAD.showAd();
 	}
 	
 	private View.OnClickListener onClickListener = new View.OnClickListener() {

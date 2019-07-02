@@ -35,8 +35,6 @@ public class Setings {
 
 	private static final int RequestCode = 1;
 
-	public static boolean IsShowNovel = false;
-
 	public static final int page_size = 8;
 
 	public static final int ca_psize = 12;

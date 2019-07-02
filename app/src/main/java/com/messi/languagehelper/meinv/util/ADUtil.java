@@ -77,7 +77,7 @@ public class ADUtil {
 			if(ad.equals(KeyUtil.No_Ad)){
 				ADUtil.IsShowAD = false;
 			}else {
-				String noAdChannel = sp.getString(KeyUtil.No_Ad_Channel,"");
+				String noAdChannel = sp.getString(KeyUtil.No_Ad_Channel,"huawei");
 				String channel = Setings.getMetaData(mContext,"UMENG_CHANNEL");
 				int versionCode = Setings.getVersion(mContext);
 				int lastCode = sp.getInt(KeyUtil.VersionCode,-1);

@@ -27,6 +27,7 @@ public class AppUpdateUtil {
     public static void runCheckUpdateTask(Activity mActivity) {
         checkUpdate(mActivity);
         initXMLY(mActivity);
+        ADUtil.initTXADID(mActivity);
         getWebFilter();
 //        PushManager.getInstance().initialize(mActivity.getApplicationContext(),null);
     }
@@ -108,6 +109,7 @@ public class AppUpdateUtil {
         Setings.saveSharedPreferences(sp,KeyUtil.Ad_Ids,ad_ids);
         Setings.saveSharedPreferences(sp,KeyUtil.Ad_Csj,ad_csj);
         Setings.saveSharedPreferences(sp,KeyUtil.Ad_Bd,ad_bd);
+        Setings.saveSharedPreferences(sp,KeyUtil.AdConfig,adConf);
         Setings.saveSharedPreferences(sp,KeyUtil.No_Ad_Channel,no_ad_channel);
         Setings.saveSharedPreferences(sp,KeyUtil.VersionCode,
                 mAVObject.getInt(AVOUtil.UpdateInfo.VersionCode));

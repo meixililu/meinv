@@ -1,6 +1,7 @@
 package com.messi.languagehelper.meinv.util;
 
 import android.app.Activity;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,7 +92,7 @@ public class XFYSAD {
 				getXXLAd();
 			}
 		}else {
-			parentView.setVisibility(View.GONE);
+			hideADView();
 		}
 	}
 
@@ -322,16 +323,21 @@ public class XFYSAD {
 	}
 
 
-	public void hideHeader(final boolean isFaile){
-		if(parentView != null){
-			parentView.setVisibility(View.GONE);
-		}
-		if(mAdapter != null){
-			if(isFaile){
-				mAdapter.hideHeader();
-			}else {
-				mAdapter.showHeader();
+	public void hideADView(){
+		try {
+			if(parentView != null){
+				parentView.setVisibility(View.GONE);
 			}
+			new Handler().postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					if(mAdapter != null){
+						mAdapter.hideHeader();
+					}
+				}
+			},100);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -349,6 +355,5 @@ public class XFYSAD {
 	public void setAdapter(HeaderFooterRecyclerViewAdapter adapter){
 		this.mAdapter = adapter;
 	}
-
 
 }

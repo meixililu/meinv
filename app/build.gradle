@@ -79,7 +79,7 @@ dependencies {
     implementation 'com.squareup.okio:okio:2.1.0'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.8'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
-    implementation 'cn.leancloud.android:avoscloud-sdk:4.7.8'
+    implementation 'cn.leancloud.android:avoscloud-sdk:4.7.10'
     //    implementation 'cn.leancloud:storage-android:5.0.6'
     //    implementation 'com.alibaba:fastjson:1.1.70.android'
     implementation 'com.facebook.fresco:fresco:1.13.0'

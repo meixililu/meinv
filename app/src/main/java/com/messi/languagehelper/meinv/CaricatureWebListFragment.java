@@ -60,9 +60,7 @@ public class CaricatureWebListFragment extends BaseFragment{
         layoutManager.setSpanSizeLookup(headerSpanSizeLookup);
         category_lv.setLayoutManager(layoutManager);
         category_lv.addItemDecoration(new DividerGridItemDecoration(1));
-        if(ADUtil.IsShowAD){
-            mAdapter.setHeader(new Object());
-        }
+        mAdapter.setHeader(new Object());
         mAdapter.setItems(mList);
         mXFYSAD.setAdapter(mAdapter);
         category_lv.setAdapter(mAdapter);
@@ -91,7 +89,7 @@ public class CaricatureWebListFragment extends BaseFragment{
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser && isHasLoadData && mXFYSAD != null){
             if(mXFYSAD.lastLoadAdTime > 0){
-                mXFYSAD.showAD();
+                mXFYSAD.showAd();
             }
         }
     }
@@ -101,7 +99,7 @@ public class CaricatureWebListFragment extends BaseFragment{
         skip = 0;
         hasMore = true;
         RequestAsyncTask();
-        mXFYSAD.showAD();
+        mXFYSAD.showAd();
     }
 
 

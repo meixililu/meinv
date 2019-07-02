@@ -175,20 +175,26 @@
                         fresco:placeholderImage="@drawable/img_loading"
                         fresco:placeholderImageScaleType="fitCenter"
                         fresco:failureImage="@drawable/img_lost"
-                        fresco:failureImageScaleType="fitCenter"
+                        fresco:failureImageScaleType="centerCrop"
                         fresco:viewAspectRatio="1.77" />
-
                     <TextView
                         android:id="@+id/ad_sign"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|left"
                         android:background="@color/none_alpha"
+                        android:visibility="gone"
                         android:paddingBottom="1dp"
                         android:paddingLeft="1dp"
                         android:text="广告"
                         android:textColor="@color/white"
                         android:textSize="@dimen/smaller" />
+                    <FrameLayout
+                        android:id="@+id/ad_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        />
                 </FrameLayout>
             </LinearLayout>
         </LinearLayout>

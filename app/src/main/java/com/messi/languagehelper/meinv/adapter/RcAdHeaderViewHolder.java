@@ -23,7 +23,7 @@ public class RcAdHeaderViewHolder extends RecyclerView.ViewHolder {
         this.mXFYSAD = mXFYSAD;
         mXFYSAD.setParentView(headerView);
         if(mXFYSAD != null){
-            mXFYSAD.showAD();
+            mXFYSAD.showAd();
         }
     }
 

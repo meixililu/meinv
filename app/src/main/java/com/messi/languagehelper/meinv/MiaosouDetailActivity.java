@@ -109,7 +109,7 @@ public class MiaosouDetailActivity extends BaseActivity {
 
     private void loadAD() {
         mXFYSAD = new XFYSAD(this, xxAdLayout, ADUtil.MRYJYSNRLAd);
-        mXFYSAD.showAD();
+        mXFYSAD.showAd();
     }
 
     private void showData(){
@@ -188,7 +188,7 @@ public class MiaosouDetailActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         if (mXFYSAD != null) {
-            mXFYSAD.showAD();
+            mXFYSAD.showAd();
         }
     }
 

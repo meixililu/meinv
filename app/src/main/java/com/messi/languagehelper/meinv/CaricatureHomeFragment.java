@@ -1,6 +1,5 @@
 package com.messi.languagehelper.meinv;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,7 +24,6 @@ import com.messi.languagehelper.meinv.box.CNWBean;
 import com.messi.languagehelper.meinv.util.ADUtil;
 import com.messi.languagehelper.meinv.util.AVOUtil;
 import com.messi.languagehelper.meinv.util.DataUtil;
-import com.messi.languagehelper.meinv.util.KeyUtil;
 import com.messi.languagehelper.meinv.util.LogUtil;
 import com.messi.languagehelper.meinv.util.NumberUtil;
 import com.messi.languagehelper.meinv.util.Setings;
@@ -329,21 +327,8 @@ public class CaricatureHomeFragment extends BaseFragment implements View.OnClick
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.search_btn){
-            toSearchActivity();
-        }
-    }
-
-    private void toSearchActivity(){
-        if(Setings.IsShowNovel){
-            toKSearch();
-        }else {
             toActivity(CaricatureSearchActivity.class,null);
         }
     }
 
-    private void toKSearch(){
-        Intent intent = new Intent(getContext(),CNSearchActivity.class);
-        intent.putExtra(KeyUtil.PositionKey,0);
-        startActivity(intent);
-    }
 }

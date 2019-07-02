@@ -124,7 +124,7 @@ public class CaricatureDetailActivity extends BaseActivity {
 
     private void loadAD() {
         mXFYSAD = new XFYSAD(this, xx_ad_layout, ADUtil.MRYJYSNRLAd);
-        mXFYSAD.showAD();
+        mXFYSAD.showAd();
     }
 
     private void onItemClick() {
@@ -156,7 +156,7 @@ public class CaricatureDetailActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         if (mXFYSAD != null) {
-            mXFYSAD.showAD();
+            mXFYSAD.showAd();
         }
     }
 

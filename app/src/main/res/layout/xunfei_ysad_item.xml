@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         fresco:actualImageScaleType="focusCrop"
         fresco:placeholderImage="@color/text_tint"
-        fresco:placeholderImageScaleType="fitCenter"
+        fresco:placeholderImageScaleType="centerCrop"
         fresco:viewAspectRatio="1.77" />
     <TextView
         android:id="@+id/ad_sign"
@@ -19,11 +19,15 @@
         android:background="@color/none_alpha"
         android:paddingBottom="1dp"
         android:paddingLeft="1dp"
+        android:visibility="gone"
         android:text="广告"
         android:textColor="@color/white"
         android:textSize="@dimen/smaller" />
     <FrameLayout
-        android:id="@+id/xx_ad_layout"
+        android:id="@+id/ad_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:background="@color/white"
+        />
 </FrameLayout>
